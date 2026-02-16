@@ -13,16 +13,16 @@ import './Schedule.css';
 
 // ─── IMAGE MAPPING ─────────────────────────────────
 const EVENT_IMAGES = {
-    'panel-discussion': '/images/panel discussion event.png',
-    'rtl-gds-workshop': '/images/Hands on Workshop.png',
-    'verilog-fpga-workshop': '/images/Hands on workshop-2.png',
-    'embedded-vlsi': '/images/event description.png',
-    'silicon-shark-tank': '/images/Silicon Shark Tank.png',
-    'wafer-chip-demo': '/images/Stall Visit.png',
-    'ai-vlsi': '/images/Al in VLSI.png',
-    'silicon-jackpot': '/images/The Silicon Jackpot.png',
-    'tech-engagement': '/images/event description.png',
-    'gallery-walk': '/images/Silent Silicon Gallery.png',
+    'panel-discussion': '/images/New posters/4.panel discussion.jpeg',
+    'rtl-gds-workshop': '/images/New posters/6.hands on workshop.jpeg',
+    'verilog-fpga-workshop': '/images/New posters/6.hands on workshop.jpeg',
+    'embedded-vlsi': '/images/New posters/7.expert talk.jpeg',
+    'silicon-shark-tank': '/images/New posters/8.silicon shark tank.jpeg',
+    'wafer-chip-demo': '/images/New posters/10.stall visit.jpeg',
+    'ai-vlsi': '/images/New posters/11.ai in vlsi.jpeg',
+    'silicon-jackpot': '/images/New posters/12.the silicon jackpot.jpeg',
+    'tech-engagement': '/images/New posters/13.interactive tech engagement activities.jpeg',
+    'gallery-walk': '/images/New posters/9.silent silicon gallery.jpeg',
 };
 
 // ─── ICON MAP ──────────────────────────────────────

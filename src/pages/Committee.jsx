@@ -88,7 +88,6 @@ const STUDENT_COORDINATORS = [
     { name: 'Arya Vyas', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Registration, Help Desk & Attendance Committee/Arya_Vyas.jpg", icon: <ClipboardList size={16} /> },
     { name: 'Riddhi Patel', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Website Committee/Riddhi_Patel.jpg", icon: <Monitor size={16} /> },
     { name: 'Yashvi Brahmbhatt', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Website Committee/Yashvi_Brahmbhatt.jpg", icon: <Monitor size={16} /> },
-    { name: 'Archi Gujar', role: null, designation: 'Co-Coordinator', image: null, icon: <Monitor size={16} /> },
     { name: 'Om Savani', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Website Committee/Om_savani.jpeg", icon: <Monitor size={16} /> },
     
     // Year 2
