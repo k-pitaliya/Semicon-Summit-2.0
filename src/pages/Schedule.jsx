@@ -771,7 +771,7 @@ const Schedule = () => {
                         onClick={() => setSelectedDay('all')}
                     >
                         <span className="tab-label">All Days</span>
-                        <span className="tab-count">{EVENTS_DATA.length}</span>
+                        <span className="tab-count">{EVENTS_DATA.length} events</span>
                     </button>
                     {DAYS.map(day => {
                         const eventCount = getEventCount(day.id);
