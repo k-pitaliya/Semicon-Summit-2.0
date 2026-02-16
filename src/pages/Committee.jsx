@@ -67,16 +67,16 @@ const FACULTY_CO_COORDINATORS = [
 ];
 
 const CORE_LEADS = [
-    { name: 'Dhruv Rupapara', role: null, designation: 'Team Lead', image: "/images/members/4.core_committee/Feedback, Reporting & Continuity Committee/Dhruv_Ruppapara.JPG", icon: <Star size={16} /> },
-    { name: 'Dhruti Panchal', role: null, designation: 'Decoration Head', image: "/images/members/4.core_committee/Dhruti-1.jpg", icon: <Palette size={16} /> },
+    { name: 'Dhruv Rupapara', role: 'Team Lead', designation: null, image: "/images/members/4.core_committee/Feedback, Reporting & Continuity Committee/Dhruv_Ruppapara.JPG", icon: <Star size={16} /> },
+    { name: 'Dhruti Panchal', role: 'Decoration Head', designation: null, image: "/images/members/4.core_committee/Dhruti-1.jpg", icon: <Palette size={16} /> },
 ];
 
 const CORE_COMMITTEE = [
-    { name: 'Mahi Kansagara', role: null, designation: 'Registration Head', image: "/images/members/4.core_committee/Decoration & Volunteer Committee/Mahi_Kansagara.jpeg", icon: <ClipboardList size={16} /> },
-    { name: 'Man Bhimani', role: null, designation: 'Budget Head', image: "/images/members/4.core_committee/Core Organizing Committee/Man_Bhimani.jpg", icon: <DollarSign size={16} /> },
-    { name: 'Minaxi Dalsania', role: null, designation: 'Registration Head', image: "/images/members/4.core_committee/Core Organizing Committee/Minaxi_Dalsania.jpeg", icon: <ClipboardList size={16} /> },
-    { name: 'Katyayani Hukeri', role: null, designation: 'Operations Head', image: "/images/members/4.core_committee/Core Organizing Committee/Katyayani_Hukeri.jpg", icon: <Users size={16} /> },
-    { name: 'Shlok Patel', role: null, designation: 'Media Head', image: "/images/members/4.core_committee/Core Organizing Committee/Shlok_Patel.jpeg", icon: <Video size={16} /> }
+    { name: 'Mahi Kansagara', role: 'Registration Head', designation: null, image: "/images/members/4.core_committee/Decoration & Volunteer Committee/Mahi_Kansagara.jpeg", icon: <ClipboardList size={16} /> },
+    { name: 'Man Bhimani', role: 'Budget Head', designation: null, image: "/images/members/4.core_committee/Core Organizing Committee/Man_Bhimani.jpg", icon: <DollarSign size={16} /> },
+    { name: 'Minaxi Dalsania', role: 'Registration Head', designation: null, image: "/images/members/4.core_committee/Core Organizing Committee/Minaxi_Dalsania.jpeg", icon: <ClipboardList size={16} /> },
+    { name: 'Katyayani Hukeri', role: 'Operations Head', designation: null, image: "/images/members/4.core_committee/Core Organizing Committee/Katyayani_Hukeri.jpg", icon: <Users size={16} /> },
+    { name: 'Shlok Patel', role: 'Media Head', designation: null, image: "/images/members/4.core_committee/Core Organizing Committee/Shlok_Patel.jpeg", icon: <Video size={16} /> }
 ];
 
 const STUDENT_COORDINATORS = [
