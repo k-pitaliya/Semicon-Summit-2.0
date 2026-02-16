@@ -14,8 +14,8 @@ import './Schedule.css';
 // ─── IMAGE MAPPING ─────────────────────────────────
 const EVENT_IMAGES = {
     'panel-discussion': '/images/panel discussion event.png',
-    'rtl-gds-workshop': '/images/Hands on Workshop.png',
-    'verilog-fpga-workshop': '/images/Hands on workshop-2.png',
+    'rtl-gds-workshop': '/images/Hands on workshop-2.png',
+    'verilog-fpga-workshop': '/images/Hands on Workshop.png',
     'embedded-vlsi': '/images/event description.png',
     'silicon-shark-tank': '/images/Silicon Shark Tank.png',
     'wafer-chip-demo': '/images/Stall Visit.png',
@@ -73,8 +73,8 @@ const EVENTS_DATA = [
         id: 'rtl-gds-workshop',
         name: 'RTL to GDS II (Open Source)',
         tagline: 'Ready to Design Your Own Chip?',
-        description: 'Hands-on workshop on the complete RTL to GDS II flow using open-source EDA tools',
-        fullDescription: 'Learn the complete chip design flow from RTL (Register Transfer Level) to GDSII using cutting-edge open-source EDA tools. This hands-on workshop covers the entire ASIC design flow including synthesis, place and route, and verification.',
+        description: 'Hands-on workshop on the complete RTL to GDS II flow using open-source EDA tools - For 3rd and 4th year students',
+        fullDescription: 'Learn the complete chip design flow from RTL (Register Transfer Level) to GDSII using cutting-edge open-source EDA tools. This hands-on workshop covers the entire ASIC design flow including synthesis, place and route, and verification. This workshop is specifically designed for 3rd and 4th year students.',
         day: 'Day 1',
         date: 'March 17, 2026',
         weekday: 'Tuesday',
@@ -90,11 +90,11 @@ const EVENTS_DATA = [
             'Hands-on practical sessions'
         ],
         rules: [
-            'Restricted to Final Year and Pre-Final Year students',
+            'Specifically for 3rd and 4th year students only',
             'Bring your own laptop with required software pre-installed',
             'Basic Verilog knowledge is mandatory'
         ],
-        prerequisites: 'Basic knowledge of digital design, Verilog (for 6th semester students)'
+        prerequisites: 'Basic knowledge of digital design and Verilog - For 3rd and 4th year students'
     },
     {
         id: 'verilog-fpga-workshop',
@@ -155,7 +155,7 @@ const EVENTS_DATA = [
         name: 'Silicon Shark Tank',
         tagline: 'Think. Prepare. Pitch. Convince.',
         description: 'Industry-interactive innovation and idea-pitching event with live presentations to expert jury',
-        fullDescription: 'Silicon Shark Tank is an industry-interactive innovation and idea-pitching event designed to nurture entrepreneurial thinking, system-level design approaches, and strong problem-solving skills among engineering students. The event simulates a real-world industry pitch environment where participants experience how technical ideas are evaluated by professionals from semiconductor, VLSI, embedded systems, FPGA, and hardware–software co-design domains.',
+        fullDescription: 'This competition is open to undergraduate engineering students, with a maximum of two members per team. Cross-department participation is encouraged, and each team must nominate one Team Leader for official communication. Teams are required to pitch original, innovation-driven ideas related to Semiconductor Design & Technology, VLSI (RTL to GDS, Physical Design, Verification), Embedded Systems & FPGA-based solutions, Hardware–Software Co-Design, AI/ML Accelerators & Edge Computing, Low-Power and High-Performance Design, Semiconductor Manufacturing Challenges, EDA Tools & Automation, or Smart Electronic/System-Level solutions. AI-generated or plagiarized content is strictly prohibited and may lead to disqualification. The event consists of two rounds. In Round 1 (Idea Screening), teams must submit an original idea (maximum 200 words) clearly outlining the problem statement, existing system loopholes, proposed solution, application/use-case, innovation aspect, technical domain (VLSI-focused), and a supporting visual such as a block diagram, mind map, or execution flow. Shortlisted teams will advance to Round 2, where they will deliver a 10-minute live pitch (7-minute presentation + 3-minute Q&A) before an expert jury; slides and system architecture diagrams are allowed, while a working demo is not mandatory. Final evaluation will be conducted solely by the expert jury, and their decision will be final and binding. Selected teams will receive internship opportunities (per team), industry mentorship, and technical feedback for idea refinement; however, no cash prize or financial funding will be provided. All eligible participants will receive participation certificates and digital badges, and winners will be awarded a free industry internship. Professional conduct, strict adherence to time limits, and originality are mandatory throughout the competition, and organizers reserve the right to modify rules if required.',
         day: 'Day 2',
         date: 'March 18, 2026',
         weekday: 'Wednesday',
@@ -315,9 +315,9 @@ const EVENTS_DATA = [
         id: 'silicon-jackpot',
         name: 'The Silicon Jackpot',
         subtitle: 'Technical Treasure Hunt',
-        tagline: 'Solve the Logic · Trace the Circuit · Find the Treasure',
-        description: 'Thrilling technical treasure hunt with semiconductor-themed challenges',
-        fullDescription: 'Embark on an exciting technical treasure hunt! Solve semiconductor-related technical puzzles, crack codes, and complete challenges to find the treasure. Test your knowledge, teamwork, and problem-solving skills in this thrilling campus-wide competition.',
+        tagline: 'Decode the Logic. Hunt the Clues. Complete the Silicon.',
+        description: 'A multi-stage technical treasure challenge testing semiconductor fundamentals and digital systems',
+        fullDescription: 'The Silicon Jackpot – "Decode the Logic. Hunt the Clues. Complete the Silicon." is a multi-stage technical treasure challenge designed to test students in semiconductor fundamentals and digital systems through knowledge, speed, collaboration, and practical implementation. The event unfolds across three progressive rounds where participants unlock clues, collect technical flags, and ultimately complete the word VLSI, symbolizing mastery in Very Large Scale Integration. Round 1, The Silicon Screening – Flag Hunt, is conducted separately for First Year, Second Year, and Third Year students, each receiving curriculum-based technical questions aligned with their academic level. Participants must solve the problem to unlock the first flag containing the letter "V" and a location clue. From each year, the first students to successfully complete the challenge qualify. These qualifiers are then grouped into interdisciplinary teams consisting of one student from each academic year, forming balanced teams. This round evaluates conceptual clarity, speed, accuracy, and individual problem-solving ability. Round 2, The Logic Conquest – Unified Challenge, brings the 20 teams together at a common location where they face a shared technical problem focused on applied digital logic, analytical reasoning, and teamwork. Upon solving the challenge, teams receive the second flag containing the letter "L" and additional clues to collect the letter "S." Based on accuracy and completion time, only the top teams advance to the final round. This stage assesses collaborative thinking, logical structuring, time management, and technical communication. Round 3, Kaun Banega Summit Samrat – The FPGA Finale, is a KBC-inspired technical showdown where the top 5 teams compete in an FPGA-based quiz featuring progressively complex digital electronics and Verilog questions. Successful teams collect the final flag containing the letter "I," completing the word VLSI. This finale evaluates practical HDL knowledge, hardware understanding, debugging skills, and performance under pressure. The team that excels across all stages and performs best in the FPGA finale will be crowned the Summit Samrat of Silicon, symbolizing their journey from V → L → S → I and their technical excellence in the semiconductor domain.',
         day: 'Day 3',
         date: 'March 19, 2026',
         weekday: 'Thursday',

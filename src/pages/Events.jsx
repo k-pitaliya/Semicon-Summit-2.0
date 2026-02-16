@@ -138,8 +138,8 @@ This session aims to provide clarity for students at early academic stages.`,
         icon: Layers,
         poster: '/images/Hands on workshop-2.png',
         prize: 'Certificates',
-        description: 'Explore the complete open-source ASIC design flow — from RTL design to GDS II generation. For final-year students and advanced learners.',
-        fullDescription: `This advanced, hands-on workshop is designed for final-year students and participants with prior knowledge of digital design and HDL concepts.
+        description: 'Explore the complete open-source ASIC design flow — from RTL design to GDS II generation. Specifically for 3rd and 4th year students.',
+        fullDescription: `This advanced, hands-on workshop is specifically designed for 3rd and 4th year students with prior knowledge of digital design and HDL concepts.
 
 Participants will explore the complete open-source ASIC design flow — from RTL design to GDS II generation.
 
@@ -151,7 +151,7 @@ Workshop Coverage:
 • Routing and layout generation
 • Understanding GDS II output
 
-Recommended For: Final-year students.`,
+Recommended For: 3rd and 4th year students only.`,
         date: 'March 18, 2026',
         time: 'Full Day (Starts 9 AM)',
         venue: 'Lab Complex 1',
@@ -199,25 +199,8 @@ Recommended For: 1st and 2nd year students.`,
         poster: '/images/Silicon Shark Tank.png',
         prize: 'Internships',
         description: 'Industry-Driven Idea Pitching. Winners get a FREE Internship Opportunity!',
-        fullDescription: `Silicon Shark Tank
-Industry-Driven Idea Pitching
-
-🏆 Winners get a FREE Internship Opportunity!
-
-Silicon Shark Tank is a two-round competitive platform designed to encourage innovation in semiconductor technology.
-
-Round 1 – Screening Round (Idea Submission)
-Submit a technical concept proposal (max 500 words) covering:
-• Problem Statement
-• Proposed Solution
-• Technical Domain (VLSI-focused)
-
-Round 2 – Live Pitch to the Sharks
-Shortlisted teams will present their ideas before an industry panel.
-• Total Time: 10 minutes per team
-• Format: Slides, architecture, block diagrams
-
-Rewards: Winning team members will receive internship opportunities from leading semiconductor startups.`,
+        fullDescription: `This competition is open to undergraduate engineering students, with a maximum of two members per team. Cross-department participation is encouraged, and each team must nominate one Team Leader for official communication. Teams are required to pitch original, innovation-driven ideas related to Semiconductor Design & Technology, VLSI (RTL to GDS, Physical Design, Verification), Embedded Systems & FPGA-based solutions, Hardware–Software Co-Design, AI/ML Accelerators & Edge Computing, Low-Power and High-Performance Design, Semiconductor Manufacturing Challenges, EDA Tools & Automation, or Smart Electronic/System-Level solutions. AI-generated or plagiarized content is strictly prohibited and may lead to disqualification.
+The event consists of two rounds. In Round 1 (Idea Screening), teams must submit an original idea (maximum 200 words) clearly outlining the problem statement, existing system loopholes, proposed solution, application/use-case, innovation aspect, technical domain (VLSI-focused), and a supporting visual such as a block diagram, mind map, or execution flow. Shortlisted teams will advance to Round 2, where they will deliver a 10-minute live pitch (7-minute presentation + 3-minute Q&A) before an expert jury; slides and system architecture diagrams are allowed, while a working demo is not mandatory. Final evaluation will be conducted solely by the expert jury, and their decision will be final and binding. Selected teams will receive internship opportunities (per team), industry mentorship, and technical feedback for idea refinement; however, no cash prize or financial funding will be provided. All eligible participants will receive participation certificates and digital badges, and winners will be awarded a free industry internship. Professional conduct, strict adherence to time limits, and originality are mandatory throughout the competition, and organizers reserve the right to modify rules if required.`,,
         date: 'March 19, 2026',
         time: '09:00 AM - 01:00 PM',
         venue: 'Main Auditorium',
@@ -228,20 +211,19 @@ Rewards: Winning team members will receive internship opportunities from leading
         id: 'silicon-jackpot',
         categoryId: 'innovation',
         title: 'The Silicon Jackpot',
-        subtitle: 'Technical Treasure Hunt',
+        subtitle: 'Decode the Logic. Hunt the Clues. Complete the Silicon.',
         type: 'Competition',
         icon: Target,
         poster: '/images/The Silicon Jackpot.png',
         prize: '₹15,000 Pool',
-        description: 'A structured three-round challenge combining technical quizzes, applied problem-solving, and a live FPGA-based grand finale.',
-        fullDescription: `The Silicon Jackpot is a structured three-round challenge combining technical knowledge with practical problem-solving skills.
+        description: 'A multi-stage technical treasure challenge testing semiconductor fundamentals and digital systems.',
+        fullDescription: `The Silicon Jackpot – "Decode the Logic. Hunt the Clues. Complete the Silicon." is a multi-stage technical treasure challenge designed to test students in semiconductor fundamentals and digital systems through knowledge, speed, collaboration, and practical implementation. The event unfolds across three progressive rounds where participants unlock clues, collect technical flags, and ultimately complete the word VLSI, symbolizing mastery in Very Large Scale Integration.
 
-Round Structure:
-• Round 1: Technical Quiz Sprint — MCQ quiz on semi fundamentals
-• Round 2: Problem-Solving Challenge — Applied design thinking
-• Round 3: Live FPGA Battle — Grand finale with hands-on challenge
+Round 1, The Silicon Screening – Flag Hunt, is conducted separately for First Year, Second Year, and Third Year students, each receiving curriculum-based technical questions aligned with their academic level. Participants must solve the problem to unlock the first flag containing the letter "V" and a location clue. From each year, the first students to successfully complete the challenge qualify. These qualifiers are then grouped into interdisciplinary teams consisting of one student from each academic year, forming balanced teams. This round evaluates conceptual clarity, speed, accuracy, and individual problem-solving ability.
 
-Each round tests a different aspect of technical ability.`,
+Round 2, The Logic Conquest – Unified Challenge, brings the 20 teams together at a common location where they face a shared technical problem focused on applied digital logic, analytical reasoning, and teamwork. Upon solving the challenge, teams receive the second flag containing the letter "L" and additional clues to collect the letter "S." Based on accuracy and completion time, only the top teams advance to the final round. This stage assesses collaborative thinking, logical structuring, time management, and technical communication.
+
+Round 3, Kaun Banega Summit Samrat – The FPGA Finale, is a KBC-inspired technical showdown where the top 5 teams compete in an FPGA-based quiz featuring progressively complex digital electronics and Verilog questions. Successful teams collect the final flag containing the letter "I," completing the word VLSI. This finale evaluates practical HDL knowledge, hardware understanding, debugging skills, and performance under pressure. The team that excels across all stages and performs best in the FPGA finale will be crowned the Summit Samrat of Silicon, symbolizing their journey from V → L → S → I and their technical excellence in the semiconductor domain.`,
         date: 'March 19, 2026',
         time: '02:00 PM - 05:00 PM',
         venue: 'Campus Grounds',
@@ -381,13 +363,6 @@ const EventModal = ({ event, onClose }) => {
                             <div>
                                 <span className="ev-label">Venue</span>
                                 <span className="ev-value">{event.venue}</span>
-                            </div>
-                        </div>
-                        <div className="ev-modal-info-box">
-                            <IndianRupee size={18} className="ev-icon" />
-                            <div>
-                                <span className="ev-label">Fee</span>
-                                <span className="ev-value">{event.fee}</span>
                             </div>
                         </div>
                     </div>

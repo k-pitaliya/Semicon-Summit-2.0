@@ -67,55 +67,55 @@ const FACULTY_CO_COORDINATORS = [
 ];
 
 const CORE_LEADS = [
-    { name: 'Dhruv Rupapara', role: null, designation: 'Coordinator', image: "/images/members/4.core_committee/Feedback, Reporting & Continuity Committee/Dhruv_Ruppapara.JPG", icon: <Star size={16} /> },
-    { name: 'Dhruti Panchal', role: null, designation: 'Coordinator', image: "/images/members/4.core_committee/Dhruti-1.jpg", icon: <Palette size={16} /> },
+    { name: 'Dhruti Panchal', role: null, designation: 'Core Head', image: "/images/members/4.core_committee/Dhruti-1.jpg", icon: <Palette size={16} /> },
+    { name: 'Dhruv Rupapara', role: null, designation: 'Core Head', image: "/images/members/4.core_committee/Feedback, Reporting & Continuity Committee/Dhruv_Ruppapara.JPG", icon: <Star size={16} /> },
 ];
 
 const CORE_COMMITTEE = [
-    { name: 'Mahi Kansagara', role: null, designation: 'Co coordinator', image: "/images/members/4.core_committee/Decoration & Volunteer Committee/Mahi_Kansagara.jpeg", icon: <ClipboardList size={16} /> },
-    { name: 'Man Bhimani', role: null, designation: 'Co coordinator', image: "/images/members/4.core_committee/Core Organizing Committee/Man_Bhimani.jpg", icon: <DollarSign size={16} /> },
-    { name: 'Minaxi Dalsania', role: null, designation: 'Co coordinator', image: "/images/members/4.core_committee/Core Organizing Committee/Minaxi_Dalsania.jpeg", icon: <ClipboardList size={16} /> },
-    { name: 'Katyayani Hukeri', role: null, designation: 'Co coordinator', image: "/images/members/4.core_committee/Core Organizing Committee/Katyayani_Hukeri.jpg", icon: <Users size={16} /> },
-    { name: 'Shlok Patel', role: null, designation: 'Co coordinator', image: "/images/members/4.core_committee/Core Organizing Committee/Shlok_Patel.jpeg", icon: <Video size={16} /> }
+    { name: 'Kushal Pitaliya', role: null, designation: 'Coordinator', image: "/images/members/4.core_committee/Website Committee/Kushal_Pitaliya.jpg", icon: <Monitor size={16} /> },
+    { name: 'Man Bhimani', role: null, designation: 'Coordinator', image: "/images/members/4.core_committee/Core Organizing Committee/Man_Bhimani.jpg", icon: <DollarSign size={16} /> },
+    { name: 'Mahi Kansagara', role: null, designation: 'Coordinator', image: "/images/members/4.core_committee/Decoration & Volunteer Committee/Mahi_Kansagara.jpeg", icon: <ClipboardList size={16} /> },
+    { name: 'Katyayani Hukeri', role: null, designation: 'Coordinator', image: "/images/members/4.core_committee/Core Organizing Committee/Katyayani_Hukeri.jpg", icon: <Users size={16} /> },
+    { name: 'Shlok Patel', role: null, designation: 'Coordinator', image: "/images/members/4.core_committee/Core Organizing Committee/Shlok_Patel.jpeg", icon: <Video size={16} /> },
+    { name: 'Minaxi Dalsania', role: null, designation: 'Coordinator', image: "/images/members/4.core_committee/Core Organizing Committee/Minaxi_Dalsania.jpeg", icon: <ClipboardList size={16} /> }
 ];
 
 const STUDENT_COORDINATORS = [
     // Year 3
-    { name: 'Kushal Pitaliya', role: 'Website Committee', designation: null, image: "/images/members/4.core_committee/Website Committee/Kushal_Pitaliya.jpg", icon: <Monitor size={16} /> },
-    { name: 'Shlok Shah', role: 'Poster Review Committee', designation: null, image: "/images/members/4.core_committee/Poster Review Committee/Shlok_Shah.png", icon: <Video size={16} /> },
-    { name: 'Mohit Rathod', role: 'Poster Review Committee', designation: null, image: "/images/members/4.core_committee/Poster Review Committee/Mohit_Rathod.jpg", icon: <Share2 size={16} /> },
-    { name: 'Bhaumik Soni', role: 'Registration & Help Desk Committee', designation: null, image: "/images/members/4.core_committee/Registration, Help Desk & Attendance Committee/Bhaumik_soni.jpg", icon: <ClipboardList size={16} /> },
-    { name: 'Arya Vyas', role: 'Registration & Help Desk Committee', designation: null, image: "/images/members/4.core_committee/Registration, Help Desk & Attendance Committee/Arya_Vyas.jpg", icon: <ClipboardList size={16} /> },
-    { name: 'Riddhi Patel', role: 'Website Committee', designation: null, image: "/images/members/4.core_committee/Website Committee/Riddhi_Patel.jpg", icon: <Monitor size={16} /> },
-    { name: 'Yashvi Brahmbhatt', role: 'Website Committee', designation: null, image: "/images/members/4.core_committee/Website Committee/Yashvi_Brahmbhatt.jpg", icon: <Monitor size={16} /> },
-    { name: 'Archi Gujar', role: 'Website Committee', designation: null, image: null, icon: <Monitor size={16} /> },
-    { name: 'Om Savani', role: 'Website Committee', designation: null, image: "/images/members/4.core_committee/Website Committee/Om_savani.jpeg", icon: <Monitor size={16} /> },
+    { name: 'Shlok Shah', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Poster Review Committee/Shlok_Shah.png", icon: <Video size={16} /> },
+    { name: 'Mohit Rathod', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Poster Review Committee/Mohit_Rathod.jpg", icon: <Share2 size={16} /> },
+    { name: 'Bhaumik Soni', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Registration, Help Desk & Attendance Committee/Bhaumik_soni.jpg", icon: <ClipboardList size={16} /> },
+    { name: 'Arya Vyas', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Registration, Help Desk & Attendance Committee/Arya_Vyas.jpg", icon: <ClipboardList size={16} /> },
+    { name: 'Riddhi Patel', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Website Committee/Riddhi_Patel.jpg", icon: <Monitor size={16} /> },
+    { name: 'Yashvi Brahmbhatt', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Website Committee/Yashvi_Brahmbhatt.jpg", icon: <Monitor size={16} /> },
+    { name: 'Archi Gujar', role: null, designation: 'Co-Coordinator', image: null, icon: <Monitor size={16} /> },
+    { name: 'Om Savani', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Website Committee/Om_savani.jpeg", icon: <Monitor size={16} /> },
     
     // Year 2
-    { name: 'Jal Lathia', role: 'Decoration & Volunteer Committee', designation: null, image: "/images/members/4.core_committee/Decoration & Volunteer Committee/Jal_Lathia.PNG", icon: <Palette size={16} /> },
-    { name: 'Brinda Varsani', role: 'Decoration & Volunteer Committee', designation: null, image: "/images/members/4.core_committee/Decoration & Volunteer Committee/Brinda_Varsani.jpg", icon: <Palette size={16} /> },
-    { name: 'Darshana Nasit', role: 'Feedback & Reporting Committee', designation: null, image: "/images/members/4.core_committee/Feedback, Reporting & Continuity Committee/Nasit_Darshana.jpg", icon: <MessageSquare size={16} /> },
-    { name: 'Srushti Jasoliya', role: 'Stationery & Merchandise Committee', designation: null, image: "/images/members/4.core_committee/Stationery, ID & Merchandise Committee/Srushti_Jasoliya.jpg", icon: <IdCard size={16} /> },
-    { name: 'Nency Prajapati', role: 'Sponsorship & Publicity Committee', designation: null, image: "/images/members/4.core_committee/Sponsorship, Publicity & Outreach Committee/Nency_Prajapati.jpg", icon: <Share2 size={16} /> },
-    { name: 'Yashvi Kankotiya', role: 'Registration & Help Desk Committee', designation: null, image: "/images/members/4.core_committee/Registration, Help Desk & Attendance Committee/Yashvi_Kankotiya.jpg", icon: <ClipboardList size={16} /> },
-    { name: 'Vritika Patel', role: 'Sponsorship & Publicity Committee', designation: null, image: "/images/members/4.core_committee/Sponsorship, Publicity & Outreach Committee/Vritika_Patel.jpg", icon: <Share2 size={16} /> },
-    { name: 'Vishva Amin', role: 'Decoration & Volunteer Committee', designation: null, image: "/images/members/4.core_committee/Decoration & Volunteer Committee/Vishva_Amin.jpg", icon: <Palette size={16} /> },
-    { name: 'Tathya Bhatt', role: 'Technical Program & Logistics Committee', designation: null, image: "/images/student coordinator/2.Tathya.jpg", icon: <Award size={16} /> },
-    { name: 'Nihar Thumbar', role: 'Sponsorship & Publicity Committee', designation: null, image: "/images/members/4.core_committee/Sponsorship, Publicity & Outreach Committee/Nihar_Thumbar.jpg", icon: <Share2 size={16} /> },
-    { name: 'Maitry Shah', role: 'Food & Transportation Committee', designation: null, image: "/images/members/4.core_committee/Food & Transportation Committee/Maitri_Shah.jpg", icon: <Truck size={16} /> },
-    { name: 'Khanjan Shah', role: 'Stationery & Merchandise Committee', designation: null, image: null, icon: <IdCard size={16} /> },
-    { name: 'Jitendra Prajapati', role: 'Technical Program & Logistics Committee', designation: null, image: "/images/members/4.core_committee/Technical Program  Stage & Logistics Committee/Prajapati_Jitendra.jpg", icon: <Award size={16} /> },
-    { name: 'Disha Italiya', role: 'Decoration & Volunteer Committee', designation: null, image: "/images/members/4.core_committee/Decoration & Volunteer Committee/Italiya_Disha.jpeg", icon: <Palette size={16} /> },
-    { name: 'Yug Shah', role: 'Technical Program & Logistics Committee', designation: null, image: null, icon: <Award size={16} /> },
+    { name: 'Jal Lathia', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Decoration & Volunteer Committee/Jal_Lathia.PNG", icon: <Palette size={16} /> },
+    { name: 'Brinda Varsani', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Decoration & Volunteer Committee/Brinda_Varsani.jpg", icon: <Palette size={16} /> },
+    { name: 'Darshana Nasit', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Feedback, Reporting & Continuity Committee/Nasit_Darshana.jpg", icon: <MessageSquare size={16} /> },
+    { name: 'Srushti Jasoliya', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Stationery, ID & Merchandise Committee/Srushti_Jasoliya.jpg", icon: <IdCard size={16} /> },
+    { name: 'Nency Prajapati', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Sponsorship, Publicity & Outreach Committee/Nency_Prajapati.jpg", icon: <Share2 size={16} /> },
+    { name: 'Yashvi Kankotiya', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Registration, Help Desk & Attendance Committee/Yashvi_Kankotiya.jpg", icon: <ClipboardList size={16} /> },
+    { name: 'Vritika Patel', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Sponsorship, Publicity & Outreach Committee/Vritika_Patel.jpg", icon: <Share2 size={16} /> },
+    { name: 'Vishva Amin', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Decoration & Volunteer Committee/Vishva_Amin.jpg", icon: <Palette size={16} /> },
+    { name: 'Tathya Bhatt', role: null, designation: 'Co-Coordinator', image: "/images/student coordinator/2.Tathya.jpg", icon: <Award size={16} /> },
+    { name: 'Nihar Thumbar', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Sponsorship, Publicity & Outreach Committee/Nihar_Thumbar.jpg", icon: <Share2 size={16} /> },
+    { name: 'Maitry Shah', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Food & Transportation Committee/Maitri_Shah.jpg", icon: <Truck size={16} /> },
+    { name: 'Khanjan Shah', role: null, designation: 'Co-Coordinator', image: null, icon: <IdCard size={16} /> },
+    { name: 'Jitendra Prajapati', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Technical Program  Stage & Logistics Committee/Prajapati_Jitendra.jpg", icon: <Award size={16} /> },
+    { name: 'Disha Italiya', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Decoration & Volunteer Committee/Italiya_Disha.jpeg", icon: <Palette size={16} /> },
+    { name: 'Yug Shah', role: null, designation: 'Co-Coordinator', image: null, icon: <Award size={16} /> },
     
     // Year 1
-    { name: 'Harianshinh Rana', role: 'Decoration & Volunteer Committee', designation: null, image: null, icon: <Palette size={16} /> },
-    { name: 'Harshdutt Joshi', role: 'Decoration & Volunteer Committee', designation: null, image: null, icon: <Palette size={16} /> },
-    { name: 'Hetvi Patel', role: 'Registration & Help Desk Committee', designation: null, image: "/images/members/4.core_committee/Registration, Help Desk & Attendance Committee/hetvi_patel.jpeg", icon: <ClipboardList size={16} /> },
-    { name: 'Jeet Patel', role: 'Food & Transportation Committee', designation: null, image: "/images/members/4.core_committee/Food & Transportation Committee/Jeet Patel.jpg", icon: <Truck size={16} /> },
-    { name: 'Saumy Mehta', role: 'Decoration & Volunteer Committee', designation: null, image: null, icon: <Palette size={16} /> },
-    { name: 'Saurya Patel', role: 'Sponsorship & Publicity Committee', designation: null, image: "/images/members/4.core_committee/Sponsorship, Publicity & Outreach Committee/Saurya_Patel.jpg", icon: <Share2 size={16} /> },
-    { name: 'Yatri Patel', role: 'Decoration & Volunteer Committee', designation: null, image: "/images/members/4.core_committee/Decoration & Volunteer Committee/Yatri_Patel.jpg", icon: <Palette size={16} /> }
+    { name: 'Harianshinh Rana', role: null, designation: 'Co-Coordinator', image: null, icon: <Palette size={16} /> },
+    { name: 'Harshdutt Joshi', role: null, designation: 'Co-Coordinator', image: null, icon: <Palette size={16} /> },
+    { name: 'Hetvi Patel', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Registration, Help Desk & Attendance Committee/hetvi_patel.jpeg", icon: <ClipboardList size={16} /> },
+    { name: 'Jeet Patel', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Food & Transportation Committee/Jeet Patel.jpg", icon: <Truck size={16} /> },
+    { name: 'Saumy Mehta', role: null, designation: 'Co-Coordinator', image: null, icon: <Palette size={16} /> },
+    { name: 'Saurya Patel', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Sponsorship, Publicity & Outreach Committee/Saurya_Patel.jpg", icon: <Share2 size={16} /> },
+    { name: 'Yatri Patel', role: null, designation: 'Co-Coordinator', image: "/images/members/4.core_committee/Decoration & Volunteer Committee/Yatri_Patel.jpg", icon: <Palette size={16} /> }
 ];
 
 const TeamMemberCard = ({ member }) => (
@@ -223,7 +223,7 @@ const Committee = () => {
                             <>
                                 {/* Core Leads - Top Tier */}
                                 <div className="core-leads-section">
-                                    <div className="core-leads-label">Coordinator</div>
+                                    <div className="core-leads-label">Core Head</div>
                                     <div className="team-grid core-leads-grid">
                                         {CORE_LEADS.map((member, index) => (
                                             <div key={`lead-${index}`} className="team-grid-item core-lead-item" style={{ animationDelay: `${index * 0.1}s` }}>
@@ -236,7 +236,7 @@ const Committee = () => {
                                 {/* Divider */}
                                 <div className="core-divider">
                                     <div className="core-divider-line" />
-                                    <span className="core-divider-text">Co coordinator</span>
+                                    <span className="core-divider-text">Coordinator</span>
                                     <div className="core-divider-line" />
                                 </div>
 
