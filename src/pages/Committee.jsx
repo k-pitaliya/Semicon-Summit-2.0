@@ -66,9 +66,12 @@ const FACULTY_CO_COORDINATORS = [
     { name: 'Prof. Parth Chauhan', role: 'Assistant Professor, EC-CSPIT', designation: null, image: null, icon: <Award size={16} /> }
 ];
 
-const CORE_COMMITTEE = [
+const CORE_LEADS = [
     { name: 'Dhruv Rupapara', role: null, designation: 'Team Lead', image: "/images/members/4.core_committee/Feedback, Reporting & Continuity Committee/Dhruv_Ruppapara.JPG", icon: <Star size={16} /> },
     { name: 'Dhruti Panchal', role: null, designation: 'Decoration Head', image: "/images/members/4.core_committee/Dhruti-1.jpg", icon: <Palette size={16} /> },
+];
+
+const CORE_COMMITTEE = [
     { name: 'Mahi Kansagara', role: null, designation: 'Registration Head', image: "/images/members/4.core_committee/Decoration & Volunteer Committee/Mahi_Kansagara.jpeg", icon: <ClipboardList size={16} /> },
     { name: 'Man Bhimani', role: null, designation: 'Budget Head', image: "/images/members/4.core_committee/Core Organizing Committee/Man_Bhimani.jpg", icon: <DollarSign size={16} /> },
     { name: 'Minaxi Dalsania', role: null, designation: 'Registration Head', image: "/images/members/4.core_committee/Core Organizing Committee/Minaxi_Dalsania.jpeg", icon: <ClipboardList size={16} /> },
@@ -216,13 +219,45 @@ const Committee = () => {
 
                     {/* Team Grid */}
                     <div className="team-grid-container">
-                        <div className="team-grid" key={activeTab}>
-                            {getActiveData().map((member, index) => (
-                                <div key={`${activeTab}-${index}`} className="team-grid-item" style={{ animationDelay: `${index * 0.04}s` }}>
-                                    <TeamMemberCard member={member} />
+                        {activeTab === 'Core Committee' ? (
+                            <>
+                                {/* Core Leads - Top Tier */}
+                                <div className="core-leads-section">
+                                    <div className="core-leads-label">Student Leads</div>
+                                    <div className="team-grid core-leads-grid">
+                                        {CORE_LEADS.map((member, index) => (
+                                            <div key={`lead-${index}`} className="team-grid-item core-lead-item" style={{ animationDelay: `${index * 0.1}s` }}>
+                                                <TeamMemberCard member={member} />
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            ))}
-                        </div>
+
+                                {/* Divider */}
+                                <div className="core-divider">
+                                    <div className="core-divider-line" />
+                                    <span className="core-divider-text">Core Committee Members</span>
+                                    <div className="core-divider-line" />
+                                </div>
+
+                                {/* Rest of Core Committee */}
+                                <div className="team-grid">
+                                    {CORE_COMMITTEE.map((member, index) => (
+                                        <div key={`core-${index}`} className="team-grid-item" style={{ animationDelay: `${(index + 2) * 0.04}s` }}>
+                                            <TeamMemberCard member={member} />
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
+                        ) : (
+                            <div className="team-grid" key={activeTab}>
+                                {getActiveData().map((member, index) => (
+                                    <div key={`${activeTab}-${index}`} className="team-grid-item" style={{ animationDelay: `${index * 0.04}s` }}>
+                                        <TeamMemberCard member={member} />
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             </section>
