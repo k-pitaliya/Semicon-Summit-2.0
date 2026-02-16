@@ -22,7 +22,7 @@ const CONVENERS = [
         name: "Dr. Upesh Patel",
         role: "HOD, EC-CSPIT",
         designation: null,
-        image: "/images/members/1.Convener/Upesh_patel.jpeg",
+        image: "/images/members/1.Convener/upeshPatel.jpg",
         icon: <Award size={16} />
     },
     {
