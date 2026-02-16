@@ -250,6 +250,41 @@
     box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
 }
 
+/* ─── MOBILE TOUCH OPTIMIZATION ─── */
+@media (max-width: 768px) {
+    /* On mobile, always show the button and hide badge */
+    .ev-card-badge {
+        opacity: 0;
+        pointer-events: none;
+    }
+    
+    .ev-card-modern-content {
+        transform: translateY(0);
+    }
+    
+    .ev-btn-view-full {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Alternative: Support touch devices specifically */
+@media (hover: none) and (pointer: coarse) {
+    /* Touch devices - always show button */
+    .ev-card-badge {
+        opacity: 0;
+    }
+    
+    .ev-card-modern-content {
+        transform: translateY(0);
+    }
+    
+    .ev-btn-view-full {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* ── MODAL ── */
 .ev-modal-overlay {
     position: fixed;
