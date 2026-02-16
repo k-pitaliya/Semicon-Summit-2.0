@@ -22,6 +22,16 @@ const userSchema = new mongoose.Schema({
     generatedPassword: {
         type: String
     },
+    passwordChangedAt: {
+        type: Date
+    },
+    passwordExpiresAt: {
+        type: Date
+    },
+    passwordRotationDays: {
+        type: Number,
+        default: 90 // Default: password expires after 90 days
+    },
     role: {
         type: String,
         enum: ['participant', 'coordinator', 'faculty'],
@@ -115,6 +125,14 @@ userSchema.pre('save', async function () {
 
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
+    
+    // Set password expiration date if rotation is enabled
+    if (this.isModified('password') && this.passwordRotationDays > 0) {
+        this.passwordChangedAt = new Date();
+        const expiryDate = new Date();
+        expiryDate.setDate(expiryDate.getDate() + this.passwordRotationDays);
+        this.passwordExpiresAt = expiryDate;
+    }
 });
 
 // Compare password method

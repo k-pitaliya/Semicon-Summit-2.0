@@ -34,6 +34,15 @@ const authenticate = async (req, res, next) => {
                 return res.status(401).json({ error: 'User not found' });
             }
 
+            // Check if password has expired (password rotation)
+            if (user.passwordExpiresAt && new Date() > user.passwordExpiresAt) {
+                return res.status(401).json({ 
+                    error: 'Password expired', 
+                    message: 'Your password has expired. Please reset your password.',
+                    passwordExpired: true
+                });
+            }
+
             req.user = user;
             req.token = token;
             next();
@@ -43,6 +52,14 @@ const authenticate = async (req, res, next) => {
             if (mongoose.Types.ObjectId.isValid(token)) {
                 const user = await User.findById(token);
                 if (user) {
+                    // Check password expiration for old tokens too
+                    if (user.passwordExpiresAt && new Date() > user.passwordExpiresAt) {
+                        return res.status(401).json({ 
+                            error: 'Password expired', 
+                            message: 'Your password has expired. Please reset your password.',
+                            passwordExpired: true
+                        });
+                    }
                     req.user = user;
                     req.token = token;
                     return next();

@@ -90,6 +90,15 @@ router.post('/:id/reset-password', authenticate, authorize('faculty'), async (re
         const newPassword = generatePassword();
         user.password = newPassword;
         user.generatedPassword = newPassword;
+        
+        // Reset password expiration date
+        if (user.passwordRotationDays > 0) {
+            user.passwordChangedAt = new Date();
+            const expiryDate = new Date();
+            expiryDate.setDate(expiryDate.getDate() + user.passwordRotationDays);
+            user.passwordExpiresAt = expiryDate;
+        }
+        
         await user.save();
 
         // Send email asynchronously (don't block response)
@@ -131,6 +140,48 @@ router.patch('/:id/role', authenticate, authorize('faculty'), async (req, res) =
         res.json(user);
     } catch (error) {
         console.error('Change role error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Update password rotation settings for a user (Faculty only)
+router.patch('/:id/password-rotation', authenticate, authorize('faculty'), async (req, res) => {
+    try {
+        const { passwordRotationDays } = req.body;
+        
+        if (passwordRotationDays === undefined || passwordRotationDays < 0) {
+            return res.status(400).json({ error: 'Invalid password rotation days. Must be 0 or greater.' });
+        }
+
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        user.passwordRotationDays = passwordRotationDays;
+        
+        // If enabling rotation and no expiry date exists, set it
+        if (passwordRotationDays > 0 && !user.passwordExpiresAt) {
+            const expiryDate = new Date();
+            expiryDate.setDate(expiryDate.getDate() + passwordRotationDays);
+            user.passwordExpiresAt = expiryDate;
+            user.passwordChangedAt = user.passwordChangedAt || new Date();
+        }
+        
+        // If disabling rotation (0 days), clear expiry date
+        if (passwordRotationDays === 0) {
+            user.passwordExpiresAt = null;
+        }
+        
+        await user.save();
+
+        res.json({ 
+            success: true, 
+            message: `Password rotation ${passwordRotationDays > 0 ? 'enabled' : 'disabled'} successfully`,
+            user: user.toJSON()
+        });
+    } catch (error) {
+        console.error('Update password rotation error:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });
