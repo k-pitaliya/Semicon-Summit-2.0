@@ -253,7 +253,7 @@ const Register = () => {
                                 <p>✓ Access to all 10 events across 3 days</p>
                                 <p>✓ Certificate of participation</p>
                                 <p>✓ Workshop materials & resources</p>
-                                <p>✓ Lunch & refreshments</p>
+                                <p>✓ Refreshments</p>
                             </div>
                         </div>
 
