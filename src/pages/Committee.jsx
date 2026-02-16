@@ -223,7 +223,7 @@ const Committee = () => {
                             <>
                                 {/* Core Leads - Top Tier */}
                                 <div className="core-leads-section">
-                                    <div className="core-leads-label">Student Leads</div>
+                                    <div className="core-leads-label">Coordinator</div>
                                     <div className="team-grid core-leads-grid">
                                         {CORE_LEADS.map((member, index) => (
                                             <div key={`lead-${index}`} className="team-grid-item core-lead-item" style={{ animationDelay: `${index * 0.1}s` }}>
@@ -236,7 +236,7 @@ const Committee = () => {
                                 {/* Divider */}
                                 <div className="core-divider">
                                     <div className="core-divider-line" />
-                                    <span className="core-divider-text">Core Committee Members</span>
+                                    <span className="core-divider-text">Co coordinator</span>
                                     <div className="core-divider-line" />
                                 </div>
 
