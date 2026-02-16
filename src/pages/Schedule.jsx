@@ -14,8 +14,8 @@ import './Schedule.css';
 // ─── IMAGE MAPPING ─────────────────────────────────
 const EVENT_IMAGES = {
     'panel-discussion': '/images/panel discussion event.png',
-    'rtl-gds-workshop': '/images/Hands on workshop-2.png',
-    'verilog-fpga-workshop': '/images/Hands on Workshop.png',
+    'rtl-gds-workshop': '/images/Hands on Workshop.png',
+    'verilog-fpga-workshop': '/images/Hands on workshop-2.png',
     'embedded-vlsi': '/images/event description.png',
     'silicon-shark-tank': '/images/Silicon Shark Tank.png',
     'wafer-chip-demo': '/images/Stall Visit.png',
