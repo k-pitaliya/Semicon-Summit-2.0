@@ -377,8 +377,7 @@ const EVENTS_DATA = [
 const FULL_SCHEDULE = {
     'Day 1': [
         { type: 'break', time: '09:15 AM – 10:30 AM', title: 'Welcome of Guests & Refreshments ☕', icon: Coffee, color: '#22c55e' },
-        { type: 'ceremony', time: '10:30 AM – 10:40 AM', title: 'Address by the Principal', icon: Mic, color: '#3b82f6', venue: 'Seminar Hall, First Floor, Electronics and Communication Department (A6 Building)', description: 'Welcome address by the Principal of CSPIT, CHARUSAT.' },
-        { type: 'ceremony', time: '10:45 AM – 10:50 AM', title: 'Address by the Provost & Registrar', icon: Mic, color: '#3b82f6', venue: 'Seminar Hall, First Floor, Electronics and Communication Department (A6 Building)', description: 'Address by the Provost and Registrar of CHARUSAT.' },
+        { type: 'ceremony', time: '10:30 AM – 10:50 AM', title: 'Summit Inaugural Proceedings', icon: Mic, color: '#3b82f6', venue: 'Seminar Hall, First Floor, Electronics and Communication Department (A6 Building)', description: 'Official inaugural proceedings of Semiconductor Summit 2.0.' },
         { type: 'ceremony', time: '10:50 AM – 11:30 AM', title: 'Inaugural Talk', icon: Mic, color: '#8b5cf6', venue: 'Seminar Hall, First Floor, Electronics and Communication Department (A6 Building)', description: 'The inaugural keynote talk of Semiconductor Summit 2.0, setting the stage for three days of learning, innovation, and industry interaction.' },
         { type: 'event', eventId: 'panel-discussion' },
         { type: 'break', time: '12:30 PM – 01:30 PM', title: 'Networking Break 🤝', icon: UtensilsCrossed, color: '#f97316' },
