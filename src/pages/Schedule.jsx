@@ -52,7 +52,7 @@ const EVENTS_DATA = [
         date: 'March 17, 2026',
         weekday: 'Tuesday',
         time: '11:30 AM – 12:30 PM',
-        venue: 'Seminar Hall, First Floor, A6 Building',
+        venue: 'Seminar Hall, First Floor, EC Department (A6 Building)',
         category: 'Panel Discussion',
         color: '#3b82f6',
         highlights: [
@@ -79,7 +79,7 @@ const EVENTS_DATA = [
         date: 'March 17, 2026',
         weekday: 'Tuesday',
         time: '01:30 PM – 04:30 PM',
-        venue: 'Seminar Hall, First Floor, A6 Building',
+        venue: 'Seminar Hall, First Floor, EC Department (A6 Building)',
         category: 'Hands-on Workshop',
         color: '#8b5cf6',
         highlights: [
@@ -106,7 +106,7 @@ const EVENTS_DATA = [
         date: 'March 17, 2026',
         weekday: 'Tuesday',
         time: '01:30 PM – 04:30 PM',
-        venue: 'Lab No: 231, First Floor, A6 Building',
+        venue: 'Lab No: 231, First Floor, EC Department (A6 Building)',
         category: 'Hands-on Workshop',
         color: '#8b5cf6',
         highlights: [
@@ -133,7 +133,7 @@ const EVENTS_DATA = [
         date: 'March 18, 2026',
         weekday: 'Wednesday',
         time: '09:45 AM – 11:00 AM',
-        venue: 'Seminar Hall, A6 Building',
+        venue: 'Seminar Hall, EC Department (A6 Building)',
         category: 'Insight Session',
         color: '#f59e0b',
         highlights: [
@@ -160,7 +160,7 @@ const EVENTS_DATA = [
         date: 'March 18, 2026',
         weekday: 'Wednesday',
         time: '12:30 PM – 04:30 PM',
-        venue: 'Seminar Hall, First Floor, A6 Building',
+        venue: 'Seminar Hall, First Floor, EC Department (A6 Building)',
         category: 'Industry-Driven Idea Pitching',
         color: '#ef4444',
         highlights: [
@@ -240,7 +240,7 @@ const EVENTS_DATA = [
         date: 'March 18, 2026',
         weekday: 'Wednesday',
         time: '12:30 PM – 04:30 PM',
-        venue: 'Left Side Lawn, Ground Floor, A6 Building',
+        venue: 'Left Side Lawn, Ground Floor, EC Department (A6 Building)',
         category: 'Stall Visit & Demo',
         color: '#10b981',
         highlights: [
@@ -267,7 +267,7 @@ const EVENTS_DATA = [
         date: 'March 18, 2026',
         weekday: 'Wednesday',
         time: '12:30 PM – 04:30 PM',
-        venue: 'EC Department, A6 Building',
+        venue:'EC Department (A6 Building)',
         category: 'Gallery Walk & Exhibition',
         color: '#06b6d4',
         highlights: [
@@ -294,7 +294,7 @@ const EVENTS_DATA = [
         date: 'March 19, 2026',
         weekday: 'Thursday',
         time: '09:45 AM – 11:00 AM',
-        venue: 'Seminar Hall, A6 Building',
+        venue: 'Seminar Hall, EC Department (A6 Building)',
         category: 'Insight Session',
         color: '#f59e0b',
         highlights: [
@@ -322,7 +322,7 @@ const EVENTS_DATA = [
         date: 'March 19, 2026',
         weekday: 'Thursday',
         time: '12:10 PM – 03:30 PM',
-        venue: 'Foyer, EC Department, A6 Building',
+        venue: 'Foyer, EC Department (A6 Building)',
         category: 'Technical Treasure Hunt',
         color: '#ec4899',
         highlights: [
@@ -351,7 +351,7 @@ const EVENTS_DATA = [
         date: 'March 19, 2026',
         weekday: 'Thursday',
         time: '12:10 PM – 03:30 PM',
-        venue: 'Activity Zones, A6 Building',
+        venue: 'Activity Zones, EC Department (A6 Building)',
         category: 'Problem-Solving Challenges',
         color: '#14b8a6',
         highlights: [
@@ -377,9 +377,9 @@ const EVENTS_DATA = [
 const FULL_SCHEDULE = {
     'Day 1': [
         { type: 'break', time: '09:30 AM – 10:30 AM', title: 'Welcome of Guests & Refreshments ☕', icon: Coffee, color: '#22c55e' },
-        { type: 'ceremony', time: '10:30 AM – 10:40 AM', title: 'Address by the Principal', icon: Mic, color: '#3b82f6', venue: 'Seminar Hall, First Floor, A6 Building', description: 'Welcome address by the Principal of CSPIT, CHARUSAT University.' },
-        { type: 'ceremony', time: '10:45 AM – 10:50 AM', title: 'Address by the Provost & Registrar', icon: Mic, color: '#3b82f6', venue: 'Seminar Hall, First Floor, A6 Building', description: 'Address by the Provost and Registrar of CHARUSAT University.' },
-        { type: 'ceremony', time: '10:50 AM – 11:30 AM', title: 'Inaugural Talk', icon: Mic, color: '#8b5cf6', venue: 'Seminar Hall, First Floor, A6 Building', description: 'The inaugural keynote talk of Semiconductor Summit 2.0, setting the stage for three days of learning, innovation, and industry interaction.' },
+        { type: 'ceremony', time: '10:30 AM – 10:40 AM', title: 'Address by the Principal', icon: Mic, color: '#3b82f6', venue: 'Seminar Hall, First Floor, EC Department (A6 Building)', description: 'Welcome address by the Principal of CSPIT, CHARUSAT.' },
+        { type: 'ceremony', time: '10:45 AM – 10:50 AM', title: 'Address by the Provost & Registrar', icon: Mic, color: '#3b82f6', venue: 'Seminar Hall, First Floor, EC Department (A6 Building)', description: 'Address by the Provost and Registrar of CHARUSAT.' },
+        { type: 'ceremony', time: '10:50 AM – 11:30 AM', title: 'Inaugural Talk', icon: Mic, color: '#8b5cf6', venue: 'Seminar Hall, First Floor, EC Department (A6 Building)', description: 'The inaugural keynote talk of Semiconductor Summit 2.0, setting the stage for three days of learning, innovation, and industry interaction.' },
         { type: 'event', eventId: 'panel-discussion' },
         { type: 'break', time: '12:30 PM – 01:30 PM', title: 'Lunch Break and Networking 🍽️', icon: UtensilsCrossed, color: '#f97316' },
         { type: 'event', eventId: 'rtl-gds-workshop' },
@@ -399,7 +399,7 @@ const FULL_SCHEDULE = {
         { type: 'break', time: '11:00 AM – 12:00 Noon', title: 'Lunch Break and Networking 🍽️', icon: UtensilsCrossed, color: '#f97316' },
         { type: 'event', eventId: 'silicon-jackpot' },
         { type: 'event', eventId: 'tech-engagement' },
-        { type: 'ceremony', time: '03:30 PM – 04:30 PM', title: 'Awards & Closing Ceremony 🏆', icon: PartyPopper, color: '#f59e0b', venue: 'Seminar Hall, A6 Building', description: 'The grand closing ceremony featuring prize distribution, certificates, recognition of outstanding participants, and a summary of the summit highlights.' },
+        { type: 'ceremony', time: '03:30 PM – 04:30 PM', title: 'Awards & Closing Ceremony 🏆', icon: PartyPopper, color: '#f59e0b', venue: 'Seminar Hall, EC Department (A6 Building)', description: 'The grand closing ceremony featuring prize distribution, certificates, recognition of outstanding participants, and a summary of the summit highlights.' },
     ],
 };
 

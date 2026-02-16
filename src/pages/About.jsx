@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Target, Lightbulb, Users, Trophy, ArrowRight, Image } from 'lucide-react';
+import { Target, Lightbulb, Users, Trophy, ArrowRight, Image, ExternalLink } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ParticleField from '../components/ParticleField';
@@ -52,6 +52,12 @@ const About = () => {
                         <p className="premium-text">
                             Charotar University of Science and Technology (CHARUSAT) is a forward-thinking institution committed to academic excellence, research innovation, and strong industry collaboration. The university fosters a dynamic ecosystem where technology, talent, and leadership converge.
                         </p>
+                        <p className="premium-text">
+                            CHARUSAT offers cutting-edge undergraduate, postgraduate, and doctoral programs in engineering, technology, applied sciences, and management. With a focus on interdisciplinary research, the university actively collaborates with national and international research institutions, industry partners, and startups to drive innovation in emerging technologies such as semiconductors, VLSI, AI, IoT, and sustainable engineering.
+                        </p>
+                        <a href="https://www.charusat.ac.in" target="_blank" rel="noopener noreferrer" className="styled-link">
+                            Explore CHARUSAT <ExternalLink size={16} />
+                        </a>
                     </div>
 
                     <div className="premium-content-block">
@@ -59,6 +65,12 @@ const About = () => {
                         <p className="premium-text">
                             Chandubhai S. Patel Institute of Technology (CSPIT), the flagship engineering institute of CHARUSAT, is known for its industry-aligned curriculum, research-driven education, and strong emphasis on practical learning. The institute nurtures innovation and technical excellence, preparing students to excel in advanced engineering fields including electronics, computing, and semiconductor technologies.
                         </p>
+                        <p className="premium-text">
+                            CSPIT offers B.Tech, M.Tech, and Ph.D. programs across multiple engineering disciplines with state-of-the-art laboratories, innovation centers, and industry collaboration hubs. The institute actively promotes student participation in research publications, patent filings, and technical competitions, fostering a culture of innovation and entrepreneurship.
+                        </p>
+                        <a href="https://cspit.charusat.ac.in" target="_blank" rel="noopener noreferrer" className="styled-link">
+                            Visit CSPIT <ExternalLink size={16} />
+                        </a>
                     </div>
 
                     <div className="premium-content-block">
@@ -69,7 +81,17 @@ const About = () => {
                     </div>
                 </section>
 
-                {/* ====== GLIMPSES SECTION (Moved to Top) ====== */}
+                {/* Mission/Vision Section - Moved Before Gallery */}
+                <section className="mission-section">
+                    {/* ... (rest of mission content) ... */}
+                    <div className="section-icon">
+                        <Target size={40} />
+                    </div>
+                    <h2>Our Vision</h2>
+                    <p>To empower the next generation of semiconductor engineers by integrating academic excellence with industry exposure and innovation-led learning.</p>
+                </section>
+
+                {/* ====== GLIMPSES SECTION ====== */}
                 <section className="glimpse-section">
                     <h2>Glimpse of <span className="text-gradient">Summit 1.0</span></h2>
                     <p className="glimpse-subtitle">Relive the moments from our previous summit.</p>
@@ -88,16 +110,6 @@ const About = () => {
                             </div>
                         ))}
                     </div>
-                </section>
-
-                {/* Mission Section */}
-                <section className="mission-section">
-                    {/* ... (rest of mission content) ... */}
-                    <div className="section-icon">
-                        <Target size={40} />
-                    </div>
-                    <h2>Our Vision</h2>
-                    <p>To empower the next generation of semiconductor engineers by integrating academic excellence with industry exposure and innovation-led learning.</p>
                 </section>
 
 

@@ -428,11 +428,11 @@ const EventCard = ({ event, category, index, onClick }) => {
             <div className="ev-card-modern-poster-wrap">
                 <img src={event.poster || 'https://placehold.co/400x400/102030/22c55e?text=No+Poster'} alt={event.title} loading="lazy" />
                 <div className="ev-card-overlay-grad" />
-                <span className="ev-card-badge">{event.type}</span>
             </div>
 
             <div className="ev-card-modern-content">
-                <div className="ev-card-buttons">
+                <div className="ev-card-badge-wrapper">
+                    <span className="ev-card-badge">{category.title}</span>
                     <button className="ev-btn-view-full">
                         View Details <ArrowRight size={16} />
                     </button>

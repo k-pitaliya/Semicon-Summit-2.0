@@ -227,7 +227,7 @@
     font-weight: 800;
     color: #ffffff;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.1em;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
     margin-bottom: 1.5rem;
     position: relative;
@@ -565,7 +565,7 @@
 .countdown-title {
     font-size: 0.9rem;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.075em;
     color: var(--text-tertiary);
     margin-bottom: 1.5rem;
     font-weight: 600;
@@ -595,7 +595,7 @@
 .countdown-label {
     font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.04em;
     color: var(--text-tertiary);
     margin-top: 0.25rem;
 }
@@ -719,7 +719,7 @@
 
 .about-summit-text {
     margin-bottom: 3rem;
-    text-align: center;
+    text-align: justify;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -738,7 +738,8 @@
     line-height: 1.7;
     color: var(--text-secondary);
     max-width: 750px;
-    margin: 0 auto 1rem;
+    margin-bottom: 1rem;
+    text-align: justify;
 }
 
 .about-closing {
@@ -823,7 +824,7 @@
     font-weight: 600;
     color: var(--accent-500);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
     opacity: 0.75;
     cursor: default;
     user-select: none;
