@@ -376,7 +376,7 @@ const EVENTS_DATA = [
 // type: 'ceremony' → clickable but no poster modal, just info
 const FULL_SCHEDULE = {
     'Day 1': [
-        { type: 'break', time: '09:30 AM – 10:30 AM', title: 'Welcome of Guests & Refreshments ☕', icon: Coffee, color: '#22c55e' },
+        { type: 'break', time: '09:15 AM – 10:30 AM', title: 'Welcome of Guests & Refreshments ☕', icon: Coffee, color: '#22c55e' },
         { type: 'ceremony', time: '10:30 AM – 10:40 AM', title: 'Address by the Principal', icon: Mic, color: '#3b82f6', venue: 'Seminar Hall, First Floor, EC Department (A6 Building)', description: 'Welcome address by the Principal of CSPIT, CHARUSAT.' },
         { type: 'ceremony', time: '10:45 AM – 10:50 AM', title: 'Address by the Provost & Registrar', icon: Mic, color: '#3b82f6', venue: 'Seminar Hall, First Floor, EC Department (A6 Building)', description: 'Address by the Provost and Registrar of CHARUSAT.' },
         { type: 'ceremony', time: '10:50 AM – 11:30 AM', title: 'Inaugural Talk', icon: Mic, color: '#8b5cf6', venue: 'Seminar Hall, First Floor, EC Department (A6 Building)', description: 'The inaugural keynote talk of Semiconductor Summit 2.0, setting the stage for three days of learning, innovation, and industry interaction.' },
