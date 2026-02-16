@@ -136,7 +136,7 @@ This session aims to provide clarity for students at early academic stages.`,
         subtitle: 'Open Source ASIC Design Flow',
         type: 'Advanced Workshop',
         icon: Layers,
-        poster: '/images/New posters/6.hands on workshop.jpeg',
+        poster: '/images/New posters/5.workshop experts.jpeg',
         prize: 'Certificates',
         description: 'Explore the complete open-source ASIC design flow — from RTL design to GDS II generation. Specifically for 3rd and 4th year students.',
         fullDescription: `This advanced, hands-on workshop is specifically designed for 3rd and 4th year students with prior knowledge of digital design and HDL concepts.
