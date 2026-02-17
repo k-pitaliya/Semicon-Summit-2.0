@@ -240,7 +240,7 @@ const Register = () => {
                     <div className="form-step">
                         <h2><CreditCard size={24} /> Make Payment</h2>
                         <p className="step-description">
-                            Pay the registration fee to get started. All 10 events are included!
+                            Pay the registration fee to get started. All 10+ events are included!
                         </p>
 
                         {/* Fee Card */}
@@ -250,7 +250,7 @@ const Register = () => {
                                 <span className="fee-amount">₹{REGISTRATION_FEE}</span>
                             </div>
                             <div className="fee-includes">
-                                <p>✓ Access to all 10 events across 3 days</p>
+                                <p>✓ Access to all 10+ events across 3 days</p>
                                 <p>✓ Certificate of participation</p>
                                 <p>✓ Workshop materials & resources</p>
                                 <p>✓ Refreshments</p>

@@ -94,7 +94,7 @@ const About = () => {
                 {/* ====== GLIMPSES SECTION ====== */}
                 <section className="glimpse-section">
                     <h2>Glimpse of <span className="text-gradient">Summit 1.0</span></h2>
-                    <p className="glimpse-subtitle" style={{ textAlign: 'justify' }}>Relive the moments from our previous summit.</p>
+                    <p className="glimpse-subtitle">Relive the moments from our previous summit.</p>
 
                     <div className="glimpse-grid">
                         {previousEventImages.map((item) => (
@@ -122,15 +122,15 @@ const About = () => {
                     <div className="audience-grid">
                         <div className="audience-card">
                             <h3>Engineering Students</h3>
-                            <p style={{ textAlign: 'justify' }}>Students from Electronics, Computer Science, and related fields interested in semiconductor technology</p>
+                            <p>Students from Electronics, Computer Science, and related fields interested in semiconductor technology</p>
                         </div>
                         <div className="audience-card">
                             <h3>Aspiring Engineers</h3>
-                            <p style={{ textAlign: 'justify' }}>Those looking to build a career in VLSI design, chip architecture, or embedded systems</p>
+                            <p>Those looking to build a career in VLSI design, chip architecture, or embedded systems</p>
                         </div>
                         <div className="audience-card">
                             <h3>Tech Enthusiasts</h3>
-                            <p style={{ textAlign: 'justify' }}>Anyone passionate about learning cutting-edge semiconductor technologies and industry trends</p>
+                            <p>Anyone passionate about learning cutting-edge semiconductor technologies and industry trends</p>
                         </div>
                     </div>
                 </section>
@@ -162,7 +162,7 @@ const About = () => {
                 {/* Call to Action */}
                 <section className="about-cta">
                     <h2>Ready to Join the Summit?</h2>
-                    <p style={{ textAlign: 'justify' }}>Register now and be part of this amazing learning experience</p>
+                    <p>Register now and be part of this amazing learning experience</p>
                     <Link to="/register" className="btn btn-primary btn-large">
                         Register Now →
                     </Link>

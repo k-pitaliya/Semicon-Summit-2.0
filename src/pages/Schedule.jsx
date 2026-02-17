@@ -748,7 +748,7 @@ const Schedule = () => {
                 </div>
                 <div className="events-hero-content">
                     <span className="events-tag">
-                        <Sparkles size={14} /> ALL (10 EVENTS) • ₹299 ONLY
+                        <Sparkles size={14} /> ALL (10+ EVENTS) • ₹299 ONLY
                     </span>
                     <h1>Event <span className="text-gradient">Schedule</span></h1>
                     <p>Semiconductor Summit 2.0 · March 17–19, 2026 · CHARUSAT</p>
@@ -927,7 +927,7 @@ const Schedule = () => {
                     <div className="cta-glass">
                         <Sparkles size={32} className="cta-icon" />
                         <h2>Ready to Join the Summit?</h2>
-                        <p>Register now for all 10 events — Only ₹299</p>
+                        <p>Register now for all 10+ events — Only ₹299</p>
                         <Link to="/register" className="btn btn-primary btn-large cta-btn">
                             Register Now <ArrowRight size={20} />
                         </Link>
