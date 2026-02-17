@@ -49,10 +49,10 @@ const About = () => {
                 <section className="about-charusat-section">
                     <div className="premium-content-block">
                         <h2>About <span className="text-gradient">CHARUSAT</span></h2>
-                        <p className="premium-text">
+                        <p className="premium-text" style={{ textAlign: 'justify' }}>
                             Charotar University of Science and Technology (CHARUSAT) is a forward-thinking institution committed to academic excellence, research innovation, and strong industry collaboration. The university fosters a dynamic ecosystem where technology, talent, and leadership converge.
                         </p>
-                        <p className="premium-text">
+                        <p className="premium-text" style={{ textAlign: 'justify' }}>
                             CHARUSAT offers cutting-edge undergraduate, postgraduate, and doctoral programs in engineering, technology, applied sciences, and management. With a focus on interdisciplinary research, the university actively collaborates with national and international research institutions, industry partners, and startups to drive innovation in emerging technologies such as semiconductors, VLSI, AI, IoT, and sustainable engineering.
                         </p>
                         <a href="https://www.charusat.ac.in" target="_blank" rel="noopener noreferrer" className="styled-link">
@@ -62,10 +62,10 @@ const About = () => {
 
                     <div className="premium-content-block">
                         <h2>About <span className="text-gradient">Institute</span></h2>
-                        <p className="premium-text">
+                        <p className="premium-text" style={{ textAlign: 'justify' }}>
                             Chandubhai S. Patel Institute of Technology (CSPIT), the flagship engineering institute of CHARUSAT, is known for its industry-aligned curriculum, research-driven education, and strong emphasis on practical learning. The institute nurtures innovation and technical excellence, preparing students to excel in advanced engineering fields including electronics, computing, and semiconductor technologies.
                         </p>
-                        <p className="premium-text">
+                        <p className="premium-text" style={{ textAlign: 'justify' }}>
                             CSPIT offers B.Tech, M.Tech, and Ph.D. programs across multiple engineering disciplines with state-of-the-art laboratories, innovation centers, and industry collaboration hubs. The institute actively promotes student participation in research publications, patent filings, and technical competitions, fostering a culture of innovation and entrepreneurship.
                         </p>
                         <a href="https://cspit.charusat.ac.in" target="_blank" rel="noopener noreferrer" className="styled-link">
@@ -75,7 +75,7 @@ const About = () => {
 
                     <div className="premium-content-block">
                         <h2>About <span className="text-gradient">V. T. Patel Department of Electronics & Communication Engineering</span></h2>
-                        <p className="premium-text">
+                        <p className="premium-text" style={{ textAlign: 'justify' }}>
                             The V. T. Patel Department of Electronics & Communication Engineering at CSPIT drives innovation in semiconductor technology, VLSI design, embedded systems, and advanced communication systems. With a research-oriented approach, modern laboratories, and industry engagement, the department equips students to solve real-world engineering challenges and contribute to the evolving semiconductor ecosystem.
                         </p>
                     </div>
@@ -88,13 +88,13 @@ const About = () => {
                         <Target size={40} />
                     </div>
                     <h2>Our Vision</h2>
-                    <p>To empower the next generation of semiconductor engineers by integrating academic excellence with industry exposure and innovation-led learning.</p>
+                    <p style={{ textAlign: 'justify' }}>To empower the next generation of semiconductor engineers by integrating academic excellence with industry exposure and innovation-led learning.</p>
                 </section>
 
                 {/* ====== GLIMPSES SECTION ====== */}
                 <section className="glimpse-section">
                     <h2>Glimpse of <span className="text-gradient">Summit 1.0</span></h2>
-                    <p className="glimpse-subtitle">Relive the moments from our previous summit.</p>
+                    <p className="glimpse-subtitle" style={{ textAlign: 'justify' }}>Relive the moments from our previous summit.</p>
 
                     <div className="glimpse-grid">
                         {previousEventImages.map((item) => (
@@ -122,15 +122,15 @@ const About = () => {
                     <div className="audience-grid">
                         <div className="audience-card">
                             <h3>Engineering Students</h3>
-                            <p>Students from Electronics, Computer Science, and related fields interested in semiconductor technology</p>
+                            <p style={{ textAlign: 'justify' }}>Students from Electronics, Computer Science, and related fields interested in semiconductor technology</p>
                         </div>
                         <div className="audience-card">
                             <h3>Aspiring Engineers</h3>
-                            <p>Those looking to build a career in VLSI design, chip architecture, or embedded systems</p>
+                            <p style={{ textAlign: 'justify' }}>Those looking to build a career in VLSI design, chip architecture, or embedded systems</p>
                         </div>
                         <div className="audience-card">
                             <h3>Tech Enthusiasts</h3>
-                            <p>Anyone passionate about learning cutting-edge semiconductor technologies and industry trends</p>
+                            <p style={{ textAlign: 'justify' }}>Anyone passionate about learning cutting-edge semiconductor technologies and industry trends</p>
                         </div>
                     </div>
                 </section>
@@ -162,7 +162,7 @@ const About = () => {
                 {/* Call to Action */}
                 <section className="about-cta">
                     <h2>Ready to Join the Summit?</h2>
-                    <p>Register now and be part of this amazing learning experience</p>
+                    <p style={{ textAlign: 'justify' }}>Register now and be part of this amazing learning experience</p>
                     <Link to="/register" className="btn btn-primary btn-large">
                         Register Now →
                     </Link>
