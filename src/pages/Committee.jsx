@@ -153,7 +153,7 @@ const Committee = () => {
 
     const tabs = [
         'Conveners',
-        'Faculty Co-Coordinators',
+        'Coordinator',
         'Core Committee',
         'Student Coordinators'
     ];
@@ -161,7 +161,7 @@ const Committee = () => {
     const getActiveData = () => {
         switch (activeTab) {
             case 'Conveners': return CONVENERS;
-            case 'Faculty Co-Coordinators': return FACULTY_CO_COORDINATORS;
+            case 'Coordinator': return COORDINATORS;
             case 'Core Committee': return CORE_COMMITTEE;
             case 'Student Coordinators': return STUDENT_COORDINATORS;
             default: return [];
