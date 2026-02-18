@@ -68,7 +68,7 @@ const Speakers = () => {
                         </div>
 
                         <div className="reveal-silhouettes">
-                            {[1, 2, 3, 4, 5].map(i => (
+                            {[1, 2, 3].map(i => (
                                 <div key={i} className="silhouette-card" style={{ animationDelay: `${i * 0.15}s` }}>
                                     <div className="silhouette-avatar">
                                         <span>?</span>
@@ -103,7 +103,7 @@ const Speakers = () => {
                         <p>Full lineup to be announced shortly. Our panelists represent the forefront of India's semiconductor growth — from chip design startups to established MSME players.</p>
 
                         <div className="reveal-silhouettes">
-                            {[1, 2, 3].map(i => (
+                            {[1, 2, 3, 4, 5].map(i => (
                                 <div key={i} className="silhouette-card panelist" style={{ animationDelay: `${i * 0.15}s` }}>
                                     <div className="silhouette-avatar">
                                         <Mic size={20} />

@@ -67,8 +67,8 @@ const FACULTY_CO_COORDINATORS = [
 ];
 
 const CORE_LEADS = [
-    { name: 'Dhruti Panchal', role: null, designation: 'Core Head', image: "/images/members/4.core_committee/Dhruti-1.jpg", icon: <Palette size={16} /> },
     { name: 'Dhruv Rupapara', role: null, designation: 'Core Head', image: "/images/members/4.core_committee/Feedback, Reporting & Continuity Committee/Dhruv_Ruppapara.JPG", icon: <Star size={16} /> },
+    { name: 'Dhruti Panchal', role: null, designation: 'Core Head', image: "/images/members/4.core_committee/Dhruti-1.jpg", icon: <Palette size={16} /> },
 ];
 
 const CORE_COMMITTEE = [
@@ -153,7 +153,6 @@ const Committee = () => {
 
     const tabs = [
         'Conveners',
-        'Coordinator',
         'Faculty Co-Coordinators',
         'Core Committee',
         'Student Coordinators'
@@ -162,7 +161,6 @@ const Committee = () => {
     const getActiveData = () => {
         switch (activeTab) {
             case 'Conveners': return CONVENERS;
-            case 'Coordinator': return COORDINATORS;
             case 'Faculty Co-Coordinators': return FACULTY_CO_COORDINATORS;
             case 'Core Committee': return CORE_COMMITTEE;
             case 'Student Coordinators': return STUDENT_COORDINATORS;

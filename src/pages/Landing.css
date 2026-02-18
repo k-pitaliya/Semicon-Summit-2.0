@@ -223,7 +223,7 @@
 /* Tagline */
 .hero-tagline {
     font-family: 'Inter', sans-serif;
-    font-size: clamp(0.875rem, 2vw, 1.25rem);
+    font-size: clamp(1rem, 2.2vw, 1.4rem);
     font-weight: 800;
     color: #ffffff;
     text-transform: uppercase;
@@ -248,7 +248,7 @@
     align-items: center;
     gap: 0.5rem;
     color: var(--text-secondary);
-    font-size: 0.9375rem;
+    font-size: 1.0625rem;
 }
 
 .hero-info-item svg {
@@ -304,7 +304,7 @@
 
 .cta-card-inner>p {
     color: var(--text-secondary);
-    font-size: 1rem;
+    font-size: 1.1rem;
     margin-bottom: 2rem;
 }
 
@@ -388,7 +388,7 @@
 .cta-events-btn {
     padding: 1rem 1.5rem !important;
     border-radius: 14px !important;
-    font-size: 0.95rem;
+    font-size: 1.05rem;
     font-weight: 600;
 }
 
@@ -657,7 +657,7 @@
 }
 
 .landing-stat-text {
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     color: var(--text-tertiary);
     line-height: 1.3;
 }
@@ -726,7 +726,7 @@
 }
 
 .about-lead {
-    font-size: 1.25rem;
+    font-size: 1.35rem;
     line-height: 1.7;
     color: var(--text-primary);
     font-weight: 500;
@@ -734,7 +734,7 @@
 }
 
 .about-summit-text p {
-    font-size: 1rem;
+    font-size: 1.0625rem;
     line-height: 1.7;
     color: var(--text-secondary);
     max-width: 750px;
@@ -786,14 +786,14 @@
 }
 
 .about-feature-card h4 {
-    font-size: 1rem;
+    font-size: 1.075rem;
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: 0.3rem;
 }
 
 .about-feature-card p {
-    font-size: 0.85rem;
+    font-size: 0.9375rem;
     color: var(--text-tertiary);
     line-height: 1.5;
     margin: 0;
