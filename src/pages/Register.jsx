@@ -40,8 +40,11 @@ const Register = () => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
+        universityEmail: '',
         phone: '',
         college: '',
+        isCharusat: '',
+        collegeId: '',
         department: '',
         paymentId: '',
         pdfFile: null,
@@ -78,10 +81,13 @@ const Register = () => {
     };
 
     const validateForm = () => {
+        if (!formData.isCharusat) { setError('Please select your university'); return false; }
+        if (formData.isCharusat === 'other' && !formData.college.trim()) { setError('Please enter your college/university name'); return false; }
         if (!formData.name.trim()) { setError('Please enter your full name'); return false; }
-        if (!/^\S+@\S+\.\S+$/.test(formData.email)) { setError('Please enter a valid email'); return false; }
+        if (!/^\S+@\S+\.\S+$/.test(formData.universityEmail)) { setError('Please enter a valid university email'); return false; }
+        if (!/^\S+@\S+\.\S+$/.test(formData.email)) { setError('Please enter a valid personal email'); return false; }
         if (!/^\d{10}$/.test(formData.phone)) { setError('Please enter a valid 10-digit phone number'); return false; }
-        if (!formData.college.trim()) { setError('Please enter your college name'); return false; }
+        if (!formData.collegeId.trim()) { setError('Please enter your student / college ID number'); return false; }
         if (!formData.paymentId.trim()) { setError('Please enter the Payment ID from your receipt'); return false; }
         if (!formData.paymentId.trim().startsWith('pay_')) { setError('Payment ID must start with "pay_" (e.g., pay_KzJ9...)'); return false; }
         if (!formData.pdfFile) { setError('Please upload the PDF receipt'); return false; }
@@ -100,8 +106,10 @@ const Register = () => {
             const data = new FormData();
             data.append('name', formData.name.trim());
             data.append('email', formData.email.trim());
+            data.append('universityEmail', formData.universityEmail.trim());
             data.append('phone', formData.phone.trim());
-            data.append('college', formData.college.trim());
+            data.append('college', formData.isCharusat === 'charusat' ? 'CHARUSAT' : formData.college.trim());
+            data.append('collegeId', formData.collegeId.trim());
             data.append('department', formData.department.trim());
             data.append('paymentId', formData.paymentId.trim());
             data.append('paymentAmount', REGISTRATION_FEE);
@@ -314,27 +322,75 @@ const Register = () => {
 
                             {/* Personal Info */}
                             <div className="form-grid">
+                                <div className="input-group full-width">
+                                    <label>University / College <span className="required">*</span></label>
+                                    <select
+                                        id="isCharusat"
+                                        name="isCharusat"
+                                        value={formData.isCharusat}
+                                        onChange={handleChange}
+                                        className="input"
+                                    >
+                                        <option value="">Select your university</option>
+                                        <option value="charusat">CHARUSAT</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+
+                                {formData.isCharusat === 'other' && (
+                                    <div className="input-group full-width">
+                                        <label>College / University Name <span className="required">*</span></label>
+                                        <input
+                                            type="text"
+                                            id="college"
+                                            name="college"
+                                            value={formData.college}
+                                            onChange={handleChange}
+                                            placeholder="Enter your institution name"
+                                            className="input"
+                                        />
+                                    </div>
+                                )}
+
                                 <div className="input-group">
                                     <label>Full Name <span className="required">*</span></label>
                                     <input
                                         type="text"
+                                        id="name"
                                         name="name"
                                         value={formData.name}
                                         onChange={handleChange}
                                         placeholder="Enter your full name"
                                         className="input"
+                                        autoComplete="name"
                                     />
                                 </div>
 
                                 <div className="input-group">
-                                    <label>Email Address <span className="required">*</span></label>
+                                    <label>University Email <span className="required">*</span></label>
                                     <input
                                         type="email"
+                                        id="universityEmail"
+                                        name="universityEmail"
+                                        value={formData.universityEmail}
+                                        onChange={handleChange}
+                                        placeholder={formData.isCharusat === 'charusat' ? '20ec023@charusat.ac.in' : 'your.uni@email.com'}
+                                        className="input"
+                                        autoComplete="email"
+                                    />
+                                </div>
+
+                                <div className="input-group">
+                                    <label>Personal Email <span className="required">*</span></label>
+                                    <input
+                                        type="email"
+                                        id="email"
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
                                         placeholder="your.email@example.com"
                                         className="input"
+                                        autoComplete="email"
                                     />
                                 </div>
 
@@ -342,22 +398,25 @@ const Register = () => {
                                     <label>Phone Number <span className="required">*</span></label>
                                     <input
                                         type="tel"
+                                        id="phone"
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleChange}
                                         placeholder="10-digit mobile number"
                                         className="input"
+                                        autoComplete="tel"
                                     />
                                 </div>
 
                                 <div className="input-group">
-                                    <label>College / University <span className="required">*</span></label>
+                                    <label>Student / College ID <span className="required">*</span></label>
                                     <input
                                         type="text"
-                                        name="college"
-                                        value={formData.college}
+                                        id="collegeId"
+                                        name="collegeId"
+                                        value={formData.collegeId}
                                         onChange={handleChange}
-                                        placeholder="Your institution name"
+                                        placeholder={formData.isCharusat === 'charusat' ? 'e.g., 20EC023' : 'Your student ID number'}
                                         className="input"
                                     />
                                 </div>
@@ -366,6 +425,7 @@ const Register = () => {
                                     <label>Department</label>
                                     <input
                                         type="text"
+                                        id="department"
                                         name="department"
                                         value={formData.department}
                                         onChange={handleChange}
@@ -385,6 +445,8 @@ const Register = () => {
                                         <label key={event.id} className="event-checkbox-label">
                                             <input
                                                 type="checkbox"
+                                                id={`event-${event.id}`}
+                                                name={`event-${event.id}`}
                                                 checked={formData.selectedEvents.includes(event.name)}
                                                 onChange={() => handleEventToggle(event.name)}
                                                 className="event-checkbox"
@@ -408,11 +470,13 @@ const Register = () => {
                                     <label>Payment ID <span className="required">*</span></label>
                                     <input
                                         type="text"
+                                        id="paymentId"
                                         name="paymentId"
                                         value={formData.paymentId}
                                         onChange={handleChange}
                                         placeholder="e.g., pay_xxxxxxxxxxxxx"
                                         className="input"
+                                        autoComplete="off"
                                     />
                                     <small>Find this ID in your payment receipt PDF</small>
                                 </div>

@@ -20,7 +20,7 @@ const User = require('./models/User');
 const Event = require('./models/Event');
 
 // Services
-const { generatePassword, sendCredentialsEmail } = require('./services/emailService');
+const { generatePassword, sendCredentialsEmail, verifyEmailTransporter } = require('./services/emailService');
 
 // Route files
 const authRoutes = require('./routes/authRoutes');
@@ -80,7 +80,7 @@ app.use(cors({
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
-        
+
         // Check if the origin is in the allowed list
         if (allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
@@ -214,7 +214,7 @@ app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) =
         try {
             // Wait a moment for file to be fully written (prevents intermittent read errors)
             await new Promise(resolve => setTimeout(resolve, 100));
-            
+
             // Read file with retry logic
             let dataBuffer;
             let retries = 3;
@@ -228,7 +228,7 @@ app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) =
                     await new Promise(resolve => setTimeout(resolve, 200));
                 }
             }
-            
+
             const pdfData = await pdfParse(dataBuffer);
             pdfText = pdfData.text;
             logger.debug('PDF text extracted', { length: pdfText.length });
@@ -447,4 +447,6 @@ app.listen(PORT, () => {
     logger.info(`Uploads directory: ${uploadsDir}`);
     logger.info('Database: MongoDB');
     logger.info(`Cloudinary: ${process.env.CLOUDINARY_CLOUD_NAME ? 'Configured' : 'Not configured'}`);
+    // Verify SMTP on startup so email failures show in logs immediately
+    verifyEmailTransporter();
 });

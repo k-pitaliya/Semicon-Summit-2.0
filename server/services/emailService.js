@@ -1,14 +1,41 @@
 const nodemailer = require('nodemailer');
 
-// Create transporter
+// Strip any surrounding quotes from env vars (common .env mistake)
+const EMAIL_USER = (process.env.EMAIL_USER || '').replace(/^"|"$/g, '').trim();
+const EMAIL_PASS = (process.env.EMAIL_PASS || '').replace(/^"|"$/g, '').trim();
+
+// Create transporter — explicit SMTP config works for both Gmail and Google Workspace
 const createTransporter = () => {
     return nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,          // STARTTLS on port 587
         auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
+            user: EMAIL_USER,
+            pass: EMAIL_PASS   // Must be a Gmail App Password (16 chars, no spaces)
+        },
+        tls: {
+            rejectUnauthorized: false  // Allow self-signed certs (helps Render/cloud envs)
         }
     });
+};
+
+// Verify SMTP connection — call once on server start
+const verifyEmailTransporter = async () => {
+    if (!EMAIL_USER || !EMAIL_PASS) {
+        console.warn('⚠️  EMAIL_USER or EMAIL_PASS not set — emails will NOT be sent');
+        return false;
+    }
+    try {
+        const transporter = createTransporter();
+        await transporter.verify();
+        console.log(`✅ SMTP ready — sending as ${EMAIL_USER}`);
+        return true;
+    } catch (err) {
+        console.error(`❌ SMTP connection failed: [${err.code}] ${err.message}`);
+        console.error('   → Check EMAIL_USER and EMAIL_PASS in .env (use a Gmail App Password, no quotes)');
+        return false;
+    }
 };
 
 // Generate random password
@@ -26,7 +53,7 @@ const sendCredentialsEmail = async (user, password) => {
     const transporter = createTransporter();
 
     const mailOptions = {
-        from: `"Semiconductor Summit 2.0" <${process.env.EMAIL_USER}>`,
+        from: `"Semiconductor Summit 2.0" <${EMAIL_USER}>`,
         to: user.email,
         subject: '🚀 Access Granted: Semiconductor Summit 2.0 Credentials',
         html: `
@@ -122,7 +149,7 @@ const sendCredentialsEmail = async (user, password) => {
         console.log(`✅ Credentials email sent to ${user.email}`);
         return true;
     } catch (error) {
-        console.error(`❌ Email sending failed:`, error.message);
+        console.error(`❌ Credentials email failed [${error.code || error.responseCode}]: ${error.message}`);
         return false;
     }
 };
@@ -132,7 +159,7 @@ const sendRejectionEmail = async (user, reason) => {
     const transporter = createTransporter();
 
     const mailOptions = {
-        from: `"Semiconductor Summit 2.0" <${process.env.EMAIL_USER}>`,
+        from: `"Semiconductor Summit 2.0" <${EMAIL_USER}>`,
         to: user.email,
         subject: 'Action Required: Registration Status Update',
         html: `
@@ -204,7 +231,7 @@ const sendPasswordResetEmail = async (user, newPassword) => {
     const transporter = createTransporter();
 
     const mailOptions = {
-        from: `"Semiconductor Summit 2.0" <${process.env.EMAIL_USER}>`,
+        from: `"Semiconductor Summit 2.0" <${EMAIL_USER}>`,
         to: user.email,
         subject: '🔑 Security Notification: Password Reset',
         html: `
@@ -295,5 +322,6 @@ module.exports = {
     generatePassword,
     sendCredentialsEmail,
     sendRejectionEmail,
-    sendPasswordResetEmail
+    sendPasswordResetEmail,
+    verifyEmailTransporter
 };
