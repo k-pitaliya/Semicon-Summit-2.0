@@ -35,7 +35,7 @@ const CoordinatorDashboard = () => {
                 api.get('/uploads/documents')
             ])
 
-            setAnnouncements(annRes.data)
+            setAnnouncements(annRes.data.announcements ?? annRes.data ?? [])
 
             // Transform API data to match UI expected format
             const photos = (photosRes.data || []).map(p => ({
@@ -47,11 +47,11 @@ const CoordinatorDashboard = () => {
             }))
 
             const docs = (docsRes.data || []).map(d => ({
-                id: d.id,
+                id: d._id || d.id,
                 name: d.originalName || d.filename,
                 size: formatFileSize(d.size),
-                type: d.filename.split('.').pop(),
-                uploaded: new Date(d.uploadedAt).toLocaleDateString()
+                type: (d.filename || '').split('.').pop(),
+                uploaded: new Date(d.createdAt || d.uploadedAt).toLocaleDateString()
             }))
 
             setUploads({ photos, documents: docs })

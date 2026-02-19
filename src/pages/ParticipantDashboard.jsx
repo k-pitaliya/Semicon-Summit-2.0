@@ -20,7 +20,7 @@ const ParticipantDashboard = () => {
             try {
                 // Fetch announcements from API
                 const announcementsRes = await api.get('/announcements')
-                setAnnouncements(announcementsRes.data || [])
+                setAnnouncements(announcementsRes.data.announcements ?? announcementsRes.data ?? [])
 
                 // Fetch gallery images from API
                 const galleryRes = await api.get('/gallery')
