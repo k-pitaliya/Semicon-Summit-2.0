@@ -6,10 +6,12 @@ const Registration = require('../models/Registration');
 const { authenticate, authorize } = require('../middleware/auth');
 const { generatePassword, sendCredentialsEmail, sendRejectionEmail } = require('../services/emailService');
 
-// Get all participants (Faculty/Coordinator)
+// Get all participants (Faculty/Coordinator) — supports ?page=&limit=&event=
 router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, res) => {
     try {
-        const { event } = req.query;
+        const { event, page, limit } = req.query;
+        const pageNum = Math.max(1, parseInt(page) || 1);
+        const limitNum = Math.min(200, parseInt(limit) || 100);
         let participants;
 
         if (event && event !== 'all') {
@@ -22,7 +24,7 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
                     id: reg.user._id,
                     name: reg.user.name,
                     email: reg.user.email,
-                    generatedPassword: reg.user.generatedPassword,
+                    mustChangePassword: reg.user.mustChangePassword,
                     college: reg.user.college,
                     phone: reg.user.phone,
                     events: [reg.event.title],
@@ -33,7 +35,11 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
                 participants = [];
             }
         } else {
-            const users = await User.find({ role: 'participant' }).sort({ createdAt: -1 });
+            const total = await User.countDocuments({ role: 'participant' });
+            const users = await User.find({ role: 'participant' })
+                .sort({ createdAt: -1 })
+                .skip((pageNum - 1) * limitNum)
+                .limit(limitNum);
             const registrations = await Registration.find().populate('event');
 
             participants = users.map(user => {
@@ -42,7 +48,7 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
                     id: user._id,
                     name: user.name,
                     email: user.email,
-                    generatedPassword: user.generatedPassword,
+                    mustChangePassword: user.mustChangePassword,
                     college: user.college,
                     phone: user.phone,
                     events: userRegs.map(r => r.event?.title || 'Unknown'),
@@ -53,7 +59,15 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
             });
         }
 
-        res.json(participants);
+        res.json({
+            participants,
+            pagination: {
+                total: event && event !== 'all' ? participants.length : total,
+                page: pageNum,
+                limit: limitNum,
+                pages: Math.ceil((event && event !== 'all' ? participants.length : total) / limitNum)
+            }
+        });
     } catch (error) {
         console.error('Get participants error:', error);
         res.status(500).json({ error: 'Server error' });
@@ -118,6 +132,7 @@ router.put('/:id/verify', authenticate, authorize('faculty'), async (req, res) =
 
         const password = generatePassword();
         user.password = password;
+        user.mustChangePassword = true;
         user.verificationStatus = 'approved';
         user.paymentStatus = 'completed';
         user.verifiedBy = req.user._id;

@@ -3,13 +3,22 @@ const router = express.Router();
 const Announcement = require('../models/Announcement');
 const { authenticate, authorize } = require('../middleware/auth');
 
-// Get all announcements (Auth required)
+// Get all announcements (Auth required) — supports ?page=&limit=
 router.get('/', authenticate, async (req, res) => {
     try {
+        const { page, limit } = req.query;
+        const pageNum = Math.max(1, parseInt(page) || 1);
+        const limitNum = Math.min(100, parseInt(limit) || 20);
+        const total = await Announcement.countDocuments();
         const announcements = await Announcement.find()
             .populate('postedBy', 'name role')
-            .sort({ createdAt: -1 });
-        res.json(announcements);
+            .sort({ createdAt: -1 })
+            .skip((pageNum - 1) * limitNum)
+            .limit(limitNum);
+        res.json({
+            announcements,
+            pagination: { total, page: pageNum, limit: limitNum, pages: Math.ceil(total / limitNum) }
+        });
     } catch (error) {
         console.error('Fetch announcements error:', error);
         res.status(500).json({ error: 'Server error' });

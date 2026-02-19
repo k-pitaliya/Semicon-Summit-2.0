@@ -19,8 +19,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         minlength: 6
     },
-    generatedPassword: {
-        type: String
+    mustChangePassword: {
+        type: Boolean,
+        default: false
     },
     passwordChangedAt: {
         type: Date
@@ -140,7 +141,7 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
     return bcrypt.compare(candidatePassword, this.password);
 };
 
-// Remove password from JSON output
+// Remove sensitive fields from JSON output
 userSchema.methods.toJSON = function () {
     const user = this.toObject();
     delete user.password;

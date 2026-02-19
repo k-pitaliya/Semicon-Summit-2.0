@@ -89,7 +89,7 @@ router.post('/:id/reset-password', authenticate, authorize('faculty'), async (re
 
         const newPassword = generatePassword();
         user.password = newPassword;
-        user.generatedPassword = newPassword;
+        user.mustChangePassword = true;
         
         // Reset password expiration date
         if (user.passwordRotationDays > 0) {
