@@ -24,6 +24,7 @@ const FacultyDashboard = () => {
     const [selectedEvent, setSelectedEvent] = useState('all')
     const [loading, setLoading] = useState(true)
     const [actionLoading, setActionLoading] = useState(null)
+    const [error, setError] = useState(null)
 
 
     // User Management State
@@ -40,12 +41,18 @@ const FacultyDashboard = () => {
     const [announcements, setAnnouncements] = useState([])
     const [newAnnouncement, setNewAnnouncement] = useState({ title: '', content: '' })
 
+    // Match the real event names from scheduleData / AVAILABLE_EVENTS in Register.jsx
     const events = [
-        'All Events',
-        'VLSI Design Workshop',
-        'Chip Architecture Talk',
-        'Embedded Systems Hackathon',
-        'Industry Panel Discussion'
+        'Fabless Startups & MSMEs',
+        'AI in VLSI',
+        'Embedded vs VLSI',
+        'RTL to GDS II Workshop',
+        'Verilog & FPGA Workshop',
+        'Silicon Shark Tank',
+        'The Silicon Jackpot',
+        'Silicon PlayZone',
+        'Silicon Ideas Showcase',
+        'Wafer to Chip Demo'
     ]
 
     useEffect(() => {
@@ -54,29 +61,39 @@ const FacultyDashboard = () => {
 
     const fetchData = async () => {
         setLoading(true)
+        setError(null)
         try {
-            // Fetch all verified participants
+            // Fetch all participants (role: participant)
             const participantsRes = await api.get('/participants')
-            const participantsData = participantsRes.data.participants ?? participantsRes.data
+            const participantsData = Array.isArray(participantsRes.data)
+                ? participantsRes.data
+                : (participantsRes.data?.participants ?? [])
             setParticipants(participantsData)
             setFilteredParticipants(participantsData)
 
             // Fetch all users for user management
             const usersRes = await api.get('/users')
-            setAllUsers(usersRes.data)
-
-
-
+            const usersData = Array.isArray(usersRes.data) ? usersRes.data : []
+            setAllUsers(usersData)
 
             // Fetch announcements
             const annRes = await api.get('/announcements')
-            setAnnouncements(annRes.data.announcements ?? annRes.data)
+            setAnnouncements(Array.isArray(annRes.data)
+                ? annRes.data
+                : (annRes.data?.announcements ?? []))
 
             // Fetch gallery images
             const galleryRes = await api.get('/gallery')
-            setGalleryImages(galleryRes.data)
-        } catch (error) {
-            console.error('Error fetching data:', error)
+            setGalleryImages(Array.isArray(galleryRes.data) ? galleryRes.data : [])
+        } catch (err) {
+            console.error('❌ Dashboard fetch error:', err)
+            const msg = err.response?.data?.error || err.message || 'Unknown error'
+            const status = err.response?.status
+            if (status === 401 || status === 403) {
+                setError(`Authentication error (${status}): ${msg}. Please log out and log back in.`)
+            } else {
+                setError(`Failed to load data: ${msg}`)
+            }
         } finally {
             setLoading(false)
         }
@@ -94,8 +111,9 @@ const FacultyDashboard = () => {
         }
 
         if (selectedEvent !== 'all') {
+            // selectedEvents is an array of event name strings on the participant object
             filtered = filtered.filter(p =>
-                p.events?.includes(selectedEvent)
+                Array.isArray(p.selectedEvents) && p.selectedEvents.includes(selectedEvent)
             )
         }
 
@@ -157,7 +175,7 @@ const FacultyDashboard = () => {
             'College': p.college || '',
             'Selected Events': (p.selectedEvents || []).join(', '),
             'Transaction ID': p.transactionId || p.paymentRef || '',
-            'Amount Paid': p.paymentAmount || 400,
+            'Amount Paid': p.paymentAmount || 299,
             'Status': p.verificationStatus || 'approved',
             'Registered On': p.createdAt ? new Date(p.createdAt).toLocaleDateString('en-IN') : p.timestamp || ''
         }))
@@ -360,6 +378,31 @@ const FacultyDashboard = () => {
                     </div>
                 </header>
 
+                {/* Error Banner */}
+                {error && (
+                    <div className="error-banner" style={{
+                        margin: '1rem 2rem',
+                        padding: '1rem 1.25rem',
+                        background: 'rgba(239,68,68,0.12)',
+                        border: '1px solid rgba(239,68,68,0.4)',
+                        borderRadius: '8px',
+                        color: '#fca5a5',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.75rem',
+                        fontSize: '0.9rem'
+                    }}>
+                        <AlertTriangle size={18} color="#ef4444" />
+                        <span>{error}</span>
+                        <button
+                            onClick={() => { setError(null); fetchData() }}
+                            style={{ marginLeft: 'auto', background: 'transparent', border: '1px solid rgba(239,68,68,0.5)', color: '#fca5a5', borderRadius: '6px', padding: '4px 12px', cursor: 'pointer' }}
+                        >
+                            Retry
+                        </button>
+                    </div>
+                )}
+
                 <div className="dashboard-content">
                     {/* All Registrations Tab */}
                     {activeTab === 'registrations' && (
@@ -369,6 +412,9 @@ const FacultyDashboard = () => {
                             loading={loading}
                             searchTerm={searchTerm}
                             setSearchTerm={setSearchTerm}
+                            selectedEvent={selectedEvent}
+                            setSelectedEvent={setSelectedEvent}
+                            events={events}
                             handleExport={handleExport}
                         />
                     )}

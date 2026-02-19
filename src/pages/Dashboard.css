@@ -717,6 +717,13 @@
     cursor: pointer;
 }
 
+.event-filter {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--text-tertiary);
+}
+
 /* ===================================
    DATA TABLE
    =================================== */

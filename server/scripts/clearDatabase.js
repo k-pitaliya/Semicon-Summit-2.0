@@ -17,6 +17,7 @@ const Registration = require('../models/Registration');
 const Gallery = require('../models/Gallery');
 const Announcement = require('../models/Announcement');
 const Event = require('../models/Event');
+const UploadedFile = require('../models/UploadedFile');
 
 // MongoDB URI
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/semiconductor_summit';
@@ -50,7 +51,8 @@ async function clearDatabase() {
             registrations: await Registration.countDocuments(),
             gallery: await Gallery.countDocuments(),
             announcements: await Announcement.countDocuments(),
-            events: await Event.countDocuments()
+            events: await Event.countDocuments(),
+            uploadedFiles: await UploadedFile.countDocuments()
         };
 
         console.log('\n' + colors.bright + '📊 Current Database State:' + colors.reset);
@@ -59,6 +61,7 @@ async function clearDatabase() {
         console.log(`   Gallery: ${counts.gallery}`);
         console.log(`   Announcements: ${counts.announcements}`);
         console.log(`   Events: ${counts.events}`);
+        console.log(`   Uploaded Files: ${counts.uploadedFiles}`);
 
         // Confirmation prompt
         const rl = readline.createInterface({
@@ -99,6 +102,9 @@ async function clearDatabase() {
 
         await Event.deleteMany({});
         log.success('Deleted all events');
+
+        await UploadedFile.deleteMany({});
+        log.success('Deleted all uploaded file records');
 
         console.log('\n' + colors.green + colors.bright + '✓ Database cleared successfully!' + colors.reset);
         console.log(colors.cyan + '\nYour site is now ready for production registrations.' + colors.reset);

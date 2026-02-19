@@ -13,6 +13,7 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
         const pageNum = Math.max(1, parseInt(page) || 1);
         const limitNum = Math.min(200, parseInt(limit) || 100);
         let participants;
+        let total = 0; // declared here so it's in scope for res.json() below
 
         if (event && event !== 'all') {
             const eventDoc = await Event.findOne({ title: event });
@@ -35,7 +36,7 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
                 participants = [];
             }
         } else {
-            const total = await User.countDocuments({ role: 'participant' });
+            total = await User.countDocuments({ role: 'participant' });
             const users = await User.find({ role: 'participant' })
                 .sort({ createdAt: -1 })
                 .skip((pageNum - 1) * limitNum)
@@ -43,7 +44,9 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
             const registrations = await Registration.find().populate('event');
 
             participants = users.map(user => {
-                const userRegs = registrations.filter(r => r.user.toString() === user._id.toString());
+                const userRegs = registrations.filter(r =>
+                    r.user && r.user.toString() === user._id.toString()
+                );
                 return {
                     id: user._id,
                     name: user.name,
@@ -62,15 +65,15 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
         res.json({
             participants,
             pagination: {
-                total: event && event !== 'all' ? participants.length : total,
+                total,
                 page: pageNum,
                 limit: limitNum,
-                pages: Math.ceil((event && event !== 'all' ? participants.length : total) / limitNum)
+                pages: Math.ceil(total / limitNum) || 1
             }
         });
     } catch (error) {
         console.error('Get participants error:', error);
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ error: 'Server error fetching participants', details: error.message });
     }
 });
 

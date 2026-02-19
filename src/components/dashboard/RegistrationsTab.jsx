@@ -1,4 +1,4 @@
-import { Search, Download, Users } from 'lucide-react'
+import { Search, Download, Users, Filter } from 'lucide-react'
 
 const RegistrationsTab = ({
     participants,
@@ -6,9 +6,13 @@ const RegistrationsTab = ({
     loading,
     searchTerm,
     setSearchTerm,
+    selectedEvent,
+    setSelectedEvent,
+    events,
     handleExport
 }) => (
     <>
+        {/* Stats Row */}
         <div className="stats-row">
             <div className="stat-card-small card">
                 <div className="stat-icon">
@@ -19,10 +23,21 @@ const RegistrationsTab = ({
                     <span className="stat-label-small">Total Registrations</span>
                 </div>
             </div>
+            <div className="stat-card-small card">
+                <div className="stat-icon">
+                    <Filter size={24} />
+                </div>
+                <div className="stat-info">
+                    <span className="stat-value-small">{filteredParticipants.length}</span>
+                    <span className="stat-label-small">Filtered Results</span>
+                </div>
+            </div>
         </div>
 
+        {/* Filters Row */}
         <section className="dashboard-section">
             <div className="filters-row">
+                {/* Search Box */}
                 <div className="search-box">
                     <Search size={18} className="search-icon" />
                     <input
@@ -33,13 +48,32 @@ const RegistrationsTab = ({
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
+
+                {/* Event Filter Dropdown */}
+                <div className="event-filter">
+                    <Filter size={16} style={{ marginRight: '6px', opacity: 0.6 }} />
+                    <select
+                        className="input"
+                        value={selectedEvent}
+                        onChange={(e) => setSelectedEvent(e.target.value)}
+                        style={{ minWidth: '200px' }}
+                    >
+                        <option value="all">All Events</option>
+                        {(events || []).map(event => (
+                            <option key={event} value={event}>{event}</option>
+                        ))}
+                    </select>
+                </div>
+
+                {/* Export Button */}
                 <button className="btn btn-primary" onClick={handleExport}>
                     <Download size={18} />
-                    Export to Excel
+                    Export Excel
                 </button>
             </div>
         </section>
 
+        {/* Table */}
         <section className="dashboard-section">
             <div className="table-container card">
                 {loading ? (
@@ -66,12 +100,14 @@ const RegistrationsTab = ({
                             {filteredParticipants.length === 0 ? (
                                 <tr>
                                     <td colSpan="9" className="table-empty">
-                                        No registrations found
+                                        {selectedEvent !== 'all'
+                                            ? `No registrations found for "${selectedEvent}"`
+                                            : 'No registrations found'}
                                     </td>
                                 </tr>
                             ) : (
                                 filteredParticipants.map((participant, index) => (
-                                    <tr key={participant.id || index}>
+                                    <tr key={participant.id || participant._id || index}>
                                         <td>{index + 1}</td>
                                         <td className="name-cell">{participant.name}</td>
                                         <td>{participant.email}</td>
@@ -89,12 +125,23 @@ const RegistrationsTab = ({
                                                         <span key={i} className="event-badge">{evt}</span>
                                                     ))
                                                 ) : (
-                                                    <span className="text-muted">All Events</span>
+                                                    <span className="text-muted">All / None Selected</span>
                                                 )}
                                             </div>
                                         </td>
-                                        <td><code>{participant.paymentRef}</code></td>
-                                        <td className="timestamp-cell">{participant.timestamp}</td>
+                                        <td><code>{participant.paymentRef || '—'}</code></td>
+                                        <td className="timestamp-cell">
+                                            {/* timestamp field from participantRoutes maps user.createdAt */}
+                                            {participant.timestamp
+                                                ? new Date(participant.timestamp).toLocaleDateString('en-IN', {
+                                                    day: '2-digit', month: 'short', year: 'numeric'
+                                                })
+                                                : participant.createdAt
+                                                    ? new Date(participant.createdAt).toLocaleDateString('en-IN', {
+                                                        day: '2-digit', month: 'short', year: 'numeric'
+                                                    })
+                                                    : '—'}
+                                        </td>
                                     </tr>
                                 ))
                             )}
@@ -105,6 +152,7 @@ const RegistrationsTab = ({
             <div className="table-footer">
                 <span className="results-count">
                     Showing {filteredParticipants.length} of {participants.length} registrations
+                    {selectedEvent !== 'all' && ` · filtered by "${selectedEvent}"`}
                 </span>
             </div>
         </section>
