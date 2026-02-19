@@ -114,12 +114,14 @@
     font-weight: 700;
     margin-bottom: 0.25rem;
     font-family: var(--font-display);
+    text-align: left;
 }
 
 .reveal-subtitle {
     font-size: 0.95rem;
     color: var(--text-secondary);
     line-height: 1.4;
+    text-align: left;
 }
 
 /* ── REVEAL CARD ── */
@@ -161,6 +163,7 @@
     font-weight: 700;
     margin-bottom: 0.75rem;
     color: var(--text-primary);
+    text-align: left;
 }
 
 .reveal-card>p {
@@ -169,6 +172,7 @@
     line-height: 1.6;
     max-width: 700px;
     margin-bottom: 2rem;
+    text-align: left;
 }
 
 /* ── REVEAL PHASES ── */
