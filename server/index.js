@@ -36,6 +36,10 @@ const paymentVerificationRoutes = require('./routes/paymentVerificationRoutes');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Trust Render/Heroku/etc reverse proxy — required for rate-limiting and IP detection
+// Without this, express-rate-limit throws ERR_ERL_UNEXPECTED_X_FORWARDED_FOR
+app.set('trust proxy', 1);
+
 // Connect to MongoDB
 connectDB();
 

@@ -8,15 +8,18 @@ const EMAIL_PASS = (process.env.EMAIL_PASS || '').replace(/^"|"$/g, '').trim();
 const createTransporter = () => {
     return nodemailer.createTransport({
         host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,          // STARTTLS on port 587
+        port: 465,
+        secure: true,           // SSL on port 465 (more reliable on Render/cloud hosts)
         auth: {
             user: EMAIL_USER,
             pass: EMAIL_PASS   // Must be a Gmail App Password (16 chars, no spaces)
         },
         tls: {
             rejectUnauthorized: false  // Allow self-signed certs (helps Render/cloud envs)
-        }
+        },
+        connectionTimeout: 10000,  // 10s — fail fast instead of hanging
+        greetingTimeout: 10000,
+        socketTimeout: 15000
     });
 };
 
