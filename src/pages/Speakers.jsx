@@ -146,22 +146,25 @@ const Speakers = () => {
                             <h3>Expert instructors for RTL to GDS II and Verilog & FPGA workshops</h3>
                             <p>Workshop leaders with extensive industry experience will guide participants through hands-on sessions covering complete ASIC design flow and FPGA implementation.</p>
 
-                            <div className="reveal-silhouettes">
+                            <div className="speaker-profile-grid">
                                 {[
                                     { name: 'Vaibhav Joshi', role: 'VLSI Engineer – Monk9 Tech', photo: '/images/panelists/vaibhav-joshi.jpeg' },
                                     { name: 'Anushka Tripathi', role: 'VLSI Engineer – Monk9 Tech', photo: '/images/panelists/anushka-tripathi.jpeg' }
                                 ].map((instructor, i) => (
-                                    <div key={i} className="silhouette-card instructor" style={{ animationDelay: `${i * 0.15}s` }}>
-                                        <div className="silhouette-avatar" style={{ overflow: 'hidden', border: '2px solid rgba(20,184,166,0.4)', background: 'none', padding: 0 }}>
+                                    <div key={i} className="speaker-profile-card" style={{ animationDelay: `${i * 0.2}s` }}>
+                                        <div className="speaker-profile-photo-wrap">
                                             <img
                                                 src={instructor.photo}
                                                 alt={instructor.name}
-                                                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%', display: 'block' }}
-                                                onError={e => { e.currentTarget.style.display = 'none'; }}
+                                                className="speaker-profile-photo"
+                                                onError={e => { e.currentTarget.src = ''; e.currentTarget.parentElement.style.background = 'rgba(20,184,166,0.1)'; }}
                                             />
+                                            <div className="speaker-profile-glow" />
                                         </div>
-                                        <div className="silhouette-name">{instructor.name}</div>
-                                        <div className="silhouette-role">{instructor.role}</div>
+                                        <div className="speaker-profile-info">
+                                            <div className="speaker-profile-name">{instructor.name}</div>
+                                            <div className="speaker-profile-role">{instructor.role}</div>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
