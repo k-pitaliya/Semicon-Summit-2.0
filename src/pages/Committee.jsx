@@ -112,7 +112,7 @@ const STUDENT_COORDINATORS = [
     { name: 'Harshdutt Joshi', role: null, designation: 'Co-Coordinator', image: "/images/members/coords/Harshdutt_Joshi.jpg", icon: <Palette size={16} /> },
     { name: 'Hetvi Patel', role: null, designation: 'Co-Coordinator', image: "/images/members/coords/Hetvi_Patel.jpeg", icon: <ClipboardList size={16} /> },
     { name: 'Jeet Patel', role: null, designation: 'Co-Coordinator', image: "/images/members/coords/Jeet_Patel.jpg", icon: <Truck size={16} /> },
-    { name: 'Saumy Mehta', role: null, designation: 'Co-Coordinator', image: null, icon: <Palette size={16} /> },
+    { name: 'Saumy Mehta', role: null, designation: 'Co-Coordinator', image: "/images/members/coords/saumy_mehta.jpeg", icon: <Palette size={16} /> },
     { name: 'Saurya Patel', role: null, designation: 'Co-Coordinator', image: "/images/members/coords/Saurya_Patel.jpg", icon: <Share2 size={16} /> },
     { name: 'Yatri Patel', role: null, designation: 'Co-Coordinator', image: "/images/members/coords/Yatri_Patel.jpg", icon: <Palette size={16} /> }
 ];
