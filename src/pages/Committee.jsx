@@ -102,14 +102,14 @@ const STUDENT_COORDINATORS = [
     { name: 'Tathya Bhatt', role: null, designation: 'Co-Coordinator', image: "/images/members/coords/Tathya_Bhatt.jpg", icon: <Award size={16} /> },
     { name: 'Nihar Thumbar', role: null, designation: 'Co-Coordinator', image: "/images/members/coords/Nihar_Thumbar.jpg", icon: <Share2 size={16} /> },
     { name: 'Maitry Shah', role: null, designation: 'Co-Coordinator', image: "/images/members/coords/Maitri_Shah.jpg", icon: <Truck size={16} /> },
-    { name: 'Khanjan Shah', role: null, designation: 'Co-Coordinator', image: null, icon: <IdCard size={16} /> },
+    { name: 'Khanjan Shah', role: null, designation: 'Co-Coordinator', image: "/images/members/coords/Khanjan_Shah.jpg", icon: <IdCard size={16} /> },
     { name: 'Jitendra Prajapati', role: null, designation: 'Co-Coordinator', image: "/images/members/coords/Prajapati_Jitendra.jpg", icon: <Award size={16} /> },
     { name: 'Disha Italiya', role: null, designation: 'Co-Coordinator', image: "/images/members/coords/Italiya_Disha.jpeg", icon: <Palette size={16} /> },
-    { name: 'Yug Shah', role: null, designation: 'Co-Coordinator', image: null, icon: <Award size={16} /> },
+    { name: 'Yug Shah', role: null, designation: 'Co-Coordinator', image: "/images/members/coords/Yug_Shah.jpg", icon: <Award size={16} /> },
 
     // Year 1
-    { name: 'Harianshinh Rana', role: null, designation: 'Co-Coordinator', image: null, icon: <Palette size={16} /> },
-    { name: 'Harshdutt Joshi', role: null, designation: 'Co-Coordinator', image: null, icon: <Palette size={16} /> },
+    { name: 'Harianshinh Rana', role: null, designation: 'Co-Coordinator', image: "/images/members/coords/Harianshsinh_Rana.jpg", icon: <Palette size={16} /> },
+    { name: 'Harshdutt Joshi', role: null, designation: 'Co-Coordinator', image: "/images/members/coords/Harshdutt_Joshi.jpg", icon: <Palette size={16} /> },
     { name: 'Hetvi Patel', role: null, designation: 'Co-Coordinator', image: "/images/members/coords/Hetvi_Patel.jpeg", icon: <ClipboardList size={16} /> },
     { name: 'Jeet Patel', role: null, designation: 'Co-Coordinator', image: "/images/members/coords/Jeet_Patel.jpg", icon: <Truck size={16} /> },
     { name: 'Saumy Mehta', role: null, designation: 'Co-Coordinator', image: null, icon: <Palette size={16} /> },
