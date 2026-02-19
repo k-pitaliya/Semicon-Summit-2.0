@@ -167,7 +167,7 @@ const About = () => {
                             <div className="hosted-card">
                                 <div className="hosted-logo-box">
                                     <img
-                                        src="/assets/logos/vtpatel-logo.png"
+                                        src="/images/logos/vtpatel-logo.jpg"
                                         alt="V. T. Patel Dept. of EC Engineering"
                                         className="hosted-logo-img"
                                         onError={e => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
@@ -187,7 +187,7 @@ const About = () => {
                             <div className="hosted-card">
                                 <div className="hosted-logo-box">
                                     <img
-                                        src="/assets/logos/ieee-cass-logo.png"
+                                        src="/images/logos/cass-logo.png"
                                         alt="IEEE CASS Student Branch Chapter"
                                         className="hosted-logo-img"
                                         onError={e => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
@@ -199,7 +199,7 @@ const About = () => {
                             <div className="hosted-card">
                                 <div className="hosted-logo-box">
                                     <img
-                                        src="/assets/logos/chipxplorer-logo.png"
+                                        src="/images/logos/chipxplorer-logo.png"
                                         alt="ChipXplorer – VLSI Club"
                                         className="hosted-logo-img"
                                         onError={e => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}

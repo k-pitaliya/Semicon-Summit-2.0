@@ -57,7 +57,7 @@ const EVENTS = [
         subtitle: "Powering India's Semiconductor Growth",
         type: 'Industry Panel',
         icon: Users,
-        poster: '/images/New posters/4.panel discussion.jpeg',
+        poster: "/images/FInal Poster/Fabless Startups & MSMEs Powering India's Semiconductor Growth.jpg",
         prize: 'Networking',
         description: "Powering India's Semiconductor Growth. Interact with leading semiconductor innovators and founders driving the fabless revolution.",
         fullDescription: `Fabless Startups & MSMEs
@@ -74,10 +74,10 @@ This session will address:
 • Talent requirements and future demand
 • Building a sustainable semiconductor value chain
 
-Participants will gain insights directly from industry experts shaping the next phase of India’s semiconductor development.`,
-        date: 'March 17, 2026',
-        time: '11:30 AM - 12:30 PM',
-        venue: 'Main Auditorium',
+Participants will gain insights directly from industry experts shaping the next phase of India's semiconductor development.`,
+        date: 'Tuesday, March 17, 2026',
+        time: '11:30 AM – 12:30 PM',
+        venue: 'Seminar Hall, First Floor, EC Dept., A6 Building, CHARUSAT',
         fee: 'Included',
         rulesUrl: null
     },
@@ -88,7 +88,7 @@ Participants will gain insights directly from industry experts shaping the next 
         subtitle: 'Will It Change the VLSI Engineer?',
         type: 'Expert Insight',
         icon: Brain,
-        poster: '/images/New posters/11.ai in vlsi.jpeg',
+        poster: "/images/FInal Poster/AI in VLSI Will It Change the VLSI Engineer.jpg",
         prize: 'Knowledge',
         description: 'Artificial Intelligence is reshaping semiconductor design workflows. This session examines how AI-driven EDA tools are redefining the role of VLSI engineers.',
         fullDescription: `Artificial Intelligence is reshaping semiconductor design workflows. This session examines how AI-driven EDA tools, automation in physical design, and intelligent verification systems are redefining the role of VLSI engineers.
@@ -96,9 +96,9 @@ Participants will gain insights directly from industry experts shaping the next 
 Participants will gain clarity on evolving skill requirements and future industry expectations.
 
 A must-attend discussion for students preparing for careers in chip design and automation-driven environments.`,
-        date: 'March 19, 2026',
-        time: '11:00 AM - 12:00 PM',
-        venue: 'Seminar Hall A',
+        date: 'Thursday, March 19, 2026',
+        time: '09:45 AM – 11:00 AM',
+        venue: 'Seminar Hall, First Floor, EC Dept., A6 Building, CHARUSAT',
         fee: 'Included',
         rulesUrl: null
     },
@@ -109,7 +109,7 @@ A must-attend discussion for students preparing for careers in chip design and a
         subtitle: 'What Should I Choose?',
         type: 'Career Guidance',
         icon: GraduationCap,
-        poster: '/images/New posters/7.expert talk.jpeg',
+        poster: "/images/FInal Poster/Embedded vs VLSI What Should I Choose.jpg",
         prize: 'Career Path',
         description: 'An interactive session designed to help students understand the differences between embedded systems and VLSI domains.',
         fullDescription: `An interactive session designed to help students understand the differences between embedded systems and VLSI domains.
@@ -121,9 +121,9 @@ Key discussion points include:
 • Career progression opportunities
 
 This session aims to provide clarity for students at early academic stages.`,
-        date: 'March 18, 2026',
-        time: '09:45 AM - 11:00 AM',
-        venue: 'Seminar Hall B',
+        date: 'Wednesday, March 18, 2026',
+        time: '09:45 AM – 11:00 AM',
+        venue: 'Seminar Hall, First Floor, EC Dept., A6 Building, CHARUSAT',
         fee: 'Included',
         rulesUrl: null
     },
@@ -136,7 +136,7 @@ This session aims to provide clarity for students at early academic stages.`,
         subtitle: 'Open Source ASIC Design Flow',
         type: 'Advanced Workshop',
         icon: Layers,
-        poster: '/images/New posters/5.workshop experts.jpeg',
+        poster: "/images/FInal Poster/RTL to GDS II Open Source ASIC Design Flow.jpg",
         prize: 'Certificates',
         description: 'Explore the complete open-source ASIC design flow — from RTL design to GDS II generation. Specifically for 3rd and 4th year students.',
         fullDescription: `This advanced, hands-on workshop is specifically designed for 3rd and 4th year students with prior knowledge of digital design and HDL concepts.
@@ -152,9 +152,9 @@ Workshop Coverage:
 • Understanding GDS II output
 
 Recommended For: 3rd and 4th year students only.`,
-        date: 'March 18, 2026',
-        time: 'Full Day (Starts 9 AM)',
-        venue: 'Lab Complex 1',
+        date: 'Tuesday, March 17, 2026',
+        time: '01:30 PM – 04:30 PM',
+        venue: 'Lab No. 218, First Floor, EC Dept., A6 Building, CHARUSAT',
         fee: 'Included',
         rulesUrl: null
     },
@@ -165,7 +165,7 @@ Recommended For: 3rd and 4th year students only.`,
         subtitle: 'Getting Started with Digital Design',
         type: 'Beginner Workshop',
         icon: CircuitBoard,
-        poster: '/images/New posters/6.hands on workshop.jpeg',
+        poster: "/images/FInal Poster/Verilog & FPGA Getting Started with Digital Design.jpg",
         prize: 'Certificates',
         description: 'Beginner-friendly workshop covering Verilog programming and basic FPGA-based system development for 1st and 2nd year students.',
         fullDescription: `This beginner-friendly workshop is designed for 1st and 2nd year students who want to build a strong foundation in digital hardware design and FPGA implementation.
@@ -181,9 +181,9 @@ Workshop Coverage:
 • Running and testing simple hardware designs
 
 Recommended For: 1st and 2nd year students.`,
-        date: 'March 18, 2026',
-        time: 'Full Day (Starts 9 AM)',
-        venue: 'Lab Complex 2',
+        date: 'Tuesday, March 17, 2026',
+        time: '01:30 PM – 04:30 PM',
+        venue: 'Lab No. 231, First Floor, EC Dept., A6 Building, CHARUSAT',
         fee: 'Included',
         rulesUrl: null
     },
@@ -196,14 +196,14 @@ Recommended For: 1st and 2nd year students.`,
         subtitle: 'Industry-Driven Idea Pitching',
         type: 'Flagship Event',
         icon: Lightbulb,
-        poster: '/images/New posters/8.silicon shark tank.jpeg',
+        poster: "/images/FInal Poster/Silicon Shark Tank Industry-Driven Idea Pitching.jpg",
         prize: 'Internships',
         description: 'Industry-Driven Idea Pitching. Winners get a FREE Internship Opportunity!',
         fullDescription: `This competition is open to undergraduate engineering students, with a maximum of two members per team. Cross-department participation is encouraged, and each team must nominate one Team Leader for official communication. Teams are required to pitch original, innovation-driven ideas related to Semiconductor Design & Technology, VLSI (RTL to GDS, Physical Design, Verification), Embedded Systems & FPGA-based solutions, Hardware–Software Co-Design, AI/ML Accelerators & Edge Computing, Low-Power and High-Performance Design, Semiconductor Manufacturing Challenges, EDA Tools & Automation, or Smart Electronic/System-Level solutions. AI-generated or plagiarized content is strictly prohibited and may lead to disqualification.
 The event consists of two rounds. In Round 1 (Idea Screening), teams must submit an original idea (maximum 200 words) clearly outlining the problem statement, existing system loopholes, proposed solution, application/use-case, innovation aspect, technical domain (VLSI-focused), and a supporting visual such as a block diagram, mind map, or execution flow. Shortlisted teams will advance to Round 2, where they will deliver a 10-minute live pitch (7-minute presentation + 3-minute Q&A) before an expert jury; slides and system architecture diagrams are allowed, while a working demo is not mandatory. Final evaluation will be conducted solely by the expert jury, and their decision will be final and binding. Selected teams will receive internship opportunities (per team), industry mentorship, and technical feedback for idea refinement; however, no cash prize or financial funding will be provided. All eligible participants will receive participation certificates and digital badges, and winners will be awarded a free industry internship. Professional conduct, strict adherence to time limits, and originality are mandatory throughout the competition, and organizers reserve the right to modify rules if required.`,
-        date: 'March 19, 2026',
-        time: '09:00 AM - 01:00 PM',
-        venue: 'Main Auditorium',
+        date: 'Wednesday, March 18, 2026',
+        time: '12:30 PM – 04:30 PM',
+        venue: 'Semiconductor Design Excellence Hub, EC Dept., A6 Building, CHARUSAT',
         fee: 'Prize Pool',
         rulesUrl: '/images/SHARK TANK Rules.docx'
     },
@@ -224,9 +224,9 @@ Round 1, The Silicon Screening – Flag Hunt, is conducted separately for First 
 Round 2, The Logic Conquest – Unified Challenge, brings the 20 teams together at a common location where they face a shared technical problem focused on applied digital logic, analytical reasoning, and teamwork. Upon solving the challenge, teams receive the second flag containing the letter "L" and additional clues to collect the letter "S." Based on accuracy and completion time, only the top teams advance to the final round. This stage assesses collaborative thinking, logical structuring, time management, and technical communication.
 
 Round 3, Kaun Banega Summit Samrat – The FPGA Finale, is a KBC-inspired technical showdown where the top 5 teams compete in an FPGA-based quiz featuring progressively complex digital electronics and Verilog questions. Successful teams collect the final flag containing the letter "I," completing the word VLSI. This finale evaluates practical HDL knowledge, hardware understanding, debugging skills, and performance under pressure. The team that excels across all stages and performs best in the FPGA finale will be crowned the Summit Samrat of Silicon, symbolizing their journey from V → L → S → I and their technical excellence in the semiconductor domain.`,
-        date: 'March 19, 2026',
-        time: '02:00 PM - 05:00 PM',
-        venue: 'Campus Grounds',
+        date: 'Thursday, March 19, 2026',
+        time: '12:10 PM – 03:30 PM',
+        venue: 'EC Department, A6 Building, CHARUSAT',
         fee: 'Prize Pool',
         rulesUrl: null
     },
@@ -237,7 +237,7 @@ Round 3, Kaun Banega Summit Samrat – The FPGA Finale, is a KBC-inspired techni
         subtitle: 'Technical Game Arena',
         type: 'Interactive',
         icon: Gamepad2,
-        poster: '/images/New posters/13.interactive tech engagement activities.jpeg',
+        poster: "/images/FInal Poster/Silicon PlayZone Technical Game Arena.jpg",
         prize: 'Merchandise',
         description: 'Hands-On. Minds-On. A dynamic zone designed to make engineering interactive and engaging.',
         fullDescription: `A dynamic zone designed to make engineering interactive and engaging.
@@ -247,9 +247,9 @@ Activities include:
 • Truth or Dare — Electronics edition
 • Join the Circuit — Rapid connection logic challenge
 • Mini hardware-based problem-solving tasks`,
-        date: 'All Days',
-        time: 'Open All Day',
-        venue: 'Expo Area',
+        date: 'Thursday, March 19, 2026',
+        time: '12:10 PM – 03:30 PM',
+        venue: 'EC Department, A6 Building, CHARUSAT',
         fee: 'Included',
         rulesUrl: null
     },
@@ -260,7 +260,7 @@ Activities include:
         subtitle: 'Silent Feedback Edition',
         type: 'Exhibition',
         icon: Eye,
-        poster: '/images/New posters/9.silent silicon gallery.jpeg',
+        poster: "/images/FInal Poster/Silicon Ideas Showcase Silent Feedback Edition.jpg",
         prize: 'Best Idea',
         description: 'Walk Through Innovation. Leave Your Insight. Silent poster exhibition with QR-based digital feedback system.',
         fullDescription: `Silent Silicon — Innovation Gallery Walk
@@ -271,9 +271,9 @@ Each poster includes a QR code enabling attendees to:
 • Access detailed technical explanations
 • Submit questions digitally
 • Provide structured feedback`,
-        date: 'All Days',
-        time: 'Open All Day',
-        venue: 'Corridor A',
+        date: 'March 17–19, 2026 (All Days)',
+        time: '09:30 AM – 04:30 PM',
+        venue: 'EC Square, EC Dept., A6 Building, CHARUSAT',
         fee: 'Included',
         rulesUrl: null
     },
@@ -286,7 +286,7 @@ Each poster includes a QR code enabling attendees to:
         subtitle: 'Live Demonstration by Monk9',
         type: 'Industry Demo',
         icon: Cpu,
-        poster: '/images/New posters/10.stall visit.jpeg',
+        poster: "/images/FInal Poster/Wafer to Chip Live Demonstration by Monk9.jpg",
         prize: 'Learning',
         description: 'See How a Chip Comes to Life — From Silicon Wafer to Working Chip. An industry-led demonstration by Monk9.',
         fullDescription: `Wafer to Chip — Live Demonstration by Monk9
@@ -297,9 +297,9 @@ Conducted by industry experts from Monk9, this session provides participants wit
 • Semiconductor fabrication fundamentals
 • Chip design and verification workflow
 • Industry toolchains and development stages`,
-        date: 'March 19, 2026',
-        time: 'Late Morning',
-        venue: 'Stall Area',
+        date: 'March 17–19, 2026 (All Days)',
+        time: '09:30 AM – 04:30 PM',
+        venue: 'CSPIT Lawn, Ground Floor, CHARUSAT',
         fee: 'Included',
         rulesUrl: null
     }

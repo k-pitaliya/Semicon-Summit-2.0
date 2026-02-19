@@ -148,12 +148,17 @@ const Speakers = () => {
 
                             <div className="reveal-silhouettes">
                                 {[
-                                    { name: 'Vaibhav Joshi', role: 'Workshop Leader' },
-                                    { name: 'Anushka Tripathi', role: 'Workshop Leader' }
+                                    { name: 'Vaibhav Joshi', role: 'Workshop Leader', photo: '/images/panelists/vaibhav-joshi.jpeg' },
+                                    { name: 'Anushka Tripathi', role: 'Workshop Leader', photo: '/images/panelists/anushka-tripathi.jpeg' }
                                 ].map((instructor, i) => (
                                     <div key={i} className="silhouette-card instructor" style={{ animationDelay: `${i * 0.15}s` }}>
-                                        <div className="silhouette-avatar">
-                                            <Zap size={20} />
+                                        <div className="silhouette-avatar" style={{ overflow: 'hidden', border: '2px solid rgba(20,184,166,0.4)', background: 'none', padding: 0 }}>
+                                            <img
+                                                src={instructor.photo}
+                                                alt={instructor.name}
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%', display: 'block' }}
+                                                onError={e => { e.currentTarget.style.display = 'none'; }}
+                                            />
                                         </div>
                                         <div className="silhouette-name">{instructor.name}</div>
                                         <div className="silhouette-role">{instructor.role}</div>
