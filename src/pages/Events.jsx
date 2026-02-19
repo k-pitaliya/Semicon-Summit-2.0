@@ -487,7 +487,7 @@ const Events = () => {
                                 <div className="events-cta-icon">
                                     <Sparkles size={20} />
                                 </div>
-                                <span>12 Curated Events</span>
+                                <span>10 Curated Events</span>
                             </div>
                             <div className="events-cta-feature">
                                 <div className="events-cta-icon">

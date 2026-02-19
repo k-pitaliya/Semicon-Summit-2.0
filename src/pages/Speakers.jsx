@@ -30,6 +30,11 @@ const Speakers = () => {
             </section>
 
             {/* Speaker Reveal Section */}
+            <div style={{ position: 'relative', overflow: 'hidden' }}>
+                <div className="hero-bg" style={{ opacity: 0.4 }}>
+                    <div className="hero-grid" />
+                    <ParticleField count={20} />
+                </div>
             <div className="speakers-container">
 
                 {/* Industry Sharks */}
@@ -100,16 +105,21 @@ const Speakers = () => {
                             <span>Panel Lineup</span>
                         </div>
                         <h3>Panelists from leading fabless startups and MSMEs</h3>
-                        <p>Full lineup to be announced shortly. Our panelists represent the forefront of India's semiconductor growth — from chip design startups to established MSME players.</p>
+                        <p>Our panelists represent the forefront of India's semiconductor growth — from chip design startups to established MSME players.</p>
 
                         <div className="reveal-silhouettes">
-                            {[1, 2, 3, 4, 5].map(i => (
+                            {[
+                                { name: 'Marmik Bhatt', role: 'Panelist' },
+                                { name: 'Sudhir', role: 'Panelist' },
+                                { name: 'Nayak', role: 'Panelist' },
+                                { name: 'Nikul Shah', role: 'Panelist' }
+                            ].map((panelist, i) => (
                                 <div key={i} className="silhouette-card panelist" style={{ animationDelay: `${i * 0.15}s` }}>
                                     <div className="silhouette-avatar">
                                         <Mic size={20} />
                                     </div>
-                                    <div className="silhouette-name">Panelist {i}</div>
-                                    <div className="silhouette-role">To Be Announced</div>
+                                    <div className="silhouette-name">{panelist.name}</div>
+                                    <div className="silhouette-role">{panelist.role}</div>
                                 </div>
                             ))}
                         </div>
@@ -138,18 +148,22 @@ const Speakers = () => {
                         <p>Workshop leaders with extensive industry experience will guide participants through hands-on sessions covering complete ASIC design flow and FPGA implementation.</p>
 
                         <div className="reveal-silhouettes">
-                            {[1, 2].map(i => (
+                            {[
+                                { name: 'Vaibhav Joshi', role: 'Workshop Leader' },
+                                { name: 'Anushka Tripathi', role: 'Workshop Leader' }
+                            ].map((instructor, i) => (
                                 <div key={i} className="silhouette-card instructor" style={{ animationDelay: `${i * 0.15}s` }}>
                                     <div className="silhouette-avatar">
                                         <Zap size={20} />
                                     </div>
-                                    <div className="silhouette-name">Instructor {i}</div>
-                                    <div className="silhouette-role">To Be Announced</div>
+                                    <div className="silhouette-name">{instructor.name}</div>
+                                    <div className="silhouette-role">{instructor.role}</div>
                                 </div>
                             ))}
                         </div>
                     </div>
                 </section>
+            </div>
             </div>
 
             <Footer />

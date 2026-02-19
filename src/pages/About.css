@@ -282,6 +282,118 @@ section h2 {
     font-size: 0.9375rem;
 }
 
+/* Hosted By / Supported By Section */
+.about-hosted-section {
+    margin-bottom: 3rem;
+    padding: 2.5rem 2rem;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(147, 51, 234, 0.05));
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    border-radius: var(--radius-2xl);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.hosted-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.hosted-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    position: relative;
+    padding: 0 1rem;
+}
+
+.hosted-label::before,
+.hosted-label::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 50px;
+    height: 1px;
+    background: rgba(99, 102, 241, 0.35);
+}
+
+.hosted-label::before { right: 100%; }
+.hosted-label::after  { left: 100%; }
+
+.hosted-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    justify-content: center;
+}
+
+.hosted-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: var(--radius-xl);
+    max-width: 200px;
+    text-align: center;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.hosted-card:hover {
+    border-color: rgba(99, 102, 241, 0.45);
+    background: rgba(99, 102, 241, 0.07);
+}
+
+.hosted-card p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.hosted-logo-box {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: rgba(99, 102, 241, 0.12);
+    border: 2px solid rgba(99, 102, 241, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hosted-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 8px;
+}
+
+.hosted-logo-fallback {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    letter-spacing: 0.05em;
+}
+
+.hosted-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(99, 102, 241, 0.15);
+}
+
 /* CTA Section */
 .about-cta {
     text-align: center;

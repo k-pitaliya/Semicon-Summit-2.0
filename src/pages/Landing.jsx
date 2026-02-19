@@ -40,9 +40,9 @@ const Landing = () => {
     }, [])
 
     const stats = [
-        { value: '200+', label: 'Expected Attendees' },
+        { value: '100+', label: 'Expected Attendees' },
         { value: '15+', label: 'Industry Experts' },
-        { value: '12', label: 'Curated Events' },
+        { value: '10', label: 'Curated Events' },
         { value: '3', label: 'Days of Learning' },
         { value: '10+', label: 'Internship Opportunities' },
         { value: '₹299', label: 'Registration Fee', subtitle: 'Included all events' }

@@ -37,8 +37,8 @@ const Contact = () => {
     };
 
     const venue = {
-        name: 'Electronics and Communication Department (A6 Building), CHARUSAT',
-        address: 'Department of EC Engineering - CSPIT, EC Department (A6 Building), CHARUSAT, Changa, Gujarat - 388421',
+        name: 'Department of EC Engineering, CSPIT',
+        address: 'Charotar University of Science and Technology, CHARUSAT Campus, Off. Nadiad-Petlad Highway, Changa-388421',
         mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3682.8!2d72.8168!3d22.5988!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e4e7439a2e021%3A0x9f4c4b1dfb8a586a!2sCHARUSAT!5e0!3m2!1sen!2sin!4v1700000000000'
     };
 
@@ -93,7 +93,7 @@ const Contact = () => {
                                 </div>
                                 <div>
                                     <h3>Location</h3>
-                                    <p>Department of Electronics and Communication Engineering - CSPIT<br />EC Department (A6 Building), CHARUSAT<br />Changa, Gujarat - 388421</p>
+                                    <p>Department of EC Engineering, CSPIT<br />Charotar University of Science and Technology<br />CHARUSAT Campus, Off. Nadiad-Petlad Highway<br />Changa-388421</p>
                                 </div>
                             </div>
                         </div>

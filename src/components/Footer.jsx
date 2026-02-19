@@ -87,7 +87,7 @@ const Footer = () => {
                             </li>
                             <li>
                                 <MapPin size={18} />
-                                <span>CHARUSAT University, Changa, Gujarat</span>
+                                <span>Dept. of EC Engineering, CSPIT, CHARUSAT Campus, Changa-388421</span>
                             </li>
                         </ul>
                     </div>

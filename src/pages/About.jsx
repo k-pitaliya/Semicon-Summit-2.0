@@ -138,7 +138,7 @@ const About = () => {
                 {/* Stats Section */}
                 <section className="stats-section">
                     <div className="stat-item">
-                        <h3>200+</h3>
+                        <h3>100+</h3>
                         <p>Expected Attendees</p>
                     </div>
                     <div className="stat-item">
@@ -146,7 +146,7 @@ const About = () => {
                         <p>Industry Experts</p>
                     </div>
                     <div className="stat-item">
-                        <h3>12</h3>
+                        <h3>10</h3>
                         <p>Curated Events</p>
                     </div>
                     <div className="stat-item">
@@ -156,6 +156,59 @@ const About = () => {
                     <div className="stat-item">
                         <h3>10+</h3>
                         <p>Internship Opportunities</p>
+                    </div>
+                </section>
+
+                {/* Hosted By / Supported By */}
+                <section className="about-hosted-section">
+                    <div className="hosted-group">
+                        <h3 className="hosted-label">Hosted By</h3>
+                        <div className="hosted-cards">
+                            <div className="hosted-card">
+                                <div className="hosted-logo-box">
+                                    <img
+                                        src="/assets/logos/vtpatel-logo.png"
+                                        alt="V. T. Patel Dept. of EC Engineering"
+                                        className="hosted-logo-img"
+                                        onError={e => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
+                                    />
+                                    <div className="hosted-logo-fallback">EC</div>
+                                </div>
+                                <p>V. T. Patel Department of Electronics &amp; Communication Engineering</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="hosted-divider" />
+
+                    <div className="hosted-group">
+                        <h3 className="hosted-label">Supported By</h3>
+                        <div className="hosted-cards">
+                            <div className="hosted-card">
+                                <div className="hosted-logo-box">
+                                    <img
+                                        src="/assets/logos/ieee-cass-logo.png"
+                                        alt="IEEE CASS Student Branch Chapter"
+                                        className="hosted-logo-img"
+                                        onError={e => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
+                                    />
+                                    <div className="hosted-logo-fallback">IEEE</div>
+                                </div>
+                                <p>IEEE CASS Student Branch Chapter – CHARUSAT</p>
+                            </div>
+                            <div className="hosted-card">
+                                <div className="hosted-logo-box">
+                                    <img
+                                        src="/assets/logos/chipxplorer-logo.png"
+                                        alt="ChipXplorer – VLSI Club"
+                                        className="hosted-logo-img"
+                                        onError={e => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
+                                    />
+                                    <div className="hosted-logo-fallback">CX</div>
+                                </div>
+                                <p>ChipXplorer – VLSI Club</p>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
