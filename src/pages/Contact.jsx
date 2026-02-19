@@ -39,7 +39,7 @@ const Contact = () => {
     const venue = {
         name: 'Department of EC Engineering, CSPIT',
         address: 'Charotar University of Science and Technology, CHARUSAT Campus, Off. Nadiad-Petlad Highway, Changa-388421',
-        mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3682.8!2d72.8168!3d22.5988!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e4e7439a2e021%3A0x9f4c4b1dfb8a586a!2sCHARUSAT!5e0!3m2!1sen!2sin!4v1700000000000'
+        mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3672.6055387814!2d72.75893387536252!3d22.589457179459!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e5d9cde6b603b%3A0xc5bc2d2ce82f59be!2sCharotar%20University%20of%20Science%20and%20Technology%20(CHARUSAT)!5e0!3m2!1sen!2sin!4v1708367400000!5m2!1sen!2sin'
     };
 
     return (
