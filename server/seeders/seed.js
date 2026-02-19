@@ -228,23 +228,20 @@ const announcementsData = [
     {
         title: 'Registration Now Open!',
         content: 'We are excited to announce that registration for Semiconductor Summit 2.0 is now open. Early bird discount available until March 1st!',
-        targetAudience: 'all',
-        isActive: true,
-        priority: 'high'
+        date: '2026-02-19',
+        role: 'faculty'
     },
     {
         title: 'Workshop Schedule Released',
         content: 'The detailed workshop schedule has been released. Check the events section for timings and topics.',
-        targetAudience: 'all',
-        isActive: true,
-        priority: 'normal'
+        date: '2026-02-19',
+        role: 'faculty'
     },
     {
         title: 'New Industry Speakers Confirmed',
         content: 'We are thrilled to announce that leading experts from Intel, AMD, and NVIDIA will be joining us as speakers!',
-        targetAudience: 'all',
-        isActive: true,
-        priority: 'high'
+        date: '2026-02-19',
+        role: 'faculty'
     }
 ];
 
@@ -369,7 +366,7 @@ async function seedAnnouncementsCollection() {
             // Create announcement
             const announcement = new Announcement({
                 ...announcementData,
-                createdBy: faculty?._id
+                postedBy: faculty?._id
             });
 
             await announcement.save();

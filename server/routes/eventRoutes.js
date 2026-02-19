@@ -3,7 +3,7 @@ const router = express.Router();
 const Event = require('../models/Event');
 const Registration = require('../models/Registration');
 const User = require('../models/User');
-const { authenticate } = require('../middleware/auth');
+const { authenticate, authorize } = require('../middleware/auth');
 
 // Get all events (Public)
 router.get('/', async (req, res) => {
@@ -30,8 +30,8 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Create event (Auth required)
-router.post('/', authenticate, async (req, res) => {
+// Create event (Faculty only)
+router.post('/', authenticate, authorize('faculty'), async (req, res) => {
     try {
         const event = new Event(req.body);
         await event.save();
