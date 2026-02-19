@@ -148,8 +148,8 @@ const Speakers = () => {
 
                             <div className="reveal-silhouettes">
                                 {[
-                                    { name: 'Vaibhav Joshi', role: 'Workshop Leader', photo: '/images/panelists/vaibhav-joshi.jpeg' },
-                                    { name: 'Anushka Tripathi', role: 'Workshop Leader', photo: '/images/panelists/anushka-tripathi.jpeg' }
+                                    { name: 'Vaibhav Joshi', role: 'VLSI Engineer – Monk9 Tech', photo: '/images/panelists/vaibhav-joshi.jpeg' },
+                                    { name: 'Anushka Tripathi', role: 'VLSI Engineer – Monk9 Tech', photo: '/images/panelists/anushka-tripathi.jpeg' }
                                 ].map((instructor, i) => (
                                     <div key={i} className="silhouette-card instructor" style={{ animationDelay: `${i * 0.15}s` }}>
                                         <div className="silhouette-avatar" style={{ overflow: 'hidden', border: '2px solid rgba(20,184,166,0.4)', background: 'none', padding: 0 }}>
