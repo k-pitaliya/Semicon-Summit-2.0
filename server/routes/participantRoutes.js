@@ -207,7 +207,7 @@ router.put('/:id/verify', authenticate, authorize('faculty'), async (req, res) =
 
         const password = generatePassword();
         user.password = password;
-        user.mustChangePassword = true;
+        user.mustChangePassword = false;
         user.verificationStatus = 'approved';
         user.paymentStatus = 'completed';
         user.verifiedBy = req.user._id;
@@ -276,7 +276,7 @@ router.post('/:id/resend-credentials', authenticate, authorize('faculty', 'coord
         // Generate a fresh password and save it
         const password = generatePassword();
         user.password = password;
-        user.mustChangePassword = true;
+        user.mustChangePassword = false;
         await user.save();
 
         const emailSent = await sendCredentialsEmail(user, password);
