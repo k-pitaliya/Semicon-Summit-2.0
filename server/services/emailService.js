@@ -14,55 +14,58 @@ const LOGIN_URL = `${process.env.FRONTEND_URL || 'https://semisummit2026.charusa
 
 // ── OAuth2 client ───────────────────────────────────────────────────────────
 const oAuth2Client = new google.auth.OAuth2(
-    GMAIL_CLIENT_ID,
-    GMAIL_CLIENT_SECRET,
-    'https://developers.google.com/oauthplayground'
+  GMAIL_CLIENT_ID,
+  GMAIL_CLIENT_SECRET,
+  'https://developers.google.com/oauthplayground'
 );
 if (GMAIL_REFRESH_TOKEN) {
-    oAuth2Client.setCredentials({ refresh_token: GMAIL_REFRESH_TOKEN });
+  oAuth2Client.setCredentials({ refresh_token: GMAIL_REFRESH_TOKEN });
 }
 const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
 
 // ── RFC 2047 — encode non-ASCII subjects so they don't garble ───────────────
 const encodeSubject = (s) =>
-    /^[\x00-\x7F]*$/.test(s) ? s : `=?UTF-8?B?${Buffer.from(s).toString('base64')}?=`;
+  /^[\x00-\x7F]*$/.test(s) ? s : `=?UTF-8?B?${Buffer.from(s).toString('base64')}?=`;
 
 // ── Build raw RFC-2822 email and base64url-encode it ────────────────────────
+// HTML body is base64-encoded (most reliable with Gmail API — prevents styling strip)
 const buildRawEmail = ({ to, subject, html }) => {
-    const boundary = `----=_Part_${Date.now()}`;
-    const raw = [
-        `From: "Semiconductor Summit 2.0" <${EMAIL_USER}>`,
-        `To: ${to}`,
-        `Subject: ${encodeSubject(subject)}`,
-        `MIME-Version: 1.0`,
-        `Content-Type: multipart/alternative; boundary="${boundary}"`,
-        ``,
-        `--${boundary}`,
-        `Content-Type: text/html; charset=UTF-8`,
-        `Content-Transfer-Encoding: quoted-printable`,
-        ``,
-        html,
-        ``,
-        `--${boundary}--`,
-    ].join('\r\n');
-    return Buffer.from(raw).toString('base64url');
+  const boundary = `----=_Part_${Date.now()}`;
+  // Encode HTML as base64, split into 76-char lines per RFC 2045
+  const htmlBase64 = Buffer.from(html, 'utf-8').toString('base64').replace(/(.{76})/g, '$1\r\n');
+  const raw = [
+    `From: "Semiconductor Summit 2.0" <${EMAIL_USER}>`,
+    `To: ${to}`,
+    `Subject: ${encodeSubject(subject)}`,
+    `MIME-Version: 1.0`,
+    `Content-Type: multipart/alternative; boundary="${boundary}"`,
+    ``,
+    `--${boundary}`,
+    `Content-Type: text/html; charset=UTF-8`,
+    `Content-Transfer-Encoding: base64`,
+    ``,
+    htmlBase64,
+    ``,
+    `--${boundary}--`,
+  ].join('\r\n');
+  return Buffer.from(raw).toString('base64url');
 };
 
 // ── Send via Gmail API ──────────────────────────────────────────────────────
 const sendMail = async ({ to, subject, html }) => {
-    const raw = buildRawEmail({ to, subject, html });
-    try {
-        return await gmail.users.messages.send({ userId: 'me', requestBody: { raw } });
-    } catch (err) {
-        const gErr = err.response?.data?.error;
-        if (gErr) {
-            console.error(`❌ Gmail API error [${gErr.code}]: ${gErr.message}`);
-            if (gErr.errors) console.error('   Details:', JSON.stringify(gErr.errors));
-        } else {
-            console.error(`❌ Gmail send error: ${err.message}`);
-        }
-        throw err;
+  const raw = buildRawEmail({ to, subject, html });
+  try {
+    return await gmail.users.messages.send({ userId: 'me', requestBody: { raw } });
+  } catch (err) {
+    const gErr = err.response?.data?.error;
+    if (gErr) {
+      console.error(`❌ Gmail API error [${gErr.code}]: ${gErr.message}`);
+      if (gErr.errors) console.error('   Details:', JSON.stringify(gErr.errors));
+    } else {
+      console.error(`❌ Gmail send error: ${err.message}`);
     }
+    throw err;
+  }
 };
 
 // ── Shared base template (table-based for email client compat) ─────────────
@@ -220,12 +223,12 @@ const sectionCard = (headerLabel, bodyHtml, accentColor = '#2563eb') => `
   </table>`;
 
 const greeting = (name) =>
-    `<h2 style="margin:0 0 12px;font-family:Arial,sans-serif;font-size:22px;font-weight:700;color:#0f172a;">
+  `<h2 style="margin:0 0 12px;font-family:Arial,sans-serif;font-size:22px;font-weight:700;color:#0f172a;">
       Hello, ${name}!
     </h2>`;
 
 const bodyText = (text) =>
-    `<p style="margin:0 0 24px;font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#475569;">${text}</p>`;
+  `<p style="margin:0 0 24px;font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#475569;">${text}</p>`;
 
 const warningNote = (text) => `
   <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-top:24px;">
@@ -240,52 +243,52 @@ const warningNote = (text) => `
 
 // ── Generate password ───────────────────────────────────────────────────────
 const generatePassword = () => {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
-    let pw = '';
-    for (let i = 0; i < 8; i++) pw += chars[Math.floor(Math.random() * chars.length)];
-    return pw;
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+  let pw = '';
+  for (let i = 0; i < 8; i++) pw += chars[Math.floor(Math.random() * chars.length)];
+  return pw;
 };
 
 // ── Verify Gmail API ────────────────────────────────────────────────────────
 const verifyEmailTransporter = async () => {
-    if (!EMAIL_USER || !GMAIL_CLIENT_ID || !GMAIL_CLIENT_SECRET || !GMAIL_REFRESH_TOKEN) {
-        console.warn('⚠️  Gmail API credentials incomplete — emails will NOT be sent');
-        return false;
-    }
-    try {
-        const { token } = await oAuth2Client.getAccessToken();
-        console.log(`✅ Gmail API ready — sending as ${EMAIL_USER}`);
-        console.log(`   → Access token obtained: ${token ? 'yes' : 'no'}`);
-        return true;
-    } catch (err) {
-        console.error(`❌ Gmail API auth failed: ${err.message}`);
-        return false;
-    }
+  if (!EMAIL_USER || !GMAIL_CLIENT_ID || !GMAIL_CLIENT_SECRET || !GMAIL_REFRESH_TOKEN) {
+    console.warn('⚠️  Gmail API credentials incomplete — emails will NOT be sent');
+    return false;
+  }
+  try {
+    const { token } = await oAuth2Client.getAccessToken();
+    console.log(`✅ Gmail API ready — sending as ${EMAIL_USER}`);
+    console.log(`   → Access token obtained: ${token ? 'yes' : 'no'}`);
+    return true;
+  } catch (err) {
+    console.error(`❌ Gmail API auth failed: ${err.message}`);
+    return false;
+  }
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  1. CREDENTIALS EMAIL  (sent after registration approval)
 // ══════════════════════════════════════════════════════════════════════════════
 const sendCredentialsEmail = async (user, password) => {
-    // Build event tags
-    const ec = user.eventChoices || {};
-    const tags = [];
-    if (ec.panelDiscussion) tags.push('Inaugural Talk &amp; Panel Discussion');
-    if (ec.day1Workshop === 'rtl-gds') tags.push('RTL to GDS II Workshop');
-    else if (ec.day1Workshop === 'fpga') tags.push('FPGA Interfacing Workshop');
-    if (ec.expertInsights) tags.push('Expert Insights: VLSI vs Embedded');
-    if (ec.sharkTank) tags.push('Silicon Shark Tank');
-    if (ec.aiInVlsi) tags.push('Impact of AI in VLSI');
-    if (ec.treasureHunt) tags.push('Silicon Jackpot');
-    if (ec.silentGallery) tags.push('Silicon Ideas Gallery');
-    if (tags.length === 0 && user.selectedEvents?.length > 0) {
-        user.selectedEvents.forEach(e => tags.push(e));
-    }
-    const tagHtml = tags.length > 0
-        ? tags.map(t => `<span class="event-tag" style="display:inline-block;margin:4px 4px 0 0;padding:6px 12px;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;border-radius:99px;font-family:Arial,sans-serif;font-size:13px;font-weight:500;">${t}</span>`).join('')
-        : `<span style="font-family:Arial,sans-serif;font-size:14px;color:#94a3b8;">Standard Access — All General Sessions</span>`;
+  // Build event tags
+  const ec = user.eventChoices || {};
+  const tags = [];
+  if (ec.panelDiscussion) tags.push('Inaugural Talk &amp; Panel Discussion');
+  if (ec.day1Workshop === 'rtl-gds') tags.push('RTL to GDS II Workshop');
+  else if (ec.day1Workshop === 'fpga') tags.push('FPGA Interfacing Workshop');
+  if (ec.expertInsights) tags.push('Expert Insights: VLSI vs Embedded');
+  if (ec.sharkTank) tags.push('Silicon Shark Tank');
+  if (ec.aiInVlsi) tags.push('Impact of AI in VLSI');
+  if (ec.treasureHunt) tags.push('Silicon Jackpot');
+  if (ec.silentGallery) tags.push('Silicon Ideas Gallery');
+  if (tags.length === 0 && user.selectedEvents?.length > 0) {
+    user.selectedEvents.forEach(e => tags.push(e));
+  }
+  const tagHtml = tags.length > 0
+    ? tags.map(t => `<span class="event-tag" style="display:inline-block;margin:4px 4px 0 0;padding:6px 12px;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;border-radius:99px;font-family:Arial,sans-serif;font-size:13px;font-weight:500;">${t}</span>`).join('')
+    : `<span style="font-family:Arial,sans-serif;font-size:14px;color:#94a3b8;">Standard Access — All General Sessions</span>`;
 
-    const contentHtml = `
+  const contentHtml = `
       ${greeting(user.name)}
       ${bodyText('Your registration for <strong>Semiconductor Summit 2.0</strong> has been verified. Your participant account is now active — use the credentials below to sign in.')}
 
@@ -305,27 +308,27 @@ const sendCredentialsEmail = async (user, password) => {
       ${warningNote('&#128274;&nbsp; <strong>Security Notice:</strong> Please change your password immediately after your first login. This is a temporary password generated for your account.')}
     `;
 
-    const html = baseTemplate({ accentColor: '#2563eb', contentHtml });
+  const html = baseTemplate({ accentColor: '#2563eb', contentHtml });
 
-    try {
-        await sendMail({
-            to: user.email,
-            subject: 'Your Semiconductor Summit 2.0 Login Credentials',
-            html
-        });
-        console.log(`✅ Credentials email sent to ${user.email}`);
-        return true;
-    } catch (err) {
-        console.error(`❌ Credentials email failed: ${err.message}`);
-        return false;
-    }
+  try {
+    await sendMail({
+      to: user.email,
+      subject: 'Your Semiconductor Summit 2.0 Login Credentials',
+      html
+    });
+    console.log(`✅ Credentials email sent to ${user.email}`);
+    return true;
+  } catch (err) {
+    console.error(`❌ Credentials email failed: ${err.message}`);
+    return false;
+  }
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  2. REJECTION EMAIL
 // ══════════════════════════════════════════════════════════════════════════════
 const sendRejectionEmail = async (user, reason) => {
-    const contentHtml = `
+  const contentHtml = `
       ${greeting(user.name)}
       ${bodyText('Thank you for registering for <strong>Semiconductor Summit 2.0</strong>. Unfortunately, we were unable to verify your payment details and could not activate your account at this time.')}
 
@@ -344,27 +347,27 @@ const sendRejectionEmail = async (user, reason) => {
       ${warningNote('Need help? Contact us at <strong>semisummit.ec@charusat.ac.in</strong> with your payment receipt and we will resolve this promptly.')}
     `;
 
-    const html = baseTemplate({ accentColor: '#ef4444', contentHtml });
+  const html = baseTemplate({ accentColor: '#ef4444', contentHtml });
 
-    try {
-        await sendMail({
-            to: user.email,
-            subject: 'Semiconductor Summit 2.0 - Registration Status Update',
-            html
-        });
-        console.log(`✅ Rejection email sent to ${user.email}`);
-        return true;
-    } catch (err) {
-        console.error(`❌ Rejection email failed: ${err.message}`);
-        return false;
-    }
+  try {
+    await sendMail({
+      to: user.email,
+      subject: 'Semiconductor Summit 2.0 - Registration Status Update',
+      html
+    });
+    console.log(`✅ Rejection email sent to ${user.email}`);
+    return true;
+  } catch (err) {
+    console.error(`❌ Rejection email failed: ${err.message}`);
+    return false;
+  }
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  3. PASSWORD RESET EMAIL
 // ══════════════════════════════════════════════════════════════════════════════
 const sendPasswordResetEmail = async (user, newPassword) => {
-    const contentHtml = `
+  const contentHtml = `
       ${greeting(user.name)}
       ${bodyText('Your password for <strong>Semiconductor Summit 2.0</strong> has been reset. Use the new credentials below to sign in to your participant dashboard.')}
 
@@ -380,26 +383,26 @@ const sendPasswordResetEmail = async (user, newPassword) => {
       ${warningNote('&#128274;&nbsp; <strong>Didn\'t request this?</strong> If you did not request a password reset, please contact our team at <strong>semisummit.ec@charusat.ac.in</strong> immediately. Change your password after login.')}
     `;
 
-    const html = baseTemplate({ accentColor: '#7c3aed', contentHtml });
+  const html = baseTemplate({ accentColor: '#7c3aed', contentHtml });
 
-    try {
-        await sendMail({
-            to: user.email,
-            subject: 'Semiconductor Summit 2.0 - Your Password Has Been Reset',
-            html
-        });
-        console.log(`✅ Password reset email sent to ${user.email}`);
-        return true;
-    } catch (err) {
-        console.error(`❌ Password reset email failed: ${err.message}`);
-        return false;
-    }
+  try {
+    await sendMail({
+      to: user.email,
+      subject: 'Semiconductor Summit 2.0 - Your Password Has Been Reset',
+      html
+    });
+    console.log(`✅ Password reset email sent to ${user.email}`);
+    return true;
+  } catch (err) {
+    console.error(`❌ Password reset email failed: ${err.message}`);
+    return false;
+  }
 };
 
 module.exports = {
-    generatePassword,
-    sendCredentialsEmail,
-    sendRejectionEmail,
-    sendPasswordResetEmail,
-    verifyEmailTransporter
+  generatePassword,
+  sendCredentialsEmail,
+  sendRejectionEmail,
+  sendPasswordResetEmail,
+  verifyEmailTransporter
 };
