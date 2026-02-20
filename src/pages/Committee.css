@@ -451,9 +451,26 @@
         max-width: 350px;
     }
 
+    .team-hero {
+        padding: 6rem 1.25rem 2rem;
+    }
+
+    .team-hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .team-hero p {
+        font-size: 1rem;
+    }
+
     /* 2×2 grid: all 4 tabs always visible, no hidden scroll */
     .team-tabs-wrapper {
         padding: 0.5rem 1rem;
+        margin-bottom: 1.25rem;   /* override the default 2.5rem — prevents big gap on mobile */
+    }
+
+    .team-tabs-section {
+        padding-bottom: 3rem;
     }
 
     .team-tabs {
@@ -473,10 +490,6 @@
         letter-spacing: 0.04em;
         text-align: center;
         width: 100%;
-    }
-
-    .team-hero h1 {
-        font-size: 2.5rem;
     }
 }
 
