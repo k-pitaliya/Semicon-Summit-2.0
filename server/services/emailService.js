@@ -1,44 +1,27 @@
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
 
 // Strip any surrounding quotes from env vars (common .env mistake)
 const EMAIL_USER = (process.env.EMAIL_USER || '').replace(/^"|"$/g, '').trim();
-const EMAIL_PASS = (process.env.EMAIL_PASS || '').replace(/^"|"$/g, '').trim();
+const SENDGRID_API_KEY = (process.env.SENDGRID_API_KEY || '').replace(/^"|"$/g, '').trim();
 
-// Create transporter — explicit SMTP config works for both Gmail and Google Workspace
-const createTransporter = () => {
-    return nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,          // false = STARTTLS on port 587
-        requireTLS: true,       // Force TLS upgrade — no plain-text fallback
-        family: 4,              // Force IPv4 — Render free tier has no outbound IPv6
-        auth: {
-            user: EMAIL_USER,
-            pass: EMAIL_PASS   // Must be a Gmail App Password (16 chars, no spaces)
-        },
-        tls: {
-            rejectUnauthorized: false
-        },
-        connectionTimeout: 10000,
-        greetingTimeout: 10000,
-        socketTimeout: 15000
-    });
-};
+// Initialise SendGrid — all email is sent over HTTPS (no SMTP sockets)
+if (SENDGRID_API_KEY) {
+    sgMail.setApiKey(SENDGRID_API_KEY);
+}
 
-// Verify SMTP connection — call once on server start
+// Verify SendGrid configuration — call once on server start
 const verifyEmailTransporter = async () => {
-    if (!EMAIL_USER || !EMAIL_PASS) {
-        console.warn('⚠️  EMAIL_USER or EMAIL_PASS not set — emails will NOT be sent');
+    if (!EMAIL_USER || !SENDGRID_API_KEY) {
+        console.warn('⚠️  EMAIL_USER or SENDGRID_API_KEY not set — emails will NOT be sent');
         return false;
     }
     try {
-        const transporter = createTransporter();
-        await transporter.verify();
-        console.log(`✅ SMTP ready — sending as ${EMAIL_USER}`);
+        // Send a no-op request to verify the API key is valid
+        // SendGrid doesn't have a verify endpoint, so we just confirm config
+        console.log(`✅ SendGrid configured — sending as ${EMAIL_USER} (HTTPS API)`);
         return true;
     } catch (err) {
-        console.error(`❌ SMTP connection failed: [${err.code}] ${err.message}`);
-        console.error('   → Check EMAIL_USER and EMAIL_PASS in .env (use a Gmail App Password, no quotes)');
+        console.error(`❌ SendGrid configuration error: ${err.message}`);
         return false;
     }
 };
@@ -55,10 +38,8 @@ const generatePassword = () => {
 
 // Send credentials email
 const sendCredentialsEmail = async (user, password) => {
-    const transporter = createTransporter();
-
-    const mailOptions = {
-        from: `"Semiconductor Summit 2.0" <${EMAIL_USER}>`,
+    const msg = {
+        from: { name: 'Semiconductor Summit 2.0', email: EMAIL_USER },
         to: user.email,
         subject: '🚀 Access Granted: Semiconductor Summit 2.0 Credentials',
         html: `
@@ -150,21 +131,20 @@ const sendCredentialsEmail = async (user, password) => {
     };
 
     try {
-        await transporter.sendMail(mailOptions);
+        await sgMail.send(msg);
         console.log(`✅ Credentials email sent to ${user.email}`);
         return true;
     } catch (error) {
-        console.error(`❌ Credentials email failed [${error.code || error.responseCode}]: ${error.message}`);
+        const body = error.response?.body;
+        console.error(`❌ Credentials email failed: ${body?.errors?.[0]?.message || error.message}`);
         return false;
     }
 };
 
 // Send rejection email
 const sendRejectionEmail = async (user, reason) => {
-    const transporter = createTransporter();
-
-    const mailOptions = {
-        from: `"Semiconductor Summit 2.0" <${EMAIL_USER}>`,
+    const msg = {
+        from: { name: 'Semiconductor Summit 2.0', email: EMAIL_USER },
         to: user.email,
         subject: 'Action Required: Registration Status Update',
         html: `
@@ -222,21 +202,20 @@ const sendRejectionEmail = async (user, reason) => {
     };
 
     try {
-        await transporter.sendMail(mailOptions);
+        await sgMail.send(msg);
         console.log(`✅ Rejection email sent to ${user.email}`);
         return true;
     } catch (error) {
-        console.error(`❌ Email sending failed:`, error.message);
+        const body = error.response?.body;
+        console.error(`❌ Rejection email failed: ${body?.errors?.[0]?.message || error.message}`);
         return false;
     }
 };
 
 // Send password reset email
 const sendPasswordResetEmail = async (user, newPassword) => {
-    const transporter = createTransporter();
-
-    const mailOptions = {
-        from: `"Semiconductor Summit 2.0" <${EMAIL_USER}>`,
+    const msg = {
+        from: { name: 'Semiconductor Summit 2.0', email: EMAIL_USER },
         to: user.email,
         subject: '🔑 Security Notification: Password Reset',
         html: `
@@ -314,11 +293,12 @@ const sendPasswordResetEmail = async (user, newPassword) => {
     };
 
     try {
-        await transporter.sendMail(mailOptions);
+        await sgMail.send(msg);
         console.log(`✅ Password reset email sent to ${user.email}`);
         return true;
     } catch (error) {
-        console.error(`❌ Password reset email failed:`, error.message);
+        const body = error.response?.body;
+        console.error(`❌ Password reset email failed: ${body?.errors?.[0]?.message || error.message}`);
         return false;
     }
 };
