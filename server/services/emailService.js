@@ -1,27 +1,72 @@
-const sgMail = require('@sendgrid/mail');
+const { google } = require('googleapis');
 
 // Strip any surrounding quotes from env vars (common .env mistake)
-const EMAIL_USER = (process.env.EMAIL_USER || '').replace(/^"|"$/g, '').trim();
-const SENDGRID_API_KEY = (process.env.SENDGRID_API_KEY || '').replace(/^"|"$/g, '').trim();
+const clean = (v) => (v || '').replace(/^"|"$/g, '').trim();
 
-// Initialise SendGrid — all email is sent over HTTPS (no SMTP sockets)
-if (SENDGRID_API_KEY) {
-    sgMail.setApiKey(SENDGRID_API_KEY);
+const EMAIL_USER       = clean(process.env.EMAIL_USER);
+const GMAIL_CLIENT_ID  = clean(process.env.GMAIL_CLIENT_ID);
+const GMAIL_CLIENT_SECRET = clean(process.env.GMAIL_CLIENT_SECRET);
+const GMAIL_REFRESH_TOKEN = clean(process.env.GMAIL_REFRESH_TOKEN);
+
+// Build OAuth2 client — Gmail API sends over HTTPS (no SMTP sockets)
+const oAuth2Client = new google.auth.OAuth2(
+    GMAIL_CLIENT_ID,
+    GMAIL_CLIENT_SECRET,
+    'https://developers.google.com/oauthplayground'   // redirect used during token generation
+);
+
+if (GMAIL_REFRESH_TOKEN) {
+    oAuth2Client.setCredentials({ refresh_token: GMAIL_REFRESH_TOKEN });
 }
 
-// Verify SendGrid configuration — call once on server start
+const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
+
+// Helper — build a raw RFC-2822 message and base64url-encode it
+const buildRawEmail = ({ to, subject, html }) => {
+    const boundary = `----=_Part_${Date.now()}`;
+    const lines = [
+        `From: "Semiconductor Summit 2.0" <${EMAIL_USER}>`,
+        `To: ${to}`,
+        `Subject: ${subject}`,
+        `MIME-Version: 1.0`,
+        `Content-Type: multipart/alternative; boundary="${boundary}"`,
+        ``,
+        `--${boundary}`,
+        `Content-Type: text/html; charset=UTF-8`,
+        `Content-Transfer-Encoding: 7bit`,
+        ``,
+        html,
+        ``,
+        `--${boundary}--`,
+    ];
+    const raw = lines.join('\r\n');
+    return Buffer.from(raw).toString('base64url');
+};
+
+// Send an email via Gmail API (HTTPS)
+const sendMail = async ({ to, subject, html }) => {
+    const raw = buildRawEmail({ to, subject, html });
+    await gmail.users.messages.send({
+        userId: 'me',
+        requestBody: { raw },
+    });
+};
+
+// Verify Gmail API configuration — call once on server start
 const verifyEmailTransporter = async () => {
-    if (!EMAIL_USER || !SENDGRID_API_KEY) {
-        console.warn('⚠️  EMAIL_USER or SENDGRID_API_KEY not set — emails will NOT be sent');
+    if (!EMAIL_USER || !GMAIL_CLIENT_ID || !GMAIL_CLIENT_SECRET || !GMAIL_REFRESH_TOKEN) {
+        console.warn('⚠️  Gmail API credentials incomplete — emails will NOT be sent');
+        console.warn('   → Need: EMAIL_USER, GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET, GMAIL_REFRESH_TOKEN');
         return false;
     }
     try {
-        // Send a no-op request to verify the API key is valid
-        // SendGrid doesn't have a verify endpoint, so we just confirm config
-        console.log(`✅ SendGrid configured — sending as ${EMAIL_USER} (HTTPS API)`);
+        // Force a token refresh to validate credentials
+        await oAuth2Client.getAccessToken();
+        console.log(`✅ Gmail API ready — sending as ${EMAIL_USER} (HTTPS)`);
         return true;
     } catch (err) {
-        console.error(`❌ SendGrid configuration error: ${err.message}`);
+        console.error(`❌ Gmail API auth failed: ${err.message}`);
+        console.error('   → Re-generate your refresh token at https://developers.google.com/oauthplayground');
         return false;
     }
 };
@@ -38,8 +83,7 @@ const generatePassword = () => {
 
 // Send credentials email
 const sendCredentialsEmail = async (user, password) => {
-    const msg = {
-        from: { name: 'Semiconductor Summit 2.0', email: EMAIL_USER },
+    const emailData = {
         to: user.email,
         subject: '🚀 Access Granted: Semiconductor Summit 2.0 Credentials',
         html: `
@@ -131,20 +175,18 @@ const sendCredentialsEmail = async (user, password) => {
     };
 
     try {
-        await sgMail.send(msg);
+        await sendMail(emailData);
         console.log(`✅ Credentials email sent to ${user.email}`);
         return true;
     } catch (error) {
-        const body = error.response?.body;
-        console.error(`❌ Credentials email failed: ${body?.errors?.[0]?.message || error.message}`);
+        console.error(`❌ Credentials email failed: ${error.message}`);
         return false;
     }
 };
 
 // Send rejection email
 const sendRejectionEmail = async (user, reason) => {
-    const msg = {
-        from: { name: 'Semiconductor Summit 2.0', email: EMAIL_USER },
+    const emailData = {
         to: user.email,
         subject: 'Action Required: Registration Status Update',
         html: `
@@ -202,20 +244,18 @@ const sendRejectionEmail = async (user, reason) => {
     };
 
     try {
-        await sgMail.send(msg);
+        await sendMail(emailData);
         console.log(`✅ Rejection email sent to ${user.email}`);
         return true;
     } catch (error) {
-        const body = error.response?.body;
-        console.error(`❌ Rejection email failed: ${body?.errors?.[0]?.message || error.message}`);
+        console.error(`❌ Rejection email failed: ${error.message}`);
         return false;
     }
 };
 
 // Send password reset email
 const sendPasswordResetEmail = async (user, newPassword) => {
-    const msg = {
-        from: { name: 'Semiconductor Summit 2.0', email: EMAIL_USER },
+    const emailData = {
         to: user.email,
         subject: '🔑 Security Notification: Password Reset',
         html: `
@@ -293,12 +333,11 @@ const sendPasswordResetEmail = async (user, newPassword) => {
     };
 
     try {
-        await sgMail.send(msg);
+        await sendMail(emailData);
         console.log(`✅ Password reset email sent to ${user.email}`);
         return true;
     } catch (error) {
-        const body = error.response?.body;
-        console.error(`❌ Password reset email failed: ${body?.errors?.[0]?.message || error.message}`);
+        console.error(`❌ Password reset email failed: ${error.message}`);
         return false;
     }
 };
