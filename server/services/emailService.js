@@ -9,16 +9,17 @@ const createTransporter = () => {
     return nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,
-        secure: false,          // false = STARTTLS on port 587 (port 465/SSL is blocked on Render)
-        requireTLS: true,       // Force upgrade to TLS — don't allow plain-text fallback
+        secure: false,          // false = STARTTLS on port 587
+        requireTLS: true,       // Force TLS upgrade — no plain-text fallback
+        family: 4,              // Force IPv4 — Render free tier has no outbound IPv6
         auth: {
             user: EMAIL_USER,
             pass: EMAIL_PASS   // Must be a Gmail App Password (16 chars, no spaces)
         },
         tls: {
-            rejectUnauthorized: false  // Allow self-signed certs (helps Render/cloud envs)
+            rejectUnauthorized: false
         },
-        connectionTimeout: 10000,  // 10s — fail fast instead of hanging
+        connectionTimeout: 10000,
         greetingTimeout: 10000,
         socketTimeout: 15000
     });
