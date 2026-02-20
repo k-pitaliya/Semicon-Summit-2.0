@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     Users, Download, Filter, Search, LogOut, Image,
-    AlertTriangle, X, Key, Trash2, UserCog, Upload, ImagePlus, Bell
+    AlertTriangle, X, Key, Trash2, UserCog, Upload, ImagePlus, Bell, Copy, Check
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
@@ -31,6 +31,15 @@ const FacultyDashboard = () => {
     const [allUsers, setAllUsers] = useState([])
     const [userManagementModal, setUserManagementModal] = useState({ open: false, user: null, action: null })
     const [deleteConfirmModal, setDeleteConfirmModal] = useState({ open: false, user: null })
+    const [passwordResetModal, setPasswordResetModal] = useState({ open: false, email: '', password: '', emailSent: false })
+    const [copied, setCopied] = useState({})   // { fieldKey: true/false }
+
+    const copyToClipboard = useCallback((text, key) => {
+        navigator.clipboard.writeText(text).then(() => {
+            setCopied(prev => ({ ...prev, [key]: true }))
+            setTimeout(() => setCopied(prev => ({ ...prev, [key]: false })), 2000)
+        })
+    }, [])
 
     // Gallery State
     const [galleryImages, setGalleryImages] = useState([])
@@ -239,15 +248,18 @@ const FacultyDashboard = () => {
 
     // User Management Functions
     const handleResetPassword = async (userId) => {
-        if (!confirm('Are you sure you want to reset this user\'s password? A new password will be emailed to them.')) {
-            return
-        }
+        if (!confirm('Reset this user\'s password? A new password will be generated and emailed to them.')) return
 
         setActionLoading(userId)
         try {
             const response = await api.post(`/users/${userId}/reset-password`)
-            const emailSent = response.data.emailSent
-            alert(`✅ Password reset successful!\n\nNew password: ${response.data.newPassword}\n\n${emailSent ? '📧 New password emailed to the user.' : '⚠️ Email delivery failed — please share the new password manually: ' + response.data.newPassword}`)
+            const targetUser = allUsers.find(u => u._id === userId)
+            setPasswordResetModal({
+                open: true,
+                email: targetUser?.email || '',
+                password: response.data.newPassword,
+                emailSent: response.data.emailSent
+            })
         } catch (error) {
             alert('Error resetting password: ' + (error.response?.data?.error || error.message))
         } finally {
@@ -510,6 +522,69 @@ const FacultyDashboard = () => {
                                 disabled={actionLoading}
                             >
                                 {actionLoading ? 'Deleting...' : 'Delete User'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ── Password Reset Success Modal ────────────────────────── */}
+            {passwordResetModal.open && (
+                <div className="modal-overlay" onClick={() => setPasswordResetModal(prev => ({ ...prev, open: false }))}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '480px' }}>
+                        <button className="modal-close" onClick={() => setPasswordResetModal(prev => ({ ...prev, open: false }))}>
+                            <X size={24} />
+                        </button>
+
+                        {/* Header */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+                            <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <Key size={18} color="#22c55e" />
+                            </div>
+                            <h3 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--text-primary)' }}>Password Reset Successful</h3>
+                        </div>
+
+                        {/* Email sent badge */}
+                        <div style={{ marginBottom: '20px' }}>
+                            {passwordResetModal.emailSent
+                                ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '4px 10px', background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.3)', borderRadius: '99px', fontSize: '0.78rem', color: '#22c55e', fontWeight: 600 }}>
+                                    ✓ Credentials emailed to user
+                                </span>
+                                : <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '4px 10px', background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', borderRadius: '99px', fontSize: '0.78rem', color: '#f59e0b', fontWeight: 600 }}>
+                                    ⚠ Email failed — share manually below
+                                </span>
+                            }
+                        </div>
+
+                        {/* Copy fields */}
+                        {[
+                            { label: 'Email / Username', value: passwordResetModal.email, key: 'email', mono: false },
+                            { label: 'New Password', value: passwordResetModal.password, key: 'pwd', mono: true },
+                        ].map(({ label, value, key, mono }) => (
+                            <div key={key} style={{ marginBottom: '12px' }}>
+                                <p style={{ margin: '0 0 5px', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{label}</p>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-default)', borderRadius: '8px' }}>
+                                    <span style={{ flex: 1, fontFamily: mono ? "'SF Mono', Monaco, monospace" : 'inherit', fontSize: mono ? '1rem' : '0.9rem', fontWeight: 600, color: 'var(--text-primary)', wordBreak: 'break-all' }}>
+                                        {value}
+                                    </span>
+                                    <button
+                                        onClick={() => copyToClipboard(value, key)}
+                                        title="Copy to clipboard"
+                                        style={{ flexShrink: 0, background: copied[key] ? 'rgba(34,197,94,0.15)' : 'rgba(99,102,241,0.12)', border: `1px solid ${copied[key] ? 'rgba(34,197,94,0.4)' : 'rgba(99,102,241,0.3)'}`, borderRadius: '6px', padding: '5px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', color: copied[key] ? '#22c55e' : '#818cf8', fontSize: '0.75rem', fontWeight: 600, transition: 'all 0.2s' }}
+                                    >
+                                        {copied[key] ? <><Check size={13} /> Copied!</> : <><Copy size={13} /> Copy</>}
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+
+                        <div className="modal-actions" style={{ marginTop: '20px' }}>
+                            <button
+                                className="btn btn-primary"
+                                onClick={() => setPasswordResetModal(prev => ({ ...prev, open: false }))}
+                                style={{ width: '100%', justifyContent: 'center' }}
+                            >
+                                Done
                             </button>
                         </div>
                     </div>
