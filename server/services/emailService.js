@@ -46,26 +46,45 @@ const buildRawEmail = ({ to, subject, html }) => {
 // Send an email via Gmail API (HTTPS)
 const sendMail = async ({ to, subject, html }) => {
     const raw = buildRawEmail({ to, subject, html });
-    await gmail.users.messages.send({
-        userId: 'me',
-        requestBody: { raw },
-    });
+    try {
+        const result = await gmail.users.messages.send({
+            userId: 'me',
+            requestBody: { raw },
+        });
+        return result;
+    } catch (err) {
+        // Log the FULL error from Google API
+        const gErr = err.response?.data?.error;
+        if (gErr) {
+            console.error(`❌ Gmail API error [${gErr.code}]: ${gErr.message}`);
+            if (gErr.errors) console.error('   Details:', JSON.stringify(gErr.errors));
+        } else {
+            console.error(`❌ Gmail send error: ${err.message}`);
+            if (err.stack) console.error(err.stack);
+        }
+        throw err;
+    }
 };
 
 // Verify Gmail API configuration — call once on server start
 const verifyEmailTransporter = async () => {
     if (!EMAIL_USER || !GMAIL_CLIENT_ID || !GMAIL_CLIENT_SECRET || !GMAIL_REFRESH_TOKEN) {
         console.warn('⚠️  Gmail API credentials incomplete — emails will NOT be sent');
-        console.warn('   → Need: EMAIL_USER, GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET, GMAIL_REFRESH_TOKEN');
+        console.warn('   → EMAIL_USER:', EMAIL_USER ? '✓' : '✗');
+        console.warn('   → GMAIL_CLIENT_ID:', GMAIL_CLIENT_ID ? `✓ (${GMAIL_CLIENT_ID.substring(0, 12)}...)` : '✗');
+        console.warn('   → GMAIL_CLIENT_SECRET:', GMAIL_CLIENT_SECRET ? '✓' : '✗');
+        console.warn('   → GMAIL_REFRESH_TOKEN:', GMAIL_REFRESH_TOKEN ? `✓ (${GMAIL_REFRESH_TOKEN.substring(0, 10)}...)` : '✗');
         return false;
     }
     try {
         // Force a token refresh to validate credentials
-        await oAuth2Client.getAccessToken();
+        const { token } = await oAuth2Client.getAccessToken();
         console.log(`✅ Gmail API ready — sending as ${EMAIL_USER} (HTTPS)`);
+        console.log(`   → Access token obtained: ${token ? 'yes' : 'no'}`);
         return true;
     } catch (err) {
         console.error(`❌ Gmail API auth failed: ${err.message}`);
+        if (err.response?.data) console.error('   → Google response:', JSON.stringify(err.response.data));
         console.error('   → Re-generate your refresh token at https://developers.google.com/oauthplayground');
         return false;
     }
