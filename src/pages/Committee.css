@@ -451,14 +451,28 @@
         max-width: 350px;
     }
 
-    .team-tabs {
-        justify-content: flex-start;
-        width: 100%;
-        border-radius: 12px;
+    /* 2×2 grid: all 4 tabs always visible, no hidden scroll */
+    .team-tabs-wrapper {
+        padding: 0.5rem 1rem;
     }
 
-    .team-tabs-wrapper {
+    .team-tabs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        border-radius: 16px;
         padding: 0.5rem;
+        width: 100%;
+        overflow: visible;  /* no more hidden scroll */
+    }
+
+    .team-tab {
+        border-radius: 10px;
+        padding: 0.65rem 0.5rem;
+        font-size: 0.72rem;
+        letter-spacing: 0.04em;
+        text-align: center;
+        width: 100%;
     }
 
     .team-hero h1 {
