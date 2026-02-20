@@ -378,10 +378,32 @@ const Register = () => {
                                 <span className="schedule-event">Expert Insights: VLSI vs Embedded</span>
                                 <span className="schedule-tag all">All</span>
                             </div>
+                            <div className="schedule-row fixed">
+                                <span className="schedule-time">Whole Day</span>
+                                <span className="schedule-event">Technical Events &amp; Activities</span>
+                                <span className="schedule-tag all">All</span>
+                            </div>
                             <div className="schedule-row highlight">
                                 <span className="schedule-time">12:30 – 04:30 PM</span>
                                 <span className="schedule-event">Silicon Shark Tank – Innovation Pitch</span>
                                 <span className="schedule-tag choose">Register Below</span>
+                            </div>
+                        </div>
+
+                        <div className="event-info-card" style={{ borderColor: 'rgba(99,179,237,0.35)', background: 'rgba(99,179,237,0.05)' }}>
+                            <div className="event-info-header">
+                                <Zap size={20} style={{ color: '#60a5fa' }} />
+                                <h3 style={{ color: '#f1f5f9' }}>Whole Day Technical Events</h3>
+                                <span className="schedule-tag all" style={{ fontSize: '0.72rem' }}>Open to All</span>
+                            </div>
+                            <div className="event-info-body">
+                                <p>Throughout Day 2, the following technical activities run in parallel — drop in any time during the day. No separate registration required.</p>
+                                <div className="event-rounds">
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Component Identification Challenge</strong><span>Identify electronic components and their specifications under time pressure.</span></div>
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>PCB Design Walkthrough Stall</strong><span>Interactive guided stall on PCB layout best practices and design tools.</span></div>
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Best Out of Waste</strong><span>Creative challenge: build something functional using scrap electronic components.</span></div>
+                                </div>
+                                <div className="info-note small"><Info size={14} /><span>All of the above are included in your registration. Just show up!</span></div>
                             </div>
                         </div>
 
@@ -438,10 +460,32 @@ const Register = () => {
                                 <span className="schedule-event">Impact of AI in VLSI</span>
                                 <span className="schedule-tag all">All</span>
                             </div>
+                            <div className="schedule-row fixed">
+                                <span className="schedule-time">Whole Day</span>
+                                <span className="schedule-event">Technical Events &amp; Activities</span>
+                                <span className="schedule-tag all">All</span>
+                            </div>
                             <div className="schedule-row highlight">
                                 <span className="schedule-time">After 12:00 PM</span>
                                 <span className="schedule-event">Silicon Jackpot + Silent Gallery</span>
                                 <span className="schedule-tag choose">Register Below</span>
+                            </div>
+                        </div>
+
+                        <div className="event-info-card" style={{ borderColor: 'rgba(99,179,237,0.35)', background: 'rgba(99,179,237,0.05)' }}>
+                            <div className="event-info-header">
+                                <Zap size={20} style={{ color: '#60a5fa' }} />
+                                <h3 style={{ color: '#f1f5f9' }}>Whole Day Technical Events</h3>
+                                <span className="schedule-tag all" style={{ fontSize: '0.72rem' }}>Open to All</span>
+                            </div>
+                            <div className="event-info-body">
+                                <p>Throughout Day 3, the following technical activities run in parallel — drop in any time during the day. No separate registration required.</p>
+                                <div className="event-rounds">
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Circuit Debugging Challenge</strong><span>Spot and fix the bug in a given circuit schematic within the time limit.</span></div>
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Semiconductor Quiz Stall</strong><span>On-the-spot technical quiz on semiconductors, VLSI, and embedded systems.</span></div>
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Project &amp; Idea Showcase</strong><span>Open showcase — brief your project or idea to judges for informal feedback.</span></div>
+                                </div>
+                                <div className="info-note small"><Info size={14} /><span>All of the above are included in your registration. Just show up!</span></div>
                             </div>
                         </div>
 
