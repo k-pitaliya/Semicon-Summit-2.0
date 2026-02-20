@@ -59,8 +59,8 @@ const RegistrationsTab = ({
                         style={{ minWidth: '200px' }}
                     >
                         <option value="all">All Events</option>
-                        {(events || []).map(event => (
-                            <option key={event} value={event}>{event}</option>
+                        {(events || []).map(ev => (
+                            <option key={ev.value ?? ev} value={ev.value ?? ev}>{ev.label ?? ev}</option>
                         ))}
                     </select>
                 </div>
@@ -91,7 +91,7 @@ const RegistrationsTab = ({
                                 <th>Pwd Status</th>
                                 <th>College</th>
                                 <th>Phone</th>
-                                <th>Selected Events</th>
+                                <th>Event Choices</th>
                                 <th>Payment Ref</th>
                                 <th>Registered On</th>
                             </tr>
@@ -120,13 +120,22 @@ const RegistrationsTab = ({
                                         <td>{participant.phone}</td>
                                         <td>
                                             <div className="events-badges">
-                                                {(participant.selectedEvents || []).length > 0 ? (
-                                                    participant.selectedEvents.map((evt, i) => (
-                                                        <span key={i} className="event-badge">{evt}</span>
-                                                    ))
-                                                ) : (
-                                                    <span className="text-muted">All / None Selected</span>
-                                                )}
+                                                {(() => {
+                                                    const ec = participant.eventChoices || {};
+                                                    const parts = [];
+                                                    if (ec.day1Workshop === 'rtl-gds') parts.push('RTL→GDS');
+                                                    else if (ec.day1Workshop === 'fpga') parts.push('FPGA');
+                                                    if (ec.sharkTank) parts.push('Shark Tank');
+                                                    if (ec.treasureHunt) parts.push('Treasure Hunt');
+                                                    if (ec.silentGallery) parts.push('Silent Gallery');
+                                                    if (parts.length === 0 && (participant.selectedEvents || []).length > 0)
+                                                        return participant.selectedEvents.map((evt, i) => (
+                                                            <span key={i} className="event-badge">{evt}</span>
+                                                        ));
+                                                    return parts.length > 0
+                                                        ? parts.map((p, i) => <span key={i} className="event-badge">{p}</span>)
+                                                        : <span className="text-muted">—</span>;
+                                                })()}
                                             </div>
                                         </td>
                                         <td><code>{participant.paymentRef || '—'}</code></td>
@@ -152,7 +161,10 @@ const RegistrationsTab = ({
             <div className="table-footer">
                 <span className="results-count">
                     Showing {filteredParticipants.length} of {participants.length} registrations
-                    {selectedEvent !== 'all' && ` · filtered by "${selectedEvent}"`}
+                    {selectedEvent !== 'all' && (() => {
+                        const evObj = (events || []).find(e => (e.value ?? e) === selectedEvent);
+                        return ` · filtered by "${evObj ? (evObj.label ?? evObj) : selectedEvent}"`;
+                    })()}
                 </span>
             </div>
         </section>

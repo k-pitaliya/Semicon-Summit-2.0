@@ -16,7 +16,20 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Get single event (Public)
+// Get registrations (Auth required) — MUST be before /:id to avoid route conflict
+router.get('/registrations/all', authenticate, async (req, res) => {
+    try {
+        const registrations = await Registration.find()
+            .populate('user')
+            .populate('event')
+            .sort({ registrationDate: -1 });
+        res.json(registrations);
+    } catch (error) {
+        console.error('Get registrations error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+// Get single event (Public) — AFTER all named sub-routes to avoid catching them as :id
 router.get('/:id', async (req, res) => {
     try {
         const event = await Event.findById(req.params.id);
@@ -72,19 +85,4 @@ router.post('/register', authenticate, async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
-
-// Get registrations (Auth required)
-router.get('/registrations/all', authenticate, async (req, res) => {
-    try {
-        const registrations = await Registration.find()
-            .populate('user')
-            .populate('event')
-            .sort({ registrationDate: -1 });
-        res.json(registrations);
-    } catch (error) {
-        console.error('Get registrations error:', error);
-        res.status(500).json({ error: 'Server error' });
-    }
-});
-
 module.exports = router;

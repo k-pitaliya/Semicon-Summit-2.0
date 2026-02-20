@@ -16,24 +16,70 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
         let total = 0; // declared here so it's in scope for res.json() below
 
         if (event && event !== 'all') {
-            const eventDoc = await Event.findOne({ title: event });
-            if (eventDoc) {
-                const registrations = await Registration.find({ event: eventDoc._id })
-                    .populate('user')
-                    .populate('event');
-                participants = registrations.map(reg => ({
-                    id: reg.user._id,
-                    name: reg.user.name,
-                    email: reg.user.email,
-                    mustChangePassword: reg.user.mustChangePassword,
-                    college: reg.user.college,
-                    phone: reg.user.phone,
-                    events: [reg.event.title],
-                    paymentRef: reg.user.razorpayPaymentId || reg.user.paymentReference || 'N/A',
-                    timestamp: reg.registrationDate
+            // Support filtering by eventChoices fields (day1Workshop, sharkTank, etc.) or legacy event title
+            const eventChoiceFields = ['rtl-gds', 'fpga', 'none', 'sharkTank', 'treasureHunt', 'silentGallery'];
+            if (eventChoiceFields.includes(event) || ['Silicon Shark Tank', 'Treasure Hunt', 'Silent Gallery'].includes(event)) {
+                // Filter by eventChoices stored on User directly
+                let filter = { role: 'participant' };
+                if (event === 'rtl-gds') filter['eventChoices.day1Workshop'] = 'rtl-gds';
+                else if (event === 'fpga') filter['eventChoices.day1Workshop'] = 'fpga';
+                else if (event === 'sharkTank' || event === 'Silicon Shark Tank') filter['eventChoices.sharkTank'] = true;
+                else if (event === 'treasureHunt' || event === 'Treasure Hunt') filter['eventChoices.treasureHunt'] = true;
+                else if (event === 'silentGallery' || event === 'Silent Gallery') filter['eventChoices.silentGallery'] = true;
+                total = await User.countDocuments(filter);
+                const users = await User.find(filter)
+                    .sort({ createdAt: -1 })
+                    .skip((pageNum - 1) * limitNum)
+                    .limit(limitNum);
+                participants = users.map(user => ({
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    mustChangePassword: user.mustChangePassword,
+                    college: user.college,
+                    phone: user.phone,
+                    department: user.department,
+                    studentId: user.studentId,
+                    yearOfStudy: user.yearOfStudy,
+                    eventChoices: user.eventChoices,
+                    selectedEvents: user.selectedEvents || [],
+                    paymentRef: user.razorpayPaymentId || 'N/A',
+                    paymentAmount: user.paymentAmount || 299,
+                    verificationStatus: user.verificationStatus || 'approved',
+                    timestamp: user.createdAt
                 }));
             } else {
-                participants = [];
+                // Legacy: filter by Registration event title
+                const eventDoc = await Event.findOne({ title: event });
+                if (eventDoc) {
+                    const registrations = await Registration.find({ event: eventDoc._id })
+                        .populate('user')
+                        .populate('event');
+                    total = registrations.length;
+                    participants = registrations
+                        .filter(reg => reg.user)
+                        .slice((pageNum - 1) * limitNum, pageNum * limitNum)
+                        .map(reg => ({
+                            id: reg.user._id,
+                            name: reg.user.name,
+                            email: reg.user.email,
+                            mustChangePassword: reg.user.mustChangePassword,
+                            college: reg.user.college,
+                            phone: reg.user.phone,
+                            department: reg.user.department,
+                            studentId: reg.user.studentId,
+                            yearOfStudy: reg.user.yearOfStudy,
+                            eventChoices: reg.user.eventChoices,
+                            selectedEvents: reg.user.selectedEvents || [],
+                            events: [reg.event.title],
+                            paymentRef: reg.user.razorpayPaymentId || 'N/A',
+                            paymentAmount: reg.user.paymentAmount || 299,
+                            verificationStatus: reg.user.verificationStatus || 'approved',
+                            timestamp: reg.registrationDate
+                        }));
+                } else {
+                    participants = [];
+                }
             }
         } else {
             total = await User.countDocuments({ role: 'participant' });
@@ -54,9 +100,15 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
                     mustChangePassword: user.mustChangePassword,
                     college: user.college,
                     phone: user.phone,
+                    department: user.department,
+                    studentId: user.studentId,
+                    yearOfStudy: user.yearOfStudy,
+                    eventChoices: user.eventChoices,
                     events: userRegs.map(r => r.event?.title || 'Unknown'),
                     selectedEvents: user.selectedEvents || [],
                     paymentRef: user.razorpayPaymentId || user.paymentReference || userRegs[0]?.paymentReference || 'N/A',
+                    paymentAmount: user.paymentAmount || 299,
+                    verificationStatus: user.verificationStatus || 'approved',
                     timestamp: user.createdAt
                 };
             });

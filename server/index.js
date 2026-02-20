@@ -21,6 +21,7 @@ const Event = require('./models/Event');
 
 // Services
 const { generatePassword, sendCredentialsEmail, verifyEmailTransporter } = require('./services/emailService');
+const { authenticate, authorize } = require('./middleware/auth');
 
 // Route files
 const authRoutes = require('./routes/authRoutes');
@@ -270,7 +271,6 @@ app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) =
             razorpayPaymentId: normalizedPaymentId,
             paymentScreenshot: `/uploads/receipts/${pdfFile.filename}`,
             password: password,
-            generatedPassword: password,
             verifiedAt: new Date()
         });
 
@@ -307,7 +307,7 @@ app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) =
 // ==========================================
 // ADMIN VERIFICATION ROUTES (kept for backward compat)
 // ==========================================
-app.get('/api/admin/pending', async (req, res) => {
+app.get('/api/admin/pending', authenticate, authorize('faculty'), async (req, res) => {
     try {
         const pending = await User.find({ verificationStatus: 'pending' })
             .sort({ createdAt: -1 });
@@ -318,7 +318,7 @@ app.get('/api/admin/pending', async (req, res) => {
     }
 });
 
-app.post('/api/admin/verify/:id', async (req, res) => {
+app.post('/api/admin/verify/:id', authenticate, authorize('faculty'), async (req, res) => {
     try {
         const { id } = req.params;
         const user = await User.findById(id);
@@ -332,7 +332,6 @@ app.post('/api/admin/verify/:id', async (req, res) => {
 
         const password = generatePassword();
         user.password = password;
-        user.generatedPassword = password;
         user.verificationStatus = 'approved';
         user.paymentStatus = 'completed';
         user.verifiedAt = new Date();
@@ -360,7 +359,7 @@ app.post('/api/admin/verify/:id', async (req, res) => {
     }
 });
 
-app.post('/api/admin/reject/:id', async (req, res) => {
+app.post('/api/admin/reject/:id', authenticate, authorize('faculty'), async (req, res) => {
     try {
         const { id } = req.params;
         const { reason } = req.body;
@@ -392,9 +391,9 @@ app.post('/api/admin/reject/:id', async (req, res) => {
 });
 
 // ==========================================
-// SEED DATABASE WITH DEMO DATA
+// SEED DATABASE WITH DEMO DATA (dev-only, faculty auth required)
 // ==========================================
-app.post('/api/seed', async (req, res) => {
+app.post('/api/seed', authenticate, authorize('faculty'), async (req, res) => {
     try {
         const demoUsers = [
             { name: 'John Participant', email: 'participant@demo.com', password: 'demo123', role: 'participant', college: 'Tech University', phone: '9876543210' },

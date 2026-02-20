@@ -41,18 +41,13 @@ const FacultyDashboard = () => {
     const [announcements, setAnnouncements] = useState([])
     const [newAnnouncement, setNewAnnouncement] = useState({ title: '', content: '' })
 
-    // Match the real event names from scheduleData / AVAILABLE_EVENTS in Register.jsx
+    // Event filter options — match keys used in User.eventChoices (set by 5-step registration form)
     const events = [
-        'Fabless Startups & MSMEs',
-        'AI in VLSI',
-        'Embedded vs VLSI',
-        'RTL to GDS II Workshop',
-        'Verilog & FPGA Workshop',
-        'Silicon Shark Tank',
-        'The Silicon Jackpot',
-        'Silicon PlayZone',
-        'Silicon Ideas Showcase',
-        'Wafer to Chip Demo'
+        { label: 'RTL to GDS II Workshop (Day 1)', value: 'rtl-gds' },
+        { label: 'FPGA Interfacing Workshop (Day 1)', value: 'fpga' },
+        { label: 'Silicon Shark Tank (Day 2)', value: 'Silicon Shark Tank' },
+        { label: 'Silicon Jackpot / Treasure Hunt (Day 3)', value: 'Treasure Hunt' },
+        { label: 'Silicon Silent Gallery (Day 3)', value: 'Silent Gallery' },
     ]
 
     useEffect(() => {
@@ -111,10 +106,16 @@ const FacultyDashboard = () => {
         }
 
         if (selectedEvent !== 'all') {
-            // selectedEvents is an array of event name strings on the participant object
-            filtered = filtered.filter(p =>
-                Array.isArray(p.selectedEvents) && p.selectedEvents.includes(selectedEvent)
-            )
+            filtered = filtered.filter(p => {
+                const ec = p.eventChoices || {};
+                if (selectedEvent === 'rtl-gds') return ec.day1Workshop === 'rtl-gds';
+                if (selectedEvent === 'fpga') return ec.day1Workshop === 'fpga';
+                if (selectedEvent === 'Silicon Shark Tank') return ec.sharkTank === true;
+                if (selectedEvent === 'Treasure Hunt') return ec.treasureHunt === true;
+                if (selectedEvent === 'Silent Gallery') return ec.silentGallery === true;
+                // fallback: legacy selectedEvents array
+                return Array.isArray(p.selectedEvents) && p.selectedEvents.includes(selectedEvent);
+            });
         }
 
         setFilteredParticipants(filtered)
@@ -166,18 +167,31 @@ const FacultyDashboard = () => {
 
     const handleExport = () => {
         // Prepare data for Excel
+        const eventChoiceSummary = (ec) => {
+            if (!ec) return '';
+            const parts = [];
+            if (ec.day1Workshop === 'rtl-gds') parts.push('RTL to GDS II');
+            else if (ec.day1Workshop === 'fpga') parts.push('FPGA Workshop');
+            if (ec.sharkTank) parts.push('Shark Tank');
+            if (ec.treasureHunt) parts.push('Treasure Hunt');
+            if (ec.silentGallery) parts.push('Silent Gallery');
+            return parts.join(', ');
+        };
         const excelData = filteredParticipants.map((p, index) => ({
             'S.No': index + 1,
             'Name': p.name || '',
             'Email': p.email || '',
-            'Must Change Password': p.mustChangePassword ? 'Yes' : 'No',
             'Phone': p.phone || '',
             'College': p.college || '',
-            'Selected Events': (p.selectedEvents || []).join(', '),
-            'Transaction ID': p.transactionId || p.paymentRef || '',
+            'Department': p.department || '',
+            'Student ID': p.studentId || '',
+            'Year': p.yearOfStudy || '',
+            'Workshop (Day 1)': p.eventChoices?.day1Workshop || '',
+            'Event Choices': eventChoiceSummary(p.eventChoices),
+            'Payment ID': p.paymentRef || '',
             'Amount Paid': p.paymentAmount || 299,
             'Status': p.verificationStatus || 'approved',
-            'Registered On': p.createdAt ? new Date(p.createdAt).toLocaleDateString('en-IN') : p.timestamp || ''
+            'Registered On': p.timestamp ? new Date(p.timestamp).toLocaleDateString('en-IN') : ''
         }))
 
         // Create worksheet
@@ -188,11 +202,14 @@ const FacultyDashboard = () => {
             { wch: 6 },   // S.No
             { wch: 25 },  // Name
             { wch: 30 },  // Email
-            { wch: 12 },  // Password
             { wch: 15 },  // Phone
-            { wch: 30 },  // College
-            { wch: 40 },  // Events
-            { wch: 20 },  // Transaction ID
+            { wch: 28 },  // College
+            { wch: 22 },  // Department
+            { wch: 14 },  // Student ID
+            { wch: 10 },  // Year
+            { wch: 14 },  // Workshop
+            { wch: 36 },  // Event Choices
+            { wch: 22 },  // Payment ID
             { wch: 12 },  // Amount
             { wch: 12 },  // Status
             { wch: 15 },  // Date
