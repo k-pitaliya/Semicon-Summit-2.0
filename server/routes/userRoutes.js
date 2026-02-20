@@ -6,7 +6,7 @@ const Registration = require('../models/Registration');
 const { authenticate, authorize } = require('../middleware/auth');
 
 // Get all users (Faculty only)
-router.get('/', authenticate, authorize('faculty'), async (req, res) => {
+router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, res) => {
     try {
         const { role } = req.query;
         let query = {};
@@ -38,7 +38,7 @@ router.get('/:id', authenticate, async (req, res) => {
 });
 
 // Update user (Faculty only)
-router.put('/:id', authenticate, authorize('faculty'), async (req, res) => {
+router.put('/:id', authenticate, authorize('faculty', 'coordinator'), async (req, res) => {
     try {
         const updates = req.body;
         delete updates.password; // Don't allow password update through this route
@@ -55,7 +55,7 @@ router.put('/:id', authenticate, authorize('faculty'), async (req, res) => {
 });
 
 // Delete user (Faculty only)
-router.delete('/:id', authenticate, authorize('faculty'), async (req, res) => {
+router.delete('/:id', authenticate, authorize('faculty', 'coordinator'), async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         if (!user) {
@@ -78,7 +78,7 @@ router.delete('/:id', authenticate, authorize('faculty'), async (req, res) => {
 });
 
 // Reset user password (Faculty only)
-router.post('/:id/reset-password', authenticate, authorize('faculty'), async (req, res) => {
+router.post('/:id/reset-password', authenticate, authorize('faculty', 'coordinator'), async (req, res) => {
     try {
         const { generatePassword, sendPasswordResetEmail } = require('../services/emailService');
 
@@ -90,7 +90,7 @@ router.post('/:id/reset-password', authenticate, authorize('faculty'), async (re
         const newPassword = generatePassword();
         user.password = newPassword;
         user.mustChangePassword = true;
-        
+
         // Reset password expiration date
         if (user.passwordRotationDays > 0) {
             user.passwordChangedAt = new Date();
@@ -98,7 +98,7 @@ router.post('/:id/reset-password', authenticate, authorize('faculty'), async (re
             expiryDate.setDate(expiryDate.getDate() + user.passwordRotationDays);
             user.passwordExpiresAt = expiryDate;
         }
-        
+
         await user.save();
 
         // Await email so we can report success/failure in response
@@ -123,7 +123,7 @@ router.post('/:id/reset-password', authenticate, authorize('faculty'), async (re
 });
 
 // Change user role (Faculty only)
-router.patch('/:id/role', authenticate, authorize('faculty'), async (req, res) => {
+router.patch('/:id/role', authenticate, authorize('faculty', 'coordinator'), async (req, res) => {
     try {
         const { role } = req.body;
 
@@ -145,10 +145,10 @@ router.patch('/:id/role', authenticate, authorize('faculty'), async (req, res) =
 });
 
 // Update password rotation settings for a user (Faculty only)
-router.patch('/:id/password-rotation', authenticate, authorize('faculty'), async (req, res) => {
+router.patch('/:id/password-rotation', authenticate, authorize('faculty', 'coordinator'), async (req, res) => {
     try {
         const { passwordRotationDays } = req.body;
-        
+
         if (passwordRotationDays === undefined || passwordRotationDays < 0) {
             return res.status(400).json({ error: 'Invalid password rotation days. Must be 0 or greater.' });
         }
@@ -159,7 +159,7 @@ router.patch('/:id/password-rotation', authenticate, authorize('faculty'), async
         }
 
         user.passwordRotationDays = passwordRotationDays;
-        
+
         // If enabling rotation and no expiry date exists, set it
         if (passwordRotationDays > 0 && !user.passwordExpiresAt) {
             const expiryDate = new Date();
@@ -167,16 +167,16 @@ router.patch('/:id/password-rotation', authenticate, authorize('faculty'), async
             user.passwordExpiresAt = expiryDate;
             user.passwordChangedAt = user.passwordChangedAt || new Date();
         }
-        
+
         // If disabling rotation (0 days), clear expiry date
         if (passwordRotationDays === 0) {
             user.passwordExpiresAt = null;
         }
-        
+
         await user.save();
 
-        res.json({ 
-            success: true, 
+        res.json({
+            success: true,
             message: `Password rotation ${passwordRotationDays > 0 ? 'enabled' : 'disabled'} successfully`,
             user: user.toJSON()
         });
