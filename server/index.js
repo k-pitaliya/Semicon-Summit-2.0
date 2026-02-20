@@ -1,3 +1,7 @@
+// Force IPv4 DNS resolution — Render free tier has no outbound IPv6
+// Must be set before any network calls (including SMTP)
+require('dns').setDefaultResultOrder('ipv4first');
+
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
