@@ -73,6 +73,18 @@ const userSchema = new mongoose.Schema({
             enum: ['rtl-gds', 'fpga', 'none', ''],
             default: ''
         },
+        panelDiscussion: {         // Day 1 — Inaugural Talk & Panel Discussion
+            type: Boolean,
+            default: false
+        },
+        expertInsights: {          // Day 2 — Expert Insights: VLSI vs Embedded
+            type: Boolean,
+            default: false
+        },
+        aiInVlsi: {                // Day 3 — Impact of AI in VLSI
+            type: Boolean,
+            default: false
+        },
         sharkTank: {
             type: Boolean,
             default: false

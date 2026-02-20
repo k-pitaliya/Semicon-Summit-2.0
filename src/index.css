@@ -127,7 +127,10 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Use native scroll on iOS for buttery feel */
+  -webkit-overflow-scrolling: touch;
 }
+
 
 body {
   font-family: var(--font-body);
@@ -174,6 +177,7 @@ body::after {
   pointer-events: none;
   z-index: 0;
   animation: nodesPulse 8s ease-in-out infinite;
+  will-change: opacity;
 }
 
 @keyframes nodesPulse {
@@ -905,15 +909,61 @@ a:hover {
     --container-padding: 1rem;
   }
 
+  /* ── Disable smooth scroll on mobile — iOS jank fix ── */
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* ── Kill body::after animation — forces full repaint ── */
+  body::after {
+    animation: none;
+    opacity: 0.6;
+  }
+
+  /* ── Kill circuit grid body::before on mobile — saves paint ── */
+  body::before {
+    display: none;
+  }
+
+  /* ── Remove backdrop-filter on cards — #1 mobile GPU killer ── */
+  .card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(17, 25, 22, 0.95);
+    padding: 1.25rem;
+  }
+
+  /* ── Disable complex card hover on touch devices ── */
+  .card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .card:hover::before,
+  .card:hover::after {
+    opacity: 0.3;
+    width: 30px;
+    height: 30px;
+  }
+
+  /* ── Kill 3D card tilt — very expensive on mobile ── */
+  .feature-card:hover,
+  .event-card:hover,
+  .glimpse-card:hover,
+  .card-3d-tilt:hover {
+    transform: none;
+  }
+
+  /* ── Reduce hero blur orbs — 140px blur is a GPU death sentence ── */
+  .hero-glow {
+    filter: blur(60px);
+  }
+
   .btn {
     padding: 0.75rem 1.25rem;
     font-size: 0.875rem;
   }
-
-  .card {
-    padding: 1.25rem;
-  }
 }
+
 
 /* ===================================
    SCROLL REVEAL ANIMATIONS
@@ -1191,7 +1241,9 @@ body::before {
   position: absolute;
   border-radius: 50%;
   filter: blur(140px);
+  will-change: transform;
 }
+
 
 .hero-glow-1 {
   top: -10%;

@@ -43,11 +43,14 @@ const FacultyDashboard = () => {
 
     // Event filter options — match keys used in User.eventChoices (set by 5-step registration form)
     const events = [
+        { label: 'Panel Discussion (Day 1)', value: 'panelDiscussion' },
         { label: 'RTL to GDS II Workshop (Day 1)', value: 'rtl-gds' },
         { label: 'FPGA Interfacing Workshop (Day 1)', value: 'fpga' },
-        { label: 'Silicon Shark Tank (Day 2)', value: 'Silicon Shark Tank' },
-        { label: 'Silicon Jackpot / Treasure Hunt (Day 3)', value: 'Treasure Hunt' },
-        { label: 'Silicon Silent Gallery (Day 3)', value: 'Silent Gallery' },
+        { label: 'Expert Insights: VLSI vs Embedded (Day 2)', value: 'expertInsights' },
+        { label: 'Silicon Shark Tank (Day 2)', value: 'sharkTank' },
+        { label: 'Impact of AI in VLSI (Day 3)', value: 'aiInVlsi' },
+        { label: 'Silicon Jackpot / Treasure Hunt (Day 3)', value: 'treasureHunt' },
+        { label: 'Silicon Silent Gallery (Day 3)', value: 'silentGallery' },
     ]
 
     useEffect(() => {
@@ -108,11 +111,14 @@ const FacultyDashboard = () => {
         if (selectedEvent !== 'all') {
             filtered = filtered.filter(p => {
                 const ec = p.eventChoices || {};
+                if (selectedEvent === 'panelDiscussion') return ec.panelDiscussion === true;
                 if (selectedEvent === 'rtl-gds') return ec.day1Workshop === 'rtl-gds';
                 if (selectedEvent === 'fpga') return ec.day1Workshop === 'fpga';
-                if (selectedEvent === 'Silicon Shark Tank') return ec.sharkTank === true;
-                if (selectedEvent === 'Treasure Hunt') return ec.treasureHunt === true;
-                if (selectedEvent === 'Silent Gallery') return ec.silentGallery === true;
+                if (selectedEvent === 'expertInsights') return ec.expertInsights === true;
+                if (selectedEvent === 'sharkTank') return ec.sharkTank === true;
+                if (selectedEvent === 'aiInVlsi') return ec.aiInVlsi === true;
+                if (selectedEvent === 'treasureHunt') return ec.treasureHunt === true;
+                if (selectedEvent === 'silentGallery') return ec.silentGallery === true;
                 // fallback: legacy selectedEvents array
                 return Array.isArray(p.selectedEvents) && p.selectedEvents.includes(selectedEvent);
             });
@@ -177,75 +183,58 @@ const FacultyDashboard = () => {
     }
 
 
-    const handleExport = async () => {
-        try {
-            setActionLoading('export')
-            // Fetch ALL participants from server (no pagination) — full detail
-            const res = await api.get('/participants/export')
-            const allData = res.data.participants || []
+    const handleExport = () => {
+        setActionLoading('export');
+        // Use setTimeout to let the UI re-render the spinner before blocking JS
+        setTimeout(() => {
+            try {
+                const yesNo = (val) => val ? 'Yes' : 'No';
+                const excelData = filteredParticipants.map((p, index) => {
+                    const ec = p.eventChoices || {};
+                    return {
+                        'S.No': index + 1,
+                        'Reg ID': p.registrationId || '',
+                        'Name': p.name || '',
+                        'Email (Personal)': p.email || '',
+                        'Email (University)': p.universityEmail || '',
+                        'Phone': p.phone || '',
+                        'College / Institution': p.college || '',
+                        'Department': p.department || '',
+                        'Student ID': p.studentId || '',
+                        'Year of Study': p.yearOfStudy || '',
+                        'Panel Discussion (D1)': yesNo(ec.panelDiscussion),
+                        'Workshop (D1)': ec.day1Workshop === 'rtl-gds' ? 'RTL to GDS II' : ec.day1Workshop === 'fpga' ? 'FPGA Workshop' : ec.day1Workshop || 'None',
+                        'Expert Insights (D2)': yesNo(ec.expertInsights),
+                        'Shark Tank (D2)': yesNo(ec.sharkTank),
+                        'AI in VLSI (D3)': yesNo(ec.aiInVlsi),
+                        'Treasure Hunt (D3)': yesNo(ec.treasureHunt),
+                        'Silent Gallery (D3)': yesNo(ec.silentGallery),
+                        'Payment ID': p.paymentRef || '',
+                        'Amount Paid (₹)': p.paymentAmount || 299,
+                        'Status': p.verificationStatus || 'approved',
+                        'Registered On': p.timestamp ? new Date(p.timestamp).toLocaleDateString('en-IN') : '',
+                    };
+                });
 
-            const workshopLabel = (w) => {
-                if (w === 'rtl-gds') return 'RTL to GDS II Workshop'
-                if (w === 'fpga') return 'FPGA Interfacing Workshop'
-                return 'None'
+                const worksheet = XLSX.utils.json_to_sheet(excelData);
+                worksheet['!cols'] = [
+                    { wch: 6 }, { wch: 12 }, { wch: 26 }, { wch: 32 }, { wch: 32 },
+                    { wch: 15 }, { wch: 32 }, { wch: 22 }, { wch: 16 }, { wch: 14 },
+                    { wch: 10 }, { wch: 18 }, { wch: 12 }, { wch: 12 }, { wch: 12 },
+                    { wch: 14 }, { wch: 14 }, { wch: 24 }, { wch: 14 }, { wch: 12 }, { wch: 16 },
+                ];
+
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Registrations');
+                const suffix = selectedEvent !== 'all' ? `_${selectedEvent}` : '_All';
+                const filename = `SS26_Registrations${suffix}_${new Date().toISOString().split('T')[0]}.xlsx`;
+                XLSX.writeFile(workbook, filename);
+            } finally {
+                setActionLoading(null);
             }
-
-            const excelData = allData.map((p, index) => ({
-                'S.No': index + 1,
-                'Reg ID': p.registrationId || '',
-                'Name': p.name || '',
-                'Email (Personal)': p.email || '',
-                'Email (University)': p.universityEmail || '',
-                'Phone': p.phone || '',
-                'College / Institution': p.college || '',
-                'Department': p.department || '',
-                'Student ID': p.studentId || '',
-                'Year of Study': p.yearOfStudy || '',
-                'Day 1 Workshop': workshopLabel(p.day1Workshop),
-                'Silicon Shark Tank': p.sharkTank || '',
-                'Treasure Hunt': p.treasureHunt || '',
-                'Silent Gallery': p.silentGallery || '',
-                'All Events': p.allEvents || '',
-                'Payment ID': p.paymentRef || '',
-                'Amount Paid (₹)': p.paymentAmount || 299,
-                'Status': p.verificationStatus || 'approved',
-                'Registered On': p.registeredOn || ''
-            }))
-
-            const worksheet = XLSX.utils.json_to_sheet(excelData)
-            worksheet['!cols'] = [
-                { wch: 6 },   // S.No
-                { wch: 12 },  // Reg ID
-                { wch: 26 },  // Name
-                { wch: 32 },  // Email personal
-                { wch: 32 },  // Email university
-                { wch: 15 },  // Phone
-                { wch: 32 },  // College
-                { wch: 22 },  // Department
-                { wch: 16 },  // Student ID
-                { wch: 14 },  // Year
-                { wch: 28 },  // Day 1 Workshop
-                { wch: 18 },  // Shark Tank
-                { wch: 16 },  // Treasure Hunt
-                { wch: 16 },  // Silent Gallery
-                { wch: 40 },  // All Events
-                { wch: 24 },  // Payment ID
-                { wch: 16 },  // Amount
-                { wch: 12 },  // Status
-                { wch: 16 },  // Date
-            ]
-
-            const workbook = XLSX.utils.book_new()
-            XLSX.utils.book_append_sheet(workbook, worksheet, 'All Registrations')
-
-            const filename = `SS26_AllRegistrations_${new Date().toISOString().split('T')[0]}.xlsx`
-            XLSX.writeFile(workbook, filename)
-        } catch (err) {
-            alert('Export failed: ' + (err.response?.data?.error || err.message))
-        } finally {
-            setActionLoading(null)
-        }
+        }, 50);
     }
+
 
 
     // User Management Functions

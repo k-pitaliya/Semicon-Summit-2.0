@@ -43,7 +43,7 @@ const CoordinatorDashboard = () => {
                 name: p.title || 'Untitled',
                 size: formatFileSize(p.bytes || 0),
                 preview: p.url, // URL from server
-                uploaded: new Date(p.createdAt).toLocaleDateString()
+                uploaded: new Date(p.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
             }))
 
             const docs = (docsRes.data || []).map(d => ({
@@ -51,7 +51,7 @@ const CoordinatorDashboard = () => {
                 name: d.originalName || d.filename,
                 size: formatFileSize(d.size),
                 type: (d.filename || '').split('.').pop(),
-                uploaded: new Date(d.createdAt || d.uploadedAt).toLocaleDateString()
+                uploaded: new Date(d.createdAt || d.uploadedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
             }))
 
             setUploads({ photos, documents: docs })
@@ -74,7 +74,7 @@ const CoordinatorDashboard = () => {
                 formData.append('title', 'Gallery Upload')
                 formData.append('description', `Uploaded by ${user?.name || 'Coordinator'}`)
                 formData.append('category', 'event')
-                
+
                 files.forEach(file => {
                     formData.append('images', file)
                 })

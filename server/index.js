@@ -171,12 +171,13 @@ const receiptStorage = multer.diskStorage({
 
 const uploadReceipt = multer({
     storage: receiptStorage,
-    limits: { fileSize: 5 * 1024 * 1024 },
+    limits: { fileSize: 10 * 1024 * 1024 }, // raised to 10MB to accommodate image screenshots
     fileFilter: (req, file, cb) => {
-        if (file.mimetype === 'application/pdf') {
+        // Accept PDF or image (JPEG, PNG, WEBP) — students may screenshot their Razorpay receipt
+        if (file.mimetype === 'application/pdf' || file.mimetype.startsWith('image/')) {
             cb(null, true);
         } else {
-            cb(new Error('Only PDF files are allowed'));
+            cb(new Error('Only PDF files or image screenshots are allowed'));
         }
     }
 });
@@ -184,7 +185,7 @@ const uploadReceipt = multer({
 app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) => {
     try {
         const { name, email, phone, college, department, selectedEvents, paymentAmount, paymentId,
-                studentId, universityEmail, yearOfStudy, eventChoices } = req.body;
+            studentId, universityEmail, yearOfStudy, eventChoices } = req.body;
         const pdfFile = req.file;
 
         if (!name || !email || !phone) {
@@ -215,38 +216,49 @@ app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) =
             return res.status(400).json({ error: 'This Payment ID has already been used. Please contact support if you believe this is an error.' });
         }
 
-        // Extract text from PDF and verify payment ID
+        // Extract text from PDF and verify payment ID — skipped for image uploads
         let pdfText = '';
-        try {
-            // Wait a moment for file to be fully written (prevents intermittent read errors)
-            await new Promise(resolve => setTimeout(resolve, 100));
+        const isImageReceipt = pdfFile.mimetype && pdfFile.mimetype.startsWith('image/');
 
-            // Read file with retry logic
-            let dataBuffer;
-            let retries = 3;
-            while (retries > 0) {
-                try {
-                    dataBuffer = fs.readFileSync(pdfFile.path);
-                    break;
-                } catch (readError) {
-                    retries--;
-                    if (retries === 0) throw readError;
-                    await new Promise(resolve => setTimeout(resolve, 200));
+        if (isImageReceipt) {
+            // Image receipt: we can't parse text, so skip automated verification
+            // Faculty will manually verify the screenshot during review
+            logger.info('Image receipt uploaded — skipping automated PDF text verification', { paymentId: normalizedPaymentId });
+        } else {
+            // PDF path: extract text and verify payment ID is present
+            try {
+                await new Promise(resolve => setTimeout(resolve, 100));
+
+                let dataBuffer;
+                let retries = 3;
+                while (retries > 0) {
+                    try {
+                        dataBuffer = fs.readFileSync(pdfFile.path);
+                        break;
+                    } catch (readError) {
+                        retries--;
+                        if (retries === 0) throw readError;
+                        await new Promise(resolve => setTimeout(resolve, 200));
+                    }
                 }
+
+                const pdfData = await pdfParse(dataBuffer);
+                pdfText = pdfData.text;
+                logger.debug('PDF text extracted', { length: pdfText.length });
+
+                const escapedId = normalizedPaymentId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const paymentIdRegex = new RegExp(escapedId, 'i');
+                if (!paymentIdRegex.test(pdfText)) {
+                    // Clean up uploaded file before returning error
+                    try { fs.unlinkSync(pdfFile.path); } catch (_) { }
+                    return res.status(400).json({ error: 'Payment ID not found in the uploaded PDF. Please verify the Payment ID and try again.' });
+                }
+            } catch (pdfError) {
+                logger.error('PDF parsing error:', pdfError);
+                // Clean up uploaded file
+                try { fs.unlinkSync(pdfFile.path); } catch (_) { }
+                return res.status(400).json({ error: 'Unable to read PDF. Please ensure you uploaded a valid PDF receipt, or upload a screenshot image instead.' });
             }
-
-            const pdfData = await pdfParse(dataBuffer);
-            pdfText = pdfData.text;
-            logger.debug('PDF text extracted', { length: pdfText.length });
-        } catch (pdfError) {
-            logger.error('PDF parsing error:', pdfError);
-            return res.status(400).json({ error: 'Unable to read PDF. Please ensure you uploaded a valid PDF receipt.' });
-        }
-
-        const escapedId = normalizedPaymentId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const paymentIdRegex = new RegExp(escapedId, 'i');
-        if (!paymentIdRegex.test(pdfText)) {
-            return res.status(400).json({ error: 'Payment ID not found in the uploaded PDF. Please verify the Payment ID and try again.' });
         }
 
         // All checks passed — Create user and auto-approve
@@ -301,6 +313,10 @@ app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) =
         });
     } catch (error) {
         logger.error('Registration error:', error);
+        // Fix #6 — Clean up any uploaded file so disk stays clean on failure
+        if (req.file && req.file.path) {
+            try { fs.unlinkSync(req.file.path); } catch (_) { }
+        }
         res.status(500).json({ error: 'Registration failed. Please try again.' });
     }
 });

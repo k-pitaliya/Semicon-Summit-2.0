@@ -16,13 +16,16 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
         let total = 0; // declared here so it's in scope for res.json() below
 
         if (event && event !== 'all') {
-            // Support filtering by eventChoices fields (day1Workshop, sharkTank, etc.) or legacy event title
-            const eventChoiceFields = ['rtl-gds', 'fpga', 'none', 'sharkTank', 'treasureHunt', 'silentGallery'];
+            // Support filtering by eventChoices fields
+            const eventChoiceFields = ['rtl-gds', 'fpga', 'none', 'panelDiscussion', 'expertInsights', 'aiInVlsi', 'sharkTank', 'treasureHunt', 'silentGallery'];
             if (eventChoiceFields.includes(event) || ['Silicon Shark Tank', 'Treasure Hunt', 'Silent Gallery'].includes(event)) {
                 // Filter by eventChoices stored on User directly
                 let filter = { role: 'participant' };
                 if (event === 'rtl-gds') filter['eventChoices.day1Workshop'] = 'rtl-gds';
                 else if (event === 'fpga') filter['eventChoices.day1Workshop'] = 'fpga';
+                else if (event === 'panelDiscussion') filter['eventChoices.panelDiscussion'] = true;
+                else if (event === 'expertInsights') filter['eventChoices.expertInsights'] = true;
+                else if (event === 'aiInVlsi') filter['eventChoices.aiInVlsi'] = true;
                 else if (event === 'sharkTank' || event === 'Silicon Shark Tank') filter['eventChoices.sharkTank'] = true;
                 else if (event === 'treasureHunt' || event === 'Treasure Hunt') filter['eventChoices.treasureHunt'] = true;
                 else if (event === 'silentGallery' || event === 'Silent Gallery') filter['eventChoices.silentGallery'] = true;
@@ -145,10 +148,13 @@ router.get('/export', authenticate, authorize('faculty'), async (req, res) => {
             );
             const ec = user.eventChoices || {};
             const eventsList = [];
+            if (ec.panelDiscussion) eventsList.push('Inaugural Talk & Panel Discussion');
             if (ec.day1Workshop === 'rtl-gds') eventsList.push('RTL to GDS II Workshop');
             else if (ec.day1Workshop === 'fpga') eventsList.push('FPGA Interfacing Workshop');
+            if (ec.expertInsights) eventsList.push('Expert Insights: VLSI vs Embedded');
             if (ec.sharkTank) eventsList.push('Silicon Shark Tank');
-            if (ec.treasureHunt) eventsList.push('Treasure Hunt');
+            if (ec.aiInVlsi) eventsList.push('Impact of AI in VLSI');
+            if (ec.treasureHunt) eventsList.push('Silicon Jackpot (Treasure Hunt)');
             if (ec.silentGallery) eventsList.push('Silicon Silent Gallery');
             const legacyEvents = userRegs.map(r => r.event?.title || '').filter(Boolean);
             const allEvents = [...new Set([...eventsList, ...legacyEvents])];
@@ -163,8 +169,11 @@ router.get('/export', authenticate, authorize('faculty'), async (req, res) => {
                 department: user.department || '',
                 studentId: user.studentId || '',
                 yearOfStudy: user.yearOfStudy || '',
-                day1Workshop: ec.day1Workshop || 'none',
+                panelDiscussion: ec.panelDiscussion ? 'Yes' : 'No',
+                day1Workshop: ec.day1Workshop === 'rtl-gds' ? 'RTL to GDS II' : ec.day1Workshop === 'fpga' ? 'FPGA Workshop' : 'None',
+                expertInsights: ec.expertInsights ? 'Yes' : 'No',
                 sharkTank: ec.sharkTank ? 'Yes' : 'No',
+                aiInVlsi: ec.aiInVlsi ? 'Yes' : 'No',
                 treasureHunt: ec.treasureHunt ? 'Yes' : 'No',
                 silentGallery: ec.silentGallery ? 'Yes' : 'No',
                 allEvents: allEvents.join(' | '),

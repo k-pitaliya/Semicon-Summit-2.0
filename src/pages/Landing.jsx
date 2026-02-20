@@ -72,13 +72,18 @@ const Landing = () => {
         <div className="landing-page">
             <Navbar />
 
+            {/* ── Single fullpage particle canvas — shared by all sections ── */}
+            {/* Renders ONE canvas fixed behind everything: 1 RAF loop instead of 7 */}
+            <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+                <ParticleField count={50} />
+            </div>
+
             {/* ====== HERO SECTION ====== */}
             <section id="home" className="hero-section">
                 <div className="hero-bg">
                     <div className="hero-grid" />
                     <div className="hero-glow hero-glow-1" />
                     <div className="hero-glow hero-glow-2" />
-                    <ParticleField count={60} />
                     {/* Animated circuit lines */}
                     <div className="hero-circuit-lines">
                         <div className="circuit-line circuit-line-1" />
@@ -95,7 +100,7 @@ const Landing = () => {
                             style={{ height: '80px', width: 'auto', objectFit: 'contain' }}
                         />
                     </div>
-                    
+
                     <div className="hero-title-wrapper hero-animate hero-animate-delay-1" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '0.5rem' }}>
                         <img
                             src="/images/Logo/Logo of SS.png"
@@ -129,7 +134,6 @@ const Landing = () => {
                 <div className="section-bg">
                     <div className="section-grid" />
                     <div className="section-glow section-glow-center" />
-                    <ParticleField count={30} />
                 </div>
                 <div className="landing-stats-row">
                     {stats.map((stat, i) => (
@@ -144,10 +148,9 @@ const Landing = () => {
 
             {/* ====== REGISTRATION CTA CARD ====== */}
             <section className="registration-cta-section reveal">                <div className="section-bg">
-                    <div className="section-grid" />
-                    <div className="section-glow section-glow-left" />
-                    <ParticleField count={30} />
-                </div>                <div className="container">
+                <div className="section-grid" />
+                <div className="section-glow section-glow-left" />
+            </div>                <div className="container">
                     <div className="hero-cta-card" style={{ maxWidth: '900px', margin: '0 auto' }}>
                         <div className="cta-card-inner">
                             <h3>Ready to Join the <span className="text-gradient">Future of Tech?</span></h3>
@@ -188,7 +191,6 @@ const Landing = () => {
                 <div className="section-bg">
                     <div className="section-grid" />
                     <div className="section-glow section-glow-center" />
-                    <ParticleField count={40} />
                 </div>
                 <div className="container">
                     <div className="section-header section-header-center">
@@ -231,7 +233,6 @@ const Landing = () => {
                 <div className="section-bg">
                     <div className="section-grid" />
                     <div className="section-glow section-glow-right" />
-                    <ParticleField count={35} />
                 </div>
                 <div className="container">
                     <div className="section-header section-header-center">
@@ -257,7 +258,6 @@ const Landing = () => {
                 <div className="section-bg">
                     <div className="section-grid" />
                     <div className="section-glow section-glow-center" />
-                    <ParticleField count={35} />
                 </div>
                 <div className="container">
                     <div className="section-header section-header-center">
@@ -294,7 +294,6 @@ const Landing = () => {
                 <div className="section-bg">
                     <div className="section-grid" />
                     <div className="section-glow section-glow-left" />
-                    <ParticleField count={30} />
                 </div>
                 <div className="container">
                     <div className="section-header section-header-center">
@@ -338,7 +337,6 @@ const Landing = () => {
                 <div className="section-bg">
                     <div className="section-grid" />
                     <div className="section-glow section-glow-center" />
-                    <ParticleField count={40} />
                 </div>
                 <div className="container">
                     <div className="countdown-wrapper">

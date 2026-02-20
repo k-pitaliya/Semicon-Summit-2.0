@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
     Upload, CheckCircle, AlertCircle, ArrowLeft, ArrowRight,
@@ -24,6 +24,9 @@ const INITIAL_FORM = {
     name: '', studentId: '', email: '', universityEmail: '',
     phone: '', isCharusat: '', university: '', department: '', yearOfStudy: '',
     day1Workshop: '',
+    panelDiscussion: false,        // Day 1 — Inaugural Talk & Panel Discussion
+    expertInsights: false,         // Day 2 — Expert Insights: VLSI vs Embedded
+    aiInVlsi: false,               // Day 3 — Impact of AI in VLSI
     sharkTank: '', sharkTankRulesAccepted: false,
     treasureHunt: '', silentGallery: '',
     paymentId: '', pdfFile: null,
@@ -37,6 +40,8 @@ const Register = () => {
     const [loadingMessage, setLoadingMessage] = useState('');
     const [success, setSuccess] = useState(false);
     const [generatedPassword, setGeneratedPassword] = useState('');
+    // Fix #6 — Prevent double-tap / double-submission
+    const isSubmitting = useRef(false);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -44,11 +49,17 @@ const Register = () => {
         setError('');
     };
 
+    // Fix #4 — Accept PDF or image (iOS users often screenshot receipt instead of saving PDF)
     const handlePdfUpload = (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        if (file.type !== 'application/pdf') { setError('Please upload a valid PDF file'); return; }
-        if (file.size > 5 * 1024 * 1024) { setError('PDF file size must be less than 5MB'); return; }
+        const isPdf = file.type === 'application/pdf';
+        const isImage = file.type.startsWith('image/');
+        if (!isPdf && !isImage) {
+            setError('Please upload your PDF receipt or an image (JPG/PNG) of the receipt');
+            return;
+        }
+        if (file.size > 10 * 1024 * 1024) { setError('File size must be less than 10MB'); return; }
         setFormData(prev => ({ ...prev, pdfFile: file }));
         setError('');
     };
@@ -81,7 +92,7 @@ const Register = () => {
         if (s === 5) {
             if (!formData.paymentId.trim()) return 'Please enter the Payment ID from your receipt';
             if (!formData.paymentId.trim().startsWith('pay_')) return 'Payment ID must start with "pay_" (e.g., pay_KzJ9...)';
-            if (!formData.pdfFile) return 'Please upload your PDF payment receipt';
+            if (!formData.pdfFile) return 'Please upload your payment receipt (PDF or image)';
         }
         return null;
     };
@@ -98,9 +109,12 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        // Fix #6 — block double-tap / re-submit while in flight
+        if (isSubmitting.current) return;
         const err = validateStep(5);
         if (err) { setError(err); return; }
 
+        isSubmitting.current = true;
         setLoading(true);
         setError('');
         setLoadingMessage('Uploading receipt...');
@@ -120,6 +134,9 @@ const Register = () => {
             data.append('pdfReceipt', formData.pdfFile);
             data.append('eventChoices', JSON.stringify({
                 day1Workshop: formData.day1Workshop,
+                panelDiscussion: formData.panelDiscussion,
+                expertInsights: formData.expertInsights,
+                aiInVlsi: formData.aiInVlsi,
                 sharkTank: formData.sharkTank === 'yes',
                 treasureHunt: formData.treasureHunt === 'yes' && isTreasureHuntEligible,
                 silentGallery: formData.silentGallery === 'yes',
@@ -145,6 +162,7 @@ const Register = () => {
         } finally {
             setLoading(false);
             setLoadingMessage('');
+            isSubmitting.current = false; // allow retry on error
         }
     };
 
@@ -318,16 +336,43 @@ const Register = () => {
                                 <span className="schedule-event">Registration &amp; Refreshment</span>
                                 <span className="schedule-tag all">All</span>
                             </div>
-                            <div className="schedule-row fixed">
+                            <div className="schedule-row highlight">
                                 <span className="schedule-time">10:00 – 11:30 AM</span>
                                 <span className="schedule-event">Inaugural Talk &amp; Panel Discussion</span>
-                                <span className="schedule-tag all">All</span>
+                                <span className="schedule-tag choose">Register Below</span>
                             </div>
                             <div className="schedule-row highlight">
                                 <span className="schedule-time">01:30 – 04:30 PM</span>
                                 <span className="schedule-event">Parallel Workshops (Choose One Below)</span>
                                 <span className="schedule-tag choose">Choose 1</span>
                             </div>
+                        </div>
+
+                        {/* Panel Discussion opt-in */}
+                        <div className="event-info-card" style={{ borderColor: 'rgba(167,139,250,0.35)', background: 'rgba(167,139,250,0.05)', marginBottom: '1.5rem' }}>
+                            <div className="event-info-header">
+                                <Info size={20} style={{ color: '#a78bfa' }} />
+                                <h3 style={{ color: '#f1f5f9' }}>Inaugural Talk &amp; Panel Discussion</h3>
+                                <span className="schedule-tag all" style={{ fontSize: '0.72rem' }}>10:00 – 11:30 AM</span>
+                            </div>
+                            <div className="event-info-body">
+                                <p>A flagship session featuring eminent industry leaders and academicians discussing the future of semiconductors, VLSI, and embedded systems in India.</p>
+                            </div>
+                        </div>
+
+                        <div className="section-label">
+                            <Info size={16} /> Will you attend the Inaugural Talk &amp; Panel Discussion? <span style={{ fontSize: '0.8em', color: 'rgba(148,163,184,0.8)', marginLeft: '6px' }}>(Optional)</span>
+                        </div>
+                        <div className="option-cards-row" style={{ marginBottom: '1.75rem' }}>
+                            {[{ val: true, label: '✅  Yes, I will attend' }, { val: false, label: 'No / Undecided' }].map(opt => (
+                                <label key={String(opt.val)} className={`option-card wide ${formData.panelDiscussion === opt.val ? 'selected' : ''}`}>
+                                    <input type="radio" name="panelDiscussion" value={String(opt.val)}
+                                        checked={formData.panelDiscussion === opt.val}
+                                        onChange={() => setFormData(prev => ({ ...prev, panelDiscussion: opt.val }))}
+                                        className="sr-only" />
+                                    <span>{opt.label}</span>
+                                </label>
+                            ))}
                         </div>
 
                         <div className="section-label">
@@ -337,7 +382,7 @@ const Register = () => {
                         <div className="info-note">
                             <Info size={16} />
                             <span>These two workshops run simultaneously. You can only attend <strong>one</strong>.<br />
-                            🎯 RTL to GDS – recommended for 3rd year &nbsp;|&nbsp; FPGA Workshop – recommended for 1st &amp; 2nd year</span>
+                                🎯 RTL to GDS – recommended for 3rd year &nbsp;|&nbsp; FPGA Workshop – recommended for 1st &amp; 2nd year</span>
                         </div>
 
                         <div className="option-cards-col">
@@ -373,10 +418,10 @@ const Register = () => {
                         </div>
 
                         <div className="schedule-summary">
-                            <div className="schedule-row fixed">
+                            <div className="schedule-row highlight">
                                 <span className="schedule-time">09:30 – 11:30 AM</span>
                                 <span className="schedule-event">Expert Insights: VLSI vs Embedded</span>
-                                <span className="schedule-tag all">All</span>
+                                <span className="schedule-tag choose">Register Below</span>
                             </div>
                             <div className="schedule-row fixed">
                                 <span className="schedule-time">Whole Day</span>
@@ -388,6 +433,33 @@ const Register = () => {
                                 <span className="schedule-event">Silicon Shark Tank – Innovation Pitch</span>
                                 <span className="schedule-tag choose">Register Below</span>
                             </div>
+                        </div>
+
+                        {/* Expert Insights opt-in */}
+                        <div className="event-info-card" style={{ borderColor: 'rgba(167,139,250,0.35)', background: 'rgba(167,139,250,0.05)', marginBottom: '1.5rem' }}>
+                            <div className="event-info-header">
+                                <Info size={20} style={{ color: '#a78bfa' }} />
+                                <h3 style={{ color: '#f1f5f9' }}>Expert Insights: VLSI vs Embedded</h3>
+                                <span className="schedule-tag all" style={{ fontSize: '0.72rem' }}>09:30 – 11:30 AM</span>
+                            </div>
+                            <div className="event-info-body">
+                                <p>A comprehensive expert talk comparing VLSI and Embedded Systems career paths, industry trends, skill requirements, and opportunities in the current semiconductor landscape.</p>
+                            </div>
+                        </div>
+
+                        <div className="section-label">
+                            <Info size={16} /> Will you attend Expert Insights: VLSI vs Embedded? <span style={{ fontSize: '0.8em', color: 'rgba(148,163,184,0.8)', marginLeft: '6px' }}>(Optional)</span>
+                        </div>
+                        <div className="option-cards-row" style={{ marginBottom: '1.75rem' }}>
+                            {[{ val: true, label: '✅  Yes, I will attend' }, { val: false, label: 'No / Undecided' }].map(opt => (
+                                <label key={String(opt.val)} className={`option-card wide ${formData.expertInsights === opt.val ? 'selected' : ''}`}>
+                                    <input type="radio" name="expertInsights" value={String(opt.val)}
+                                        checked={formData.expertInsights === opt.val}
+                                        onChange={() => setFormData(prev => ({ ...prev, expertInsights: opt.val }))}
+                                        className="sr-only" />
+                                    <span>{opt.label}</span>
+                                </label>
+                            ))}
                         </div>
 
                         <div className="event-info-card" style={{ borderColor: 'rgba(99,179,237,0.35)', background: 'rgba(99,179,237,0.05)' }}>
@@ -455,10 +527,10 @@ const Register = () => {
                         </div>
 
                         <div className="schedule-summary">
-                            <div className="schedule-row fixed">
+                            <div className="schedule-row highlight">
                                 <span className="schedule-time">09:30 – 11:00 AM</span>
                                 <span className="schedule-event">Impact of AI in VLSI</span>
-                                <span className="schedule-tag all">All</span>
+                                <span className="schedule-tag choose">Register Below</span>
                             </div>
                             <div className="schedule-row fixed">
                                 <span className="schedule-time">Whole Day</span>
@@ -470,6 +542,33 @@ const Register = () => {
                                 <span className="schedule-event">Silicon Jackpot + Silent Gallery</span>
                                 <span className="schedule-tag choose">Register Below</span>
                             </div>
+                        </div>
+
+                        {/* AI in VLSI opt-in */}
+                        <div className="event-info-card" style={{ borderColor: 'rgba(167,139,250,0.35)', background: 'rgba(167,139,250,0.05)', marginBottom: '1.5rem' }}>
+                            <div className="event-info-header">
+                                <Info size={20} style={{ color: '#a78bfa' }} />
+                                <h3 style={{ color: '#f1f5f9' }}>Impact of AI in VLSI</h3>
+                                <span className="schedule-tag all" style={{ fontSize: '0.72rem' }}>09:30 – 11:00 AM</span>
+                            </div>
+                            <div className="event-info-body">
+                                <p>An expert talk exploring how Artificial Intelligence is revolutionizing VLSI design — from automated layout generation and verification to AI-driven chip architecture and future-ready design flows.</p>
+                            </div>
+                        </div>
+
+                        <div className="section-label">
+                            <Info size={16} /> Will you attend &ldquo;Impact of AI in VLSI&rdquo;? <span style={{ fontSize: '0.8em', color: 'rgba(148,163,184,0.8)', marginLeft: '6px' }}>(Optional)</span>
+                        </div>
+                        <div className="option-cards-row" style={{ marginBottom: '1.75rem' }}>
+                            {[{ val: true, label: '✅  Yes, I will attend' }, { val: false, label: 'No / Undecided' }].map(opt => (
+                                <label key={String(opt.val)} className={`option-card wide ${formData.aiInVlsi === opt.val ? 'selected' : ''}`}>
+                                    <input type="radio" name="aiInVlsi" value={String(opt.val)}
+                                        checked={formData.aiInVlsi === opt.val}
+                                        onChange={() => setFormData(prev => ({ ...prev, aiInVlsi: opt.val }))}
+                                        className="sr-only" />
+                                    <span>{opt.label}</span>
+                                </label>
+                            ))}
                         </div>
 
                         <div className="event-info-card" style={{ borderColor: 'rgba(99,179,237,0.35)', background: 'rgba(99,179,237,0.05)' }}>
@@ -572,14 +671,17 @@ const Register = () => {
                                     <div className="summary-row"><span>Name</span><strong>{formData.name}</strong></div>
                                     <div className="summary-row"><span>University</span><strong>{collegeName}</strong></div>
                                     <div className="summary-row"><span>Year</span><strong>{formData.yearOfStudy}</strong></div>
+                                    <div className="summary-row"><span>Panel Discussion (Day 1)</span><strong>{formData.panelDiscussion ? '✅ Attending' : '—'}</strong></div>
                                     <div className="summary-row"><span>Day 1 Workshop</span><strong>
                                         {formData.day1Workshop === 'rtl-gds' ? 'RTL to GDS II Flow' :
-                                         formData.day1Workshop === 'fpga' ? 'FPGA Interfacing Workshop' : 'Not attending workshop'}
+                                            formData.day1Workshop === 'fpga' ? 'FPGA Interfacing Workshop' : 'Not attending workshop'}
                                     </strong></div>
+                                    <div className="summary-row"><span>Expert Insights (Day 2)</span><strong>{formData.expertInsights ? '✅ Attending' : '—'}</strong></div>
                                     <div className="summary-row"><span>Silicon Shark Tank</span><strong>{formData.sharkTank === 'yes' ? '✅ Participant' : '👁 Visitor'}</strong></div>
+                                    <div className="summary-row"><span>AI in VLSI (Day 3)</span><strong>{formData.aiInVlsi ? '✅ Attending' : '—'}</strong></div>
                                     <div className="summary-row"><span>Treasure Hunt</span><strong>
                                         {!isTreasureHuntEligible ? '⛔ Not eligible (4th year — observer only)' :
-                                         formData.treasureHunt === 'yes' ? '✅ Participant' : '❌ Not participating'}
+                                            formData.treasureHunt === 'yes' ? '✅ Participant' : '❌ Not participating'}
                                     </strong></div>
                                     <div className="summary-row"><span>Silent Gallery</span><strong>{formData.silentGallery === 'yes' ? '✅ Participant' : '❌ Not participating'}</strong></div>
                                 </div>
@@ -624,17 +726,18 @@ const Register = () => {
                                 <div className="input-group full-width">
                                     <label>Payment ID <span className="required">*</span></label>
                                     <input type="text" name="paymentId" value={formData.paymentId} onChange={handleChange} placeholder="e.g., pay_xxxxxxxxxxxxx" className="input" autoComplete="off" />
-                                    <small className="input-hint">Find this in your Razorpay payment receipt PDF</small>
+                                    <small className="input-hint">Find this in your Razorpay payment receipt (PDF or app screenshot)</small>
                                 </div>
 
                                 <div className="input-group full-width">
-                                    <label>PDF Receipt <span className="required">*</span></label>
+                                    <label>Payment Receipt <span className="required">*</span></label>
                                     <div className="file-upload-area">
-                                        <input type="file" id="pdfReceipt" accept=".pdf" onChange={handlePdfUpload} className="file-input" />
+                                        {/* accept PDF + image/* so iOS users can use camera/photo library or choose PDF */}
+                                        <input type="file" id="pdfReceipt" accept=".pdf,image/*" onChange={handlePdfUpload} className="file-input" />
                                         <label htmlFor="pdfReceipt" className="file-upload-label">
                                             <Upload size={24} />
-                                            <span>{formData.pdfFile ? formData.pdfFile.name : 'Click to upload PDF receipt'}</span>
-                                            <small>PDF only · Max 5 MB</small>
+                                            <span>{formData.pdfFile ? formData.pdfFile.name : 'Click to upload receipt (PDF or screenshot)'}</span>
+                                            <small>PDF or image · Max 10 MB</small>
                                         </label>
                                     </div>
                                     {formData.pdfFile && (

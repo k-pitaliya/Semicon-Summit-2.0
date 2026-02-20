@@ -3,8 +3,8 @@ const { google } = require('googleapis');
 // Strip any surrounding quotes from env vars (common .env mistake)
 const clean = (v) => (v || '').replace(/^"|"$/g, '').trim();
 
-const EMAIL_USER       = clean(process.env.EMAIL_USER);
-const GMAIL_CLIENT_ID  = clean(process.env.GMAIL_CLIENT_ID);
+const EMAIL_USER = clean(process.env.EMAIL_USER);
+const GMAIL_CLIENT_ID = clean(process.env.GMAIL_CLIENT_ID);
 const GMAIL_CLIENT_SECRET = clean(process.env.GMAIL_CLIENT_SECRET);
 const GMAIL_REFRESH_TOKEN = clean(process.env.GMAIL_REFRESH_TOKEN);
 
@@ -169,7 +169,25 @@ const sendCredentialsEmail = async (user, password) => {
 
                 <div class="events-title">YOUR REGISTERED EVENTS</div>
                 <div style="margin-bottom: 24px;">
-                    ${user.selectedEvents?.map(event => `<span class="tag">${event}</span>`).join('') || '<span class="tag">Standard Access</span>'}
+                    ${(() => {
+                const ec = user.eventChoices || {};
+                const tags = [];
+                if (ec.panelDiscussion) tags.push('Inaugural Talk & Panel Discussion');
+                if (ec.day1Workshop === 'rtl-gds') tags.push('RTL to GDS II Workshop');
+                else if (ec.day1Workshop === 'fpga') tags.push('FPGA Interfacing Workshop');
+                if (ec.expertInsights) tags.push('Expert Insights: VLSI vs Embedded');
+                if (ec.sharkTank) tags.push('Silicon Shark Tank');
+                if (ec.aiInVlsi) tags.push('Impact of AI in VLSI');
+                if (ec.treasureHunt) tags.push('Silicon Jackpot (Treasure Hunt)');
+                if (ec.silentGallery) tags.push('Silicon Silent Gallery');
+                // Fallback to legacy selectedEvents
+                if (tags.length === 0 && user.selectedEvents?.length > 0) {
+                    return user.selectedEvents.map(e => `<span class="tag">${e}</span>`).join('');
+                }
+                return tags.length > 0
+                    ? tags.map(t => `<span class="tag">${t}</span>`).join('')
+                    : '<span class="tag">Standard Access — All General Sessions</span>';
+            })()}
                 </div>
 
                 <div class="btn-container">

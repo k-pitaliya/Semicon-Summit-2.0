@@ -111,11 +111,20 @@ const usersData = [
         phone: '9876543214',
         college: 'Anna University',
         department: 'ECE',
-        selectedEvents: ['VLSI Design Workshop', 'Chip Architecture Talk'],
+        yearOfStudy: '3rd Year',
+        eventChoices: {
+            day1Workshop: 'rtl-gds',
+            panelDiscussion: true,
+            expertInsights: true,
+            aiInVlsi: false,
+            sharkTank: false,
+            treasureHunt: true,
+            silentGallery: false,
+        },
         verificationStatus: 'approved',
         paymentStatus: 'completed',
-        paymentAmount: 400,
-        paymentRef: 'DEMO123456789'
+        paymentAmount: 299,
+        paymentRef: 'pay_DEMO123456789'
     },
     {
         name: 'Sneha Patel',
@@ -125,11 +134,20 @@ const usersData = [
         phone: '9876543215',
         college: 'Gujarat Technological University',
         department: 'Electronics',
-        selectedEvents: ['Embedded Systems Hackathon', 'Industry Panel Discussion'],
+        yearOfStudy: '2nd Year',
+        eventChoices: {
+            day1Workshop: 'fpga',
+            panelDiscussion: true,
+            expertInsights: false,
+            aiInVlsi: true,
+            sharkTank: true,
+            treasureHunt: true,
+            silentGallery: true,
+        },
         verificationStatus: 'approved',
         paymentStatus: 'completed',
-        paymentAmount: 200,
-        paymentRef: 'DEMO987654321'
+        paymentAmount: 299,
+        paymentRef: 'pay_DEMO987654321'
     },
     {
         name: 'Vikram Singh',
@@ -139,11 +157,20 @@ const usersData = [
         phone: '9876543216',
         college: 'Delhi Technological University',
         department: 'Computer Engineering',
-        selectedEvents: ['VLSI Design Workshop'],
+        yearOfStudy: '4th Year',
+        eventChoices: {
+            day1Workshop: 'rtl-gds',
+            panelDiscussion: false,
+            expertInsights: true,
+            aiInVlsi: false,
+            sharkTank: false,
+            treasureHunt: false, // 4th year — not eligible
+            silentGallery: false,
+        },
         verificationStatus: 'pending',
         paymentStatus: 'pending',
-        paymentAmount: 400,
-        paymentRef: 'PENDING123456'
+        paymentAmount: 299,
+        paymentRef: 'pay_PENDING123456'
     },
     {
         name: 'Meera Krishnan',
@@ -153,11 +180,20 @@ const usersData = [
         phone: '9876543217',
         college: 'IIT Madras',
         department: 'Electrical Engineering',
-        selectedEvents: ['Chip Architecture Talk', 'Industry Panel Discussion'],
+        yearOfStudy: '1st Year',
+        eventChoices: {
+            day1Workshop: 'fpga',
+            panelDiscussion: true,
+            expertInsights: true,
+            aiInVlsi: true,
+            sharkTank: false,
+            treasureHunt: true,
+            silentGallery: true,
+        },
         verificationStatus: 'pending',
         paymentStatus: 'pending',
-        paymentAmount: 0,
-        paymentRef: 'PENDING654321'
+        paymentAmount: 299,
+        paymentRef: 'pay_PENDING654321'
     }
 ];
 
@@ -227,20 +263,20 @@ const galleryData = [
 const announcementsData = [
     {
         title: 'Registration Now Open!',
-        content: 'We are excited to announce that registration for Semiconductor Summit 2.0 is now open. Early bird discount available until March 1st!',
-        date: '2026-02-19',
+        content: 'We are excited to announce that registration for Semiconductor Summit 2.0 is now open. Register before 10 March 2026 to secure your spot!',
+        date: '2026-02-21',
         role: 'faculty'
     },
     {
         title: 'Workshop Schedule Released',
-        content: 'The detailed workshop schedule has been released. Check the events section for timings and topics.',
-        date: '2026-02-19',
+        content: 'The detailed workshop schedule has been released. Choose between the RTL to GDS II Flow or FPGA Interfacing Workshop on Day 1 (17 March 2026).',
+        date: '2026-02-21',
         role: 'faculty'
     },
     {
-        title: 'New Industry Speakers Confirmed',
-        content: 'We are thrilled to announce that leading experts from Intel, AMD, and NVIDIA will be joining us as speakers!',
-        date: '2026-02-19',
+        title: 'Expert Speakers Confirmed for Summit',
+        content: 'We are thrilled to confirm expert speakers for the Panel Discussion (Day 1), Expert Insights: VLSI vs Embedded (Day 2), and Impact of AI in VLSI talk (Day 3). Stay tuned!',
+        date: '2026-02-21',
         role: 'faculty'
     }
 ];

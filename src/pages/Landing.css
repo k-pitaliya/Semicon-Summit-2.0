@@ -51,6 +51,7 @@
     height: 600px;
     background: rgba(16, 185, 129, 0.15);
     animation: hero-orb-1 10s ease-in-out infinite;
+    will-change: transform;
 }
 
 .hero-glow-2 {
@@ -60,7 +61,9 @@
     height: 500px;
     background: rgba(0, 255, 136, 0.08);
     animation: hero-orb-2 12s ease-in-out infinite;
+    will-change: transform;
 }
+
 
 @keyframes hero-orb-1 {
 
@@ -413,7 +416,9 @@
     color: var(--accent-400);
     animation: chip-float 6s ease-in-out infinite;
     box-shadow: 0 0 20px rgba(34, 197, 94, 0.1);
+    will-change: transform;
 }
+
 
 .floating-chip-1 {
     top: 20%;
@@ -471,9 +476,12 @@
 }
 
 @keyframes gridPulse {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 0.5;
     }
+
     50% {
         opacity: 0.8;
     }
@@ -512,10 +520,13 @@
 }
 
 @keyframes glowFloat {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translate(-50%, -50%) scale(1);
         opacity: 0.6;
     }
+
     50% {
         transform: translate(-50%, -50%) scale(1.1);
         opacity: 0.9;
@@ -532,18 +543,24 @@
 }
 
 @keyframes glowFloatLeft {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translate(0, 0) scale(1);
     }
+
     50% {
         transform: translate(20px, -15px) scale(1.15);
     }
 }
 
 @keyframes glowFloatRight {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translate(0, 0) scale(1);
     }
+
     50% {
         transform: translate(-20px, 15px) scale(1.1);
     }
@@ -697,6 +714,7 @@
         opacity: 0;
         transform: scale(0.95);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -962,7 +980,7 @@
     border-color: rgba(34, 197, 94, 0.25);
     transform: translateY(-8px) scale(1.02);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
-                0 0 80px rgba(34, 197, 94, 0.15);
+        0 0 80px rgba(34, 197, 94, 0.15);
 }
 
 .partner-card:hover::before {
@@ -1025,27 +1043,36 @@
 }
 
 @keyframes partnerFloat1 {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0px);
     }
+
     50% {
         transform: translateY(-10px);
     }
 }
 
 @keyframes partnerFloat2 {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0px);
     }
+
     50% {
         transform: translateY(-15px);
     }
 }
 
 @keyframes partnerFloat3 {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0px);
     }
+
     50% {
         transform: translateY(-12px);
     }
@@ -1240,7 +1267,7 @@
     .about-features-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .partners-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 2rem;
@@ -1251,12 +1278,12 @@
     .hero-section {
         padding: 6rem 1rem 3rem;
     }
-    
+
     /* Responsive university logo */
     .hero-university-logo img {
         max-height: 60px;
     }
-    
+
     .hero-logo-img {
         max-width: 90vw;
     }
@@ -1340,50 +1367,51 @@
         flex-direction: column;
         align-items: center;
     }
-    
+
     .partners-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
-    
+
     .partner-card {
         padding: 2rem 1.5rem;
         min-height: 180px;
     }
-    
+
     .partner-logo img {
         max-width: 150px;
         max-height: 80px;
     }
-    
+
     .partner-name {
         font-size: 1rem;
     }
 }
 
 @media (max-width: 480px) {
+
     /* Mobile logo adjustments */
     .hero-university-logo {
         margin-bottom: 1rem !important;
     }
-    
+
     .hero-university-logo img {
         max-height: 50px;
     }
-    
+
     .hero-logo-img {
         max-width: 95vw;
     }
-    
+
     .hero-info {
         font-size: 0.875rem;
     }
-    
+
     .landing-stats-row {
         grid-template-columns: repeat(2, 1fr);
         max-width: 300px;
     }
-    
+
     .landing-stat-item {
         padding: 1rem 0.5rem;
     }
@@ -1391,11 +1419,11 @@
     .landing-stat-item::after {
         display: none !important;
     }
-    
+
     .landing-stat-num {
         font-size: 1.75rem;
     }
-    
+
     .landing-stat-text {
         font-size: 0.75rem;
     }
@@ -1406,5 +1434,53 @@
 
     .countdown-value {
         font-size: 1.5rem;
+    }
+
+    /* ── Kill section grid pulse — causes repaint every 4s ── */
+    .section-grid {
+        animation: none;
+        opacity: 0.4;
+    }
+
+    /* ── Freeze & hide floating chips ── */
+    .floating-chip {
+        display: none;
+    }
+
+    /* ── Kill circuit line animations ── */
+    .circuit-line {
+        display: none;
+    }
+
+    /* ── Reduce hero glow blur — 140px is GPU death on mobile ── */
+    .hero-glow,
+    .section-glow {
+        filter: blur(50px) !important;
+        animation: none;
+    }
+
+    /* ── Kill section glow float animations ── */
+    .section-glow-left,
+    .section-glow-right,
+    .section-glow-center {
+        animation: none;
+    }
+
+    /* ── Freeze hero logo pulse ── */
+    .hero-logo-img {
+        animation: none;
+        filter: drop-shadow(0 4px 20px rgba(34, 197, 94, 0.2)) brightness(1.05);
+    }
+
+    /* ── CTA card — no backdrop blur ── */
+    .cta-card-inner {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: rgba(10, 20, 40, 0.95);
+    }
+
+    /* ── About feature cards — remove transform hover ── */
+    .about-feature-card:hover {
+        transform: none;
     }
 }

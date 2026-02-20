@@ -182,16 +182,25 @@ const ParticipantDashboard = () => {
                                 // Build event list from eventChoices (new format) or selectedEvents (legacy)
                                 const ec = user?.eventChoices || {}
                                 const derived = []
+                                // Day 1
+                                if (ec.panelDiscussion)
+                                    derived.push({ name: 'Inaugural Talk & Panel Discussion', day: 'Day 1 — 17 Mar', note: '10:00 – 11:30 AM' })
                                 if (ec.day1Workshop === 'rtl-gds')
-                                    derived.push({ name: 'RTL to GDS II Workshop', day: 'Day 1 — 21 Feb', note: 'Full-day technical workshop' })
+                                    derived.push({ name: 'RTL to GDS II Workshop', day: 'Day 1 — 17 Mar', note: 'Full-day technical workshop · 1:30 – 4:30 PM' })
                                 else if (ec.day1Workshop === 'fpga')
-                                    derived.push({ name: 'FPGA Interfacing Workshop', day: 'Day 1 — 21 Feb', note: 'Full-day technical workshop' })
+                                    derived.push({ name: 'FPGA Interfacing Workshop', day: 'Day 1 — 17 Mar', note: 'Full-day technical workshop · 1:30 – 4:30 PM' })
+                                // Day 2
+                                if (ec.expertInsights)
+                                    derived.push({ name: 'Expert Insights: VLSI vs Embedded', day: 'Day 2 — 18 Mar', note: '9:30 – 11:30 AM' })
                                 if (ec.sharkTank)
-                                    derived.push({ name: 'Silicon Shark Tank', day: 'Day 2 — 22 Feb', note: 'Business pitch competition' })
+                                    derived.push({ name: 'Silicon Shark Tank', day: 'Day 2 — 18 Mar', note: 'Business pitch competition · 12:30 – 4:30 PM' })
+                                // Day 3
+                                if (ec.aiInVlsi)
+                                    derived.push({ name: 'Impact of AI in VLSI', day: 'Day 3 — 19 Mar', note: '9:30 – 11:00 AM' })
                                 if (ec.treasureHunt)
-                                    derived.push({ name: 'Treasure Hunt', day: 'Day 3 — 23 Feb', note: 'Team-based treasure hunt' })
+                                    derived.push({ name: 'Silicon Jackpot (Treasure Hunt)', day: 'Day 3 — 19 Mar', note: 'Team-based treasure hunt' })
                                 if (ec.silentGallery)
-                                    derived.push({ name: 'Silicon Silent Gallery', day: 'Day 3 — 23 Feb', note: 'Silent auction & display' })
+                                    derived.push({ name: 'Silicon Silent Gallery', day: 'Day 3 — 19 Mar', note: 'Poster presentation' })
 
                                 // Fallback for legacy users with selectedEvents array
                                 const legacy = (user?.selectedEvents || []).filter(e =>
@@ -242,7 +251,13 @@ const ParticipantDashboard = () => {
                                         <div className="announcement-header">
                                             <h4>{announcement.title}</h4>
                                             <span className="announcement-date">
-                                                {announcement.date ? new Date(announcement.date).toLocaleDateString() : 'N/A'}
+                                                {(() => {
+                                                    const raw = announcement.date || announcement.createdAt;
+                                                    if (!raw) return 'N/A';
+                                                    return new Date(raw).toLocaleDateString('en-IN', {
+                                                        day: 'numeric', month: 'short', year: 'numeric'
+                                                    });
+                                                })()}
                                             </span>
                                         </div>
                                         <p>{announcement.content}</p>
@@ -276,6 +291,8 @@ const ParticipantDashboard = () => {
                                                 src={photo.thumbnailUrl || photo.url}
                                                 alt={photo.title || photo.caption || 'Gallery image'}
                                                 className="gallery-img"
+                                                loading="lazy"
+                                                decoding="async"
                                             />
                                         </div>
                                         <div className="gallery-caption">

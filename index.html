@@ -4,7 +4,13 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="apple-touch-icon" href="/images/Logo/Logo of SS.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <!-- PWA / Mobile Shell -->
+  <meta name="theme-color" content="#030706" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Semicon Summit" />
   <!-- CSP: unsafe-eval needed by xlsx/SheetJS for Excel export -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self';
       script-src 'self' 'unsafe-inline' 'unsafe-eval';
@@ -19,14 +25,22 @@
         http://semisummit2026.charusat.ac.in;
       frame-src https://www.google.com https://maps.google.com https://maps.googleapis.com;
       object-src 'none';" />
+  <!-- SEO -->
   <meta name="description"
     content="Semiconductor Summit 2.0 - Join us for the premier semiconductor technology conference featuring workshops, hackathons, and expert talks." />
   <meta name="keywords" content="semiconductor, summit, technology, conference, VLSI, chip design, embedded systems" />
   <meta name="author" content="Semiconductor Summit 2.0" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Semiconductor Summit 2.0" />
+  <meta property="og:description" content="Premier semiconductor technology conference — Workshops, Expert Talks & Hackathons. 17–19 March 2026, CHARUSAT." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/images/New posters/1.main poster.jpeg" />
+  <meta property="og:url" content="https://semisummit2026.charusat.ac.in" />
+  <!-- Fonts: preconnect first, then load with display=swap for non-blocking -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap"
     rel="stylesheet">
   <title>Semiconductor Summit 2.0</title>
 </head>
