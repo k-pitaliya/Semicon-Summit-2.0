@@ -21,19 +21,27 @@ if (GMAIL_REFRESH_TOKEN) {
 
 const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
 
+// RFC 2047 encode a subject so non-ASCII / emoji never garble in email clients
+const encodeSubject = (subject) => {
+    // If the subject is pure ASCII, use as-is
+    if (/^[\x00-\x7F]*$/.test(subject)) return subject;
+    // Otherwise base64-encode it per RFC 2047
+    return `=?UTF-8?B?${Buffer.from(subject).toString('base64')}?=`;
+};
+
 // Helper — build a raw RFC-2822 message and base64url-encode it
 const buildRawEmail = ({ to, subject, html }) => {
     const boundary = `----=_Part_${Date.now()}`;
     const lines = [
         `From: "Semiconductor Summit 2.0" <${EMAIL_USER}>`,
         `To: ${to}`,
-        `Subject: ${subject}`,
+        `Subject: ${encodeSubject(subject)}`,
         `MIME-Version: 1.0`,
         `Content-Type: multipart/alternative; boundary="${boundary}"`,
         ``,
         `--${boundary}`,
         `Content-Type: text/html; charset=UTF-8`,
-        `Content-Transfer-Encoding: 7bit`,
+        `Content-Transfer-Encoding: quoted-printable`,
         ``,
         html,
         ``,
@@ -104,7 +112,7 @@ const generatePassword = () => {
 const sendCredentialsEmail = async (user, password) => {
     const emailData = {
         to: user.email,
-        subject: '🚀 Access Granted: Semiconductor Summit 2.0 Credentials',
+        subject: 'Your Semiconductor Summit 2.0 Login Credentials',
         html: `
 <!DOCTYPE html>
 <html>
@@ -115,8 +123,10 @@ const sendCredentialsEmail = async (user, password) => {
         body { margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f4f4f5; }
         .wrapper { width: 100%; table-layout: fixed; background-color: #f4f4f5; padding-bottom: 40px; }
         .webkit { max-width: 600px; background-color: #ffffff; margin: 0 auto; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
-        .header { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 40px 0; text-align: center; }
+        .header { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 28px 0 20px; text-align: center; }
         .logo { font-size: 24px; font-weight: bold; color: #ffffff; letter-spacing: 1px; }
+        .logo-img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px; }
+        .header-title { font-size: 13px; font-weight: 600; color: #94a3b8; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 6px; }
         .content { padding: 40px; }
         .greeting { font-size: 20px; font-weight: 600; color: #1f2937; margin-bottom: 16px; }
         .message { font-size: 16px; line-height: 24px; color: #4b5563; margin-bottom: 32px; }
@@ -144,7 +154,8 @@ const sendCredentialsEmail = async (user, password) => {
     <div class="wrapper">
         <div class="webkit">
             <div class="header">
-                <div class="logo">⚡ SEMICONDUCTOR SUMMIT</div>
+                <img src="https://semisummit2026.charusat.ac.in/images/Logo/Logo%20of%20SS.png" alt="Semiconductor Summit 2.0" class="logo-img" />
+                <div class="header-title">Semiconductor Summit 2.0</div>
             </div>
             
             <div class="content">
@@ -225,7 +236,7 @@ const sendCredentialsEmail = async (user, password) => {
 const sendRejectionEmail = async (user, reason) => {
     const emailData = {
         to: user.email,
-        subject: 'Action Required: Registration Status Update',
+        subject: 'Important: Your Semiconductor Summit 2.0 Registration Update',
         html: `
 <!DOCTYPE html>
 <html>
@@ -236,8 +247,10 @@ const sendRejectionEmail = async (user, reason) => {
         body { margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f4f4f5; }
         .wrapper { width: 100%; table-layout: fixed; background-color: #f4f4f5; padding-bottom: 40px; }
         .webkit { max-width: 600px; background-color: #ffffff; margin: 0 auto; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        .header { background-color: #ef4444; padding: 30px 0; text-align: center; }
+        .header { background: linear-gradient(135deg, #7f1d1d 0%, #ef4444 100%); padding: 28px 0 20px; text-align: center; }
         .logo { font-size: 24px; font-weight: bold; color: #ffffff; }
+        .logo-img { width: 70px; height: 70px; object-fit: contain; margin-bottom: 8px; }
+        .header-title { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.75); letter-spacing: 0.15em; text-transform: uppercase; margin-top: 6px; }
         .content { padding: 40px; }
         .title { font-size: 20px; font-weight: 600; color: #1f2937; margin-bottom: 16px; }
         .message { font-size: 16px; line-height: 24px; color: #4b5563; margin-bottom: 24px; }
@@ -251,7 +264,8 @@ const sendRejectionEmail = async (user, reason) => {
     <div class="wrapper">
         <div class="webkit">
             <div class="header">
-                <div class="logo">⚠️ Verification Issue</div>
+                <img src="https://semisummit2026.charusat.ac.in/images/Logo/Logo%20of%20SS.png" alt="Semiconductor Summit 2.0" class="logo-img" />
+                <div class="header-title">Semiconductor Summit 2.0</div>
             </div>
             
             <div class="content">
@@ -294,7 +308,7 @@ const sendRejectionEmail = async (user, reason) => {
 const sendPasswordResetEmail = async (user, newPassword) => {
     const emailData = {
         to: user.email,
-        subject: '🔑 Security Notification: Password Reset',
+        subject: 'Security Notification: Your Password Has Been Reset',
         html: `
 <!DOCTYPE html>
 <html>
@@ -305,8 +319,10 @@ const sendPasswordResetEmail = async (user, newPassword) => {
         body { margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f4f4f5; }
         .wrapper { width: 100%; table-layout: fixed; background-color: #f4f4f5; padding-bottom: 40px; }
         .webkit { max-width: 600px; background-color: #ffffff; margin: 0 auto; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        .header { background: linear-gradient(135deg, #059669 0%, #10b981 100%); padding: 30px 0; text-align: center; }
+        .header { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 28px 0 20px; text-align: center; }
         .logo { font-size: 24px; font-weight: bold; color: #ffffff; letter-spacing: 1px; }
+        .logo-img { width: 70px; height: 70px; object-fit: contain; margin-bottom: 8px; }
+        .header-title { font-size: 12px; font-weight: 600; color: #94a3b8; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 6px; }
         .content { padding: 40px; }
         .greeting { font-size: 20px; font-weight: 600; color: #1f2937; margin-bottom: 16px; }
         .message { font-size: 16px; line-height: 24px; color: #4b5563; margin-bottom: 32px; }
@@ -330,7 +346,8 @@ const sendPasswordResetEmail = async (user, newPassword) => {
     <div class="wrapper">
         <div class="webkit">
             <div class="header">
-                <div class="logo">🔒 PASSWORD RESET</div>
+                <img src="https://semisummit2026.charusat.ac.in/images/Logo/Logo%20of%20SS.png" alt="Semiconductor Summit 2.0" class="logo-img" />
+                <div class="header-title">Semiconductor Summit 2.0</div>
             </div>
             
             <div class="content">

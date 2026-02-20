@@ -13,154 +13,253 @@ const RegistrationsTab = ({
     handleExport,
     handleBackfillIds
 }) => (<>
-        {/* Stats Row */}
-        <div className="stats-row">
-            <div className="stat-card-small card">
-                <div className="stat-icon">
-                    <Users size={24} />
-                </div>
-                <div className="stat-info">
-                    <span className="stat-value-small">{participants.length}</span>
-                    <span className="stat-label-small">Total Registrations</span>
-                </div>
+    {/* Stats Row */}
+    <div className="stats-row">
+        <div className="stat-card-small card">
+            <div className="stat-icon">
+                <Users size={24} />
             </div>
-            <div className="stat-card-small card">
-                <div className="stat-icon">
-                    <Filter size={24} />
-                </div>
-                <div className="stat-info">
-                    <span className="stat-value-small">{filteredParticipants.length}</span>
-                    <span className="stat-label-small">Filtered Results</span>
-                </div>
+            <div className="stat-info">
+                <span className="stat-value-small">{participants.length}</span>
+                <span className="stat-label-small">Total Registrations</span>
             </div>
         </div>
-
-        {/* Filters Row */}
-        <section className="dashboard-section">
-            <div className="filters-row">
-                {/* Search Box */}
-                <div className="search-box">
-                    <Search size={18} className="search-icon" />
-                    <input
-                        type="text"
-                        className="input search-input"
-                        placeholder="Search by name, email, or college..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                </div>
-
-                {/* Event Filter Dropdown */}
-                <div className="event-filter">
-                    <Filter size={16} style={{ marginRight: '6px', opacity: 0.6 }} />
-                    <select
-                        className="input"
-                        value={selectedEvent}
-                        onChange={(e) => setSelectedEvent(e.target.value)}
-                        style={{ minWidth: '200px' }}
-                    >
-                        <option value="all">All Events</option>
-                        {(events || []).map(ev => (
-                            <option key={ev.value ?? ev} value={ev.value ?? ev}>{ev.label ?? ev}</option>
-                        ))}
-                    </select>
-                </div>
-
-                {/* Export Button */}
-                <button
-                    className="btn btn-primary"
-                    onClick={handleExport}
-                    disabled={actionLoading === 'export'}
-                    style={{ opacity: actionLoading === 'export' ? 0.7 : 1 }}
-                >
-                    <Download size={18} />
-                    {actionLoading === 'export' ? 'Exporting…' : 'Export All (Excel)'}
-                </button>
-
-                {/* Backfill IDs Button */}
-                {handleBackfillIds && (
-                    <button
-                        className="btn"
-                        onClick={handleBackfillIds}
-                        title="Assign SS26-XXX IDs to participants who are missing one"
-                        style={{ background: 'rgba(99,179,237,0.12)', border: '1px solid rgba(99,179,237,0.4)', color: '#93c5fd', borderRadius: '8px', padding: '8px 14px', cursor: 'pointer', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}
-                    >
-                        Assign Missing IDs
-                    </button>
-                )}
+        <div className="stat-card-small card">
+            <div className="stat-icon">
+                <Filter size={24} />
             </div>
-        </section>
+            <div className="stat-info">
+                <span className="stat-value-small">{filteredParticipants.length}</span>
+                <span className="stat-label-small">Filtered Results</span>
+            </div>
+        </div>
+    </div>
 
-        {/* Table */}
-        <section className="dashboard-section">
-            <div className="table-container card">
-                {loading ? (
-                    <div className="table-loading">
-                        <div className="loading-spinner-small"></div>
-                        <span>Loading registrations...</span>
-                    </div>
-                ) : (
-                    <table className="data-table">
-                        <thead>
+    {/* Filters Row */}
+    <section className="dashboard-section">
+        <div className="filters-row">
+            <div className="search-box">
+                <Search size={18} className="search-icon" />
+                <input
+                    type="text"
+                    className="input search-input"
+                    placeholder="Search by name, email, or college..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </div>
+
+            <div className="event-filter">
+                <Filter size={16} style={{ marginRight: '6px', opacity: 0.6 }} />
+                <select
+                    className="input"
+                    value={selectedEvent}
+                    onChange={(e) => setSelectedEvent(e.target.value)}
+                    style={{ minWidth: '200px' }}
+                >
+                    <option value="all">All Events</option>
+                    {(events || []).map(ev => (
+                        <option key={ev.value ?? ev} value={ev.value ?? ev}>{ev.label ?? ev}</option>
+                    ))}
+                </select>
+            </div>
+
+            <button
+                className="btn btn-primary"
+                onClick={handleExport}
+                disabled={actionLoading === 'export'}
+                style={{ opacity: actionLoading === 'export' ? 0.7 : 1, whiteSpace: 'nowrap' }}
+            >
+                <Download size={18} />
+                {actionLoading === 'export' ? 'Exporting…' : 'Export All (Excel)'}
+            </button>
+
+            {handleBackfillIds && (
+                <button
+                    className="btn"
+                    onClick={handleBackfillIds}
+                    title="Assign SS26-XXX IDs to participants who are missing one"
+                    style={{
+                        background: 'rgba(99,179,237,0.12)',
+                        border: '1px solid rgba(99,179,237,0.4)',
+                        color: '#93c5fd',
+                        borderRadius: '8px',
+                        padding: '8px 14px',
+                        cursor: 'pointer',
+                        fontSize: '0.85rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        whiteSpace: 'nowrap'
+                    }}
+                >
+                    Assign Missing IDs
+                </button>
+            )}
+        </div>
+    </section>
+
+    {/* Table */}
+    <section className="dashboard-section">
+        <div className="table-container card">
+            {loading ? (
+                <div className="table-loading">
+                    <div className="loading-spinner-small"></div>
+                    <span>Loading registrations...</span>
+                </div>
+            ) : (
+                <table className="data-table" style={{ tableLayout: 'auto', minWidth: '900px' }}>
+                    <thead>
+                        <tr>
+                            <th style={{ width: '130px', whiteSpace: 'nowrap' }}># / Reg ID</th>
+                            <th style={{ minWidth: '130px' }}>Name</th>
+                            <th style={{ minWidth: '180px' }}>Email</th>
+                            <th style={{ width: '105px', whiteSpace: 'nowrap' }}>Pwd Status</th>
+                            <th style={{ minWidth: '110px' }}>College</th>
+                            <th style={{ width: '115px', whiteSpace: 'nowrap' }}>Phone</th>
+                            <th style={{ minWidth: '240px' }}>Event Choices</th>
+                            <th style={{ minWidth: '140px', whiteSpace: 'nowrap' }}>Payment Ref</th>
+                            <th style={{ width: '95px', whiteSpace: 'nowrap' }}>Registered On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredParticipants.length === 0 ? (
                             <tr>
-                                <th>Reg ID</th>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Pwd Status</th>
-                                <th>College</th>
-                                <th>Phone</th>
-                                <th>Event Choices</th>
-                                <th>Payment Ref</th>
-                                <th>Registered On</th>
+                                <td colSpan="9" className="table-empty">
+                                    {selectedEvent !== 'all'
+                                        ? `No registrations found for "${selectedEvent}"`
+                                        : 'No registrations found'}
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {filteredParticipants.length === 0 ? (
-                                <tr>
-                                    <td colSpan="9" className="table-empty">
-                                        {selectedEvent !== 'all'
-                                            ? `No registrations found for "${selectedEvent}"`
-                                            : 'No registrations found'}
-                                    </td>
-                                </tr>
-                            ) : (
-                                filteredParticipants.map((participant, index) => (
+                        ) : (
+                            filteredParticipants.map((participant, index) => {
+                                const ec = participant.eventChoices || {};
+                                const badges = [];
+                                if (ec.panelDiscussion) badges.push({ label: 'Panel Disc.', color: '#3b82f6' });
+                                if (ec.day1Workshop === 'rtl-gds') badges.push({ label: 'RTL→GDS', color: '#8b5cf6' });
+                                else if (ec.day1Workshop === 'fpga') badges.push({ label: 'FPGA', color: '#8b5cf6' });
+                                if (ec.expertInsights) badges.push({ label: 'Expert Talk', color: '#f59e0b' });
+                                if (ec.sharkTank) badges.push({ label: 'Shark Tank', color: '#ef4444' });
+                                if (ec.aiInVlsi) badges.push({ label: 'AI in VLSI', color: '#f59e0b' });
+                                if (ec.treasureHunt) badges.push({ label: 'Jackpot', color: '#ec4899' });
+                                if (ec.silentGallery) badges.push({ label: 'Gallery', color: '#06b6d4' });
+
+                                // Fallback for old selectedEvents array
+                                if (badges.length === 0 && (participant.selectedEvents || []).length > 0) {
+                                    participant.selectedEvents.forEach(evt =>
+                                        badges.push({ label: evt, color: '#3b82f6' })
+                                    );
+                                }
+
+                                return (
                                     <tr key={participant.id || participant._id || index}>
-                                        <td><code style={{fontSize:'0.8rem', color:'#93c5fd'}}>{participant.registrationId || '—'}</code></td>
-                                        <td>{index + 1}</td>
-                                        <td className="name-cell">{participant.name}</td>
-                                        <td>{participant.email}</td>
-                                        <td>
-                                            {participant.mustChangePassword
-                                                ? <span className="badge badge-warning">Must Change ⚠️</span>
-                                                : <span className="badge badge-success">Active ✓</span>}
+                                        {/* Combined # + Reg ID */}
+                                        <td style={{ whiteSpace: 'nowrap' }}>
+                                            <span style={{ color: '#6b7280', fontSize: '0.72rem', marginRight: '4px' }}>
+                                                {index + 1}.
+                                            </span>
+                                            <code style={{
+                                                fontSize: '0.72rem',
+                                                color: participant.registrationId ? '#93c5fd' : '#4b5563',
+                                                background: 'var(--bg-tertiary)',
+                                                padding: '2px 5px',
+                                                borderRadius: '3px'
+                                            }}>
+                                                {participant.registrationId || '—'}
+                                            </code>
                                         </td>
-                                        <td>{participant.college}</td>
-                                        <td>{participant.phone}</td>
+
+                                        <td className="name-cell">{participant.name}</td>
+
+                                        <td style={{ whiteSpace: 'nowrap', fontSize: '0.84rem' }}>
+                                            {participant.email}
+                                        </td>
+
+                                        <td style={{ whiteSpace: 'nowrap' }}>
+                                            {participant.mustChangePassword
+                                                ? (
+                                                    <span style={{
+                                                        display: 'inline-flex',
+                                                        alignItems: 'center',
+                                                        gap: '3px',
+                                                        padding: '3px 8px',
+                                                        background: 'rgba(234,179,8,0.12)',
+                                                        border: '1px solid rgba(234,179,8,0.4)',
+                                                        borderRadius: '20px',
+                                                        fontSize: '0.7rem',
+                                                        fontWeight: 600,
+                                                        color: '#fbbf24',
+                                                        whiteSpace: 'nowrap'
+                                                    }}>
+                                                        ⚠️ Must Change
+                                                    </span>
+                                                ) : (
+                                                    <span style={{
+                                                        display: 'inline-flex',
+                                                        alignItems: 'center',
+                                                        gap: '3px',
+                                                        padding: '3px 8px',
+                                                        background: 'rgba(34,197,94,0.1)',
+                                                        border: '1px solid rgba(34,197,94,0.3)',
+                                                        borderRadius: '20px',
+                                                        fontSize: '0.7rem',
+                                                        fontWeight: 600,
+                                                        color: '#22c55e',
+                                                        whiteSpace: 'nowrap'
+                                                    }}>
+                                                        ✓ Active
+                                                    </span>
+                                                )
+                                            }
+                                        </td>
+
+                                        <td style={{ fontSize: '0.84rem' }}>{participant.college}</td>
+
+                                        <td style={{ whiteSpace: 'nowrap', fontSize: '0.84rem' }}>
+                                            {participant.phone}
+                                        </td>
+
                                         <td>
-                                            <div className="events-badges">
-                                                {(() => {
-                                                    const ec = participant.eventChoices || {};
-                                                    const parts = [];
-                                                    if (ec.day1Workshop === 'rtl-gds') parts.push('RTL→GDS');
-                                                    else if (ec.day1Workshop === 'fpga') parts.push('FPGA');
-                                                    if (ec.sharkTank) parts.push('Shark Tank');
-                                                    if (ec.treasureHunt) parts.push('Treasure Hunt');
-                                                    if (ec.silentGallery) parts.push('Silent Gallery');
-                                                    if (parts.length === 0 && (participant.selectedEvents || []).length > 0)
-                                                        return participant.selectedEvents.map((evt, i) => (
-                                                            <span key={i} className="event-badge">{evt}</span>
-                                                        ));
-                                                    return parts.length > 0
-                                                        ? parts.map((p, i) => <span key={i} className="event-badge">{p}</span>)
-                                                        : <span className="text-muted">—</span>;
-                                                })()}
+                                            <div style={{
+                                                display: 'flex',
+                                                flexWrap: 'wrap',
+                                                gap: '4px',
+                                                maxWidth: '280px'
+                                            }}>
+                                                {badges.length > 0
+                                                    ? badges.map((b, i) => (
+                                                        <span key={i} style={{
+                                                            padding: '2px 7px',
+                                                            background: `${b.color}18`,
+                                                            border: `1px solid ${b.color}40`,
+                                                            borderRadius: '4px',
+                                                            fontSize: '0.68rem',
+                                                            color: b.color,
+                                                            whiteSpace: 'nowrap',
+                                                            fontWeight: 500,
+                                                            letterSpacing: '0.01em'
+                                                        }}>
+                                                            {b.label}
+                                                        </span>
+                                                    ))
+                                                    : <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>—</span>
+                                                }
                                             </div>
                                         </td>
-                                        <td><code>{participant.paymentRef || '—'}</code></td>
-                                        <td className="timestamp-cell">
-                                            {/* timestamp field from participantRoutes maps user.createdAt */}
+
+                                        <td style={{ whiteSpace: 'nowrap' }}>
+                                            <code style={{
+                                                fontSize: '0.72rem',
+                                                color: '#a3a3a3',
+                                                background: 'var(--bg-tertiary)',
+                                                padding: '2px 5px',
+                                                borderRadius: '3px'
+                                            }}>
+                                                {participant.paymentRef || '—'}
+                                            </code>
+                                        </td>
+
+                                        <td className="timestamp-cell" style={{ whiteSpace: 'nowrap', fontSize: '0.8rem' }}>
                                             {participant.timestamp
                                                 ? new Date(participant.timestamp).toLocaleDateString('en-IN', {
                                                     day: '2-digit', month: 'short', year: 'numeric'
@@ -172,23 +271,24 @@ const RegistrationsTab = ({
                                                     : '—'}
                                         </td>
                                     </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
-                )}
-            </div>
-            <div className="table-footer">
-                <span className="results-count">
-                    Showing {filteredParticipants.length} of {participants.length} registrations
-                    {selectedEvent !== 'all' && (() => {
-                        const evObj = (events || []).find(e => (e.value ?? e) === selectedEvent);
-                        return ` · filtered by "${evObj ? (evObj.label ?? evObj) : selectedEvent}"`;
-                    })()}
-                </span>
-            </div>
-        </section>
-    </>
+                                );
+                            })
+                        )}
+                    </tbody>
+                </table>
+            )}
+        </div>
+        <div className="table-footer">
+            <span className="results-count">
+                Showing {filteredParticipants.length} of {participants.length} registrations
+                {selectedEvent !== 'all' && (() => {
+                    const evObj = (events || []).find(e => (e.value ?? e) === selectedEvent);
+                    return ` · filtered by "${evObj ? (evObj.label ?? evObj) : selectedEvent}"`;
+                })()}
+            </span>
+        </div>
+    </section>
+</>
 )
 
 export default RegistrationsTab
