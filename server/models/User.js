@@ -53,6 +53,39 @@ const userSchema = new mongoose.Schema({
     selectedEvents: [{
         type: String
     }],
+    // New structured event registration fields
+    studentId: {
+        type: String,
+        trim: true
+    },
+    universityEmail: {
+        type: String,
+        trim: true,
+        lowercase: true
+    },
+    yearOfStudy: {
+        type: String,
+        enum: ['1st Year', '2nd Year', '3rd Year', '4th Year', '']
+    },
+    eventChoices: {
+        day1Workshop: {
+            type: String,
+            enum: ['rtl-gds', 'fpga', 'none', ''],
+            default: ''
+        },
+        sharkTank: {
+            type: Boolean,
+            default: false
+        },
+        treasureHunt: {
+            type: Boolean,
+            default: false
+        },
+        silentGallery: {
+            type: Boolean,
+            default: false
+        }
+    },
     registeredEvents: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Event'

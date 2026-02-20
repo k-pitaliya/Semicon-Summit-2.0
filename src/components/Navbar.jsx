@@ -60,6 +60,9 @@ const Navbar = () => {
                             {link.name}
                         </Link>
                     ))}
+                    <Link to="/register" className="btn btn-outline btn-sm nav-register-btn" onClick={() => setIsMobileMenuOpen(false)}>
+                        Register
+                    </Link>
                     <Link to="/login" className="btn btn-primary btn-sm nav-login-btn">
                         Login
                     </Link>

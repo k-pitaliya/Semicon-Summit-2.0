@@ -182,7 +182,8 @@ const uploadReceipt = multer({
 
 app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) => {
     try {
-        const { name, email, phone, college, department, selectedEvents, paymentAmount, paymentId } = req.body;
+        const { name, email, phone, college, department, selectedEvents, paymentAmount, paymentId,
+                studentId, universityEmail, yearOfStudy, eventChoices } = req.body;
         const pdfFile = req.file;
 
         if (!name || !email || !phone) {
@@ -256,6 +257,10 @@ app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) =
             phone,
             college,
             department,
+            studentId: studentId || '',
+            universityEmail: (universityEmail || '').toLowerCase(),
+            yearOfStudy: yearOfStudy || '',
+            eventChoices: typeof eventChoices === 'string' ? JSON.parse(eventChoices) : (eventChoices || {}),
             selectedEvents: Array.isArray(selectedEvents) ? selectedEvents :
                 (typeof selectedEvents === 'string' ? JSON.parse(selectedEvents) : []),
             verificationStatus: 'approved',
