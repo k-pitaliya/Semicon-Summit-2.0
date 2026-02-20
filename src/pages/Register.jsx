@@ -399,9 +399,9 @@ const Register = () => {
                             <div className="event-info-body">
                                 <p>Throughout Day 2, the following technical activities run in parallel — drop in any time during the day. No separate registration required.</p>
                                 <div className="event-rounds">
-                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Component Identification Challenge</strong><span>Identify electronic components and their specifications under time pressure.</span></div>
-                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>PCB Design Walkthrough Stall</strong><span>Interactive guided stall on PCB layout best practices and design tools.</span></div>
-                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Best Out of Waste</strong><span>Creative challenge: build something functional using scrap electronic components.</span></div>
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Spin the Wheel</strong><span>Let the Logic Choose Your Challenge.</span></div>
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Circuit Puzzle</strong><span>Design It Right or Watch It Fail.</span></div>
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Cross the Words</strong><span>Connect the Concepts.</span></div>
                                 </div>
                                 <div className="info-note small"><Info size={14} /><span>All of the above are included in your registration. Just show up!</span></div>
                             </div>
@@ -481,9 +481,9 @@ const Register = () => {
                             <div className="event-info-body">
                                 <p>Throughout Day 3, the following technical activities run in parallel — drop in any time during the day. No separate registration required.</p>
                                 <div className="event-rounds">
-                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Circuit Debugging Challenge</strong><span>Spot and fix the bug in a given circuit schematic within the time limit.</span></div>
-                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Semiconductor Quiz Stall</strong><span>On-the-spot technical quiz on semiconductors, VLSI, and embedded systems.</span></div>
-                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Project &amp; Idea Showcase</strong><span>Open showcase — brief your project or idea to judges for informal feedback.</span></div>
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Spin the Wheel</strong><span>Let the Logic Choose Your Challenge.</span></div>
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Circuit Puzzle</strong><span>Design It Right or Watch It Fail.</span></div>
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Cross the Words</strong><span>Connect the Concepts.</span></div>
                                 </div>
                                 <div className="info-note small"><Info size={14} /><span>All of the above are included in your registration. Just show up!</span></div>
                             </div>
