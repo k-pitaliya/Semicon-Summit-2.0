@@ -257,7 +257,8 @@ const FacultyDashboard = () => {
         setActionLoading(userId)
         try {
             const response = await api.post(`/users/${userId}/reset-password`)
-            alert(`✅ Password reset successful!\n\nNew password: ${response.data.newPassword}\n\n${response.data.emailSent ? 'Email sent to user.' : 'Email sending failed - please share password manually.'}`)
+            const emailSent = response.data.emailSent
+            alert(`✅ Password reset successful!\n\nNew password: ${response.data.newPassword}\n\n${emailSent ? '📧 New password emailed to the user.' : '⚠️ Email delivery failed — please share the new password manually: ' + response.data.newPassword}`)
         } catch (error) {
             alert('Error resetting password: ' + (error.response?.data?.error || error.message))
         } finally {

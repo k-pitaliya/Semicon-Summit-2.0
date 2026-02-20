@@ -252,4 +252,38 @@ router.put('/:id/reject', authenticate, authorize('faculty'), async (req, res) =
     }
 });
 
+// Resend credentials email — generates a new password and sends it (Faculty / Coordinator)
+router.post('/:id/resend-credentials', authenticate, authorize('faculty', 'coordinator'), async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        if (user.verificationStatus !== 'approved') {
+            return res.status(400).json({ error: 'User is not approved — cannot resend credentials' });
+        }
+
+        // Generate a fresh password and save it
+        const password = generatePassword();
+        user.password = password;
+        user.mustChangePassword = true;
+        await user.save();
+
+        const emailSent = await sendCredentialsEmail(user, password);
+
+        console.log(`📧 Credentials resent to ${user.email} (emailSent=${emailSent})`);
+        res.json({
+            message: emailSent
+                ? `Credentials emailed to ${user.email}`
+                : `Email delivery failed — new password generated but not delivered`,
+            emailSent,
+            newPassword: password   // Return in response so admin can share manually if email fails
+        });
+    } catch (error) {
+        console.error('Resend credentials error:', error);
+        res.status(500).json({ error: 'Resend failed: ' + error.message });
+    }
+});
+
 module.exports = router;

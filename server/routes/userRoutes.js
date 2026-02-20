@@ -101,20 +101,20 @@ router.post('/:id/reset-password', authenticate, authorize('faculty'), async (re
         
         await user.save();
 
-        // Send email asynchronously (don't block response)
-        sendPasswordResetEmail(user, newPassword)
-            .then((emailSent) => {
-                console.log(`📧 Password reset email sent: ${emailSent} (${user.email})`);
-            })
-            .catch((emailError) => {
-                console.error('Password reset email failed (async):', emailError);
-            });
+        // Await email so we can report success/failure in response
+        let emailSent = false;
+        try {
+            emailSent = await sendPasswordResetEmail(user, newPassword);
+        } catch (emailError) {
+            console.error('Password reset email failed:', emailError);
+        }
 
-        console.log(`🔐 Password reset for: ${user.name} (${user.email})`);
+        console.log(`🔐 Password reset for: ${user.name} (${user.email}) — email sent: ${emailSent}`);
         res.json({
             success: true,
             message: 'Password reset successfully',
-            newPassword
+            newPassword,
+            emailSent
         });
     } catch (error) {
         console.error('Password reset error:', error);
