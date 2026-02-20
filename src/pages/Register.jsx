@@ -53,7 +53,7 @@ const Register = () => {
         setError('');
     };
 
-    const isTreasureHuntEligible = !['3rd Year', '4th Year'].includes(formData.yearOfStudy);
+    const isTreasureHuntEligible = !['4th Year'].includes(formData.yearOfStudy);
 
     const validateStep = (s) => {
         if (s === 1) {
@@ -494,7 +494,7 @@ const Register = () => {
                             <div className="event-info-header">
                                 <Zap size={20} />
                                 <h3>The Silicon Jackpot — Logic-Driven Treasure Hunt</h3>
-                                {!isTreasureHuntEligible && <span className="badge-restricted">🎓 1st &amp; 2nd Year Only</span>}
+                                {!isTreasureHuntEligible && <span className="badge-restricted">🎓 1st, 2nd &amp; 3rd Year</span>}
                             </div>
                             <div className="event-info-body">
                                 <p>"Decode the Logic. Hunt the Clues. Complete the Silicon." — A multi-stage technical treasure challenge.</p>
@@ -503,13 +503,13 @@ const Register = () => {
                                     <div className="event-round"><strong>Round 2</strong><span>The Logic Conquest — Team-Based Challenge</span></div>
                                     <div className="event-round"><strong>Round 3</strong><span>Kaun Banega Summit Samrat — FPGA-Based Quiz Finale (no coding required)</span></div>
                                 </div>
-                                <div className="info-note small"><Info size={14} /><span>🎯 Open to 1st and 2nd year students only. No FPGA/Verilog knowledge required.</span></div>
+                                <div className="info-note small"><Info size={14} /><span>🎯 Open to 1st, 2nd and 3rd year students. 4th year students may attend as observers only.</span></div>
                             </div>
                         </div>
 
                         <div className="section-label">
                             Are you a participant in the Treasure Hunt?<span className="required"> *</span>
-                            {!isTreasureHuntEligible && <span className="not-eligible-tag">Not eligible — 3rd/4th year only attend as observers</span>}
+                            {!isTreasureHuntEligible && <span className="not-eligible-tag">Not eligible — 4th year attends as observer only</span>}
                         </div>
                         <div className="option-cards-row">
                             {[{ val: 'yes', label: 'Yes, I will participate' }, { val: 'no', label: 'No' }].map(opt => (
@@ -578,7 +578,7 @@ const Register = () => {
                                     </strong></div>
                                     <div className="summary-row"><span>Silicon Shark Tank</span><strong>{formData.sharkTank === 'yes' ? '✅ Participant' : '👁 Visitor'}</strong></div>
                                     <div className="summary-row"><span>Treasure Hunt</span><strong>
-                                        {!isTreasureHuntEligible ? '⛔ Not eligible (3rd/4th year)' :
+                                        {!isTreasureHuntEligible ? '⛔ Not eligible (4th year — observer only)' :
                                          formData.treasureHunt === 'yes' ? '✅ Participant' : '❌ Not participating'}
                                     </strong></div>
                                     <div className="summary-row"><span>Silent Gallery</span><strong>{formData.silentGallery === 'yes' ? '✅ Participant' : '❌ Not participating'}</strong></div>
