@@ -138,11 +138,35 @@ const ParticipantDashboard = () => {
                                 </div>
                                 <div className="profile-row">
                                     <span className="profile-label">College</span>
-                                    <span className="profile-value">{user?.college || 'Tech University'}</span>
+                                    <span className="profile-value">{user?.college || '—'}</span>
                                 </div>
+                                {user?.department && (
+                                    <div className="profile-row">
+                                        <span className="profile-label">Department</span>
+                                        <span className="profile-value">{user.department}</span>
+                                    </div>
+                                )}
+                                {user?.yearOfStudy && (
+                                    <div className="profile-row">
+                                        <span className="profile-label">Year</span>
+                                        <span className="profile-value">{user.yearOfStudy}</span>
+                                    </div>
+                                )}
+                                {user?.studentId && (
+                                    <div className="profile-row">
+                                        <span className="profile-label">Student ID</span>
+                                        <span className="profile-value">{user.studentId}</span>
+                                    </div>
+                                )}
+                                {user?.universityEmail && (
+                                    <div className="profile-row">
+                                        <span className="profile-label">University Email</span>
+                                        <span className="profile-value">{user.universityEmail}</span>
+                                    </div>
+                                )}
                                 <div className="profile-row">
                                     <span className="profile-label">Phone</span>
-                                    <span className="profile-value">{user?.phone || '+91 98765 43210'}</span>
+                                    <span className="profile-value">{user?.phone || '—'}</span>
                                 </div>
                             </div>
                         </div>
@@ -154,18 +178,50 @@ const ParticipantDashboard = () => {
                             <h2>Registered Events</h2>
                         </div>
                         <div className="events-list">
-                            {(user?.selectedEvents || ['VLSI Design Workshop', 'Chip Architecture Talk']).map((event, index) => (
-                                <div key={index} className="event-item card">
-                                    <div className="event-item-icon">
-                                        <Calendar size={20} />
+                            {(() => {
+                                // Build event list from eventChoices (new format) or selectedEvents (legacy)
+                                const ec = user?.eventChoices || {}
+                                const derived = []
+                                if (ec.day1Workshop === 'rtl-gds')
+                                    derived.push({ name: 'RTL to GDS II Workshop', day: 'Day 1 — 21 Feb', note: 'Full-day technical workshop' })
+                                else if (ec.day1Workshop === 'fpga')
+                                    derived.push({ name: 'FPGA Interfacing Workshop', day: 'Day 1 — 21 Feb', note: 'Full-day technical workshop' })
+                                if (ec.sharkTank)
+                                    derived.push({ name: 'Silicon Shark Tank', day: 'Day 2 — 22 Feb', note: 'Business pitch competition' })
+                                if (ec.treasureHunt)
+                                    derived.push({ name: 'Treasure Hunt', day: 'Day 3 — 23 Feb', note: 'Team-based treasure hunt' })
+                                if (ec.silentGallery)
+                                    derived.push({ name: 'Silicon Silent Gallery', day: 'Day 3 — 23 Feb', note: 'Silent auction & display' })
+
+                                // Fallback for legacy users with selectedEvents array
+                                const legacy = (user?.selectedEvents || []).filter(e =>
+                                    !derived.some(d => d.name === e)
+                                ).map(e => ({ name: e, day: '', note: 'Scheduled time will be announced soon' }))
+
+                                const all = [...derived, ...legacy]
+
+                                if (all.length === 0) {
+                                    return (
+                                        <div className="empty-state">
+                                            <Calendar size={32} />
+                                            <p>No events registered yet</p>
+                                        </div>
+                                    )
+                                }
+
+                                return all.map((event, index) => (
+                                    <div key={index} className="event-item card">
+                                        <div className="event-item-icon">
+                                            <Calendar size={20} />
+                                        </div>
+                                        <div className="event-item-info">
+                                            <h4>{event.name}</h4>
+                                            <p>{event.day ? `${event.day} · ` : ''}{event.note}</p>
+                                        </div>
+                                        <ChevronRight size={20} className="event-item-arrow" />
                                     </div>
-                                    <div className="event-item-info">
-                                        <h4>{event}</h4>
-                                        <p>Scheduled time will be announced soon</p>
-                                    </div>
-                                    <ChevronRight size={20} className="event-item-arrow" />
-                                </div>
-                            ))}
+                                ))
+                            })()}
                         </div>
                     </section>
 

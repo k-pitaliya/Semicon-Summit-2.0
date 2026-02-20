@@ -4,6 +4,7 @@ const RegistrationsTab = ({
     participants,
     filteredParticipants,
     loading,
+    actionLoading,
     searchTerm,
     setSearchTerm,
     selectedEvent,
@@ -66,9 +67,14 @@ const RegistrationsTab = ({
                 </div>
 
                 {/* Export Button */}
-                <button className="btn btn-primary" onClick={handleExport}>
+                <button
+                    className="btn btn-primary"
+                    onClick={handleExport}
+                    disabled={actionLoading === 'export'}
+                    style={{ opacity: actionLoading === 'export' ? 0.7 : 1 }}
+                >
                     <Download size={18} />
-                    Export Excel
+                    {actionLoading === 'export' ? 'Exporting…' : 'Export All (Excel)'}
                 </button>
 
                 {/* Backfill IDs Button */}

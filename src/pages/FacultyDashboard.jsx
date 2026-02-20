@@ -177,67 +177,74 @@ const FacultyDashboard = () => {
     }
 
 
-    const handleExport = () => {
-        // Prepare data for Excel
-        const eventChoiceSummary = (ec) => {
-            if (!ec) return '';
-            const parts = [];
-            if (ec.day1Workshop === 'rtl-gds') parts.push('RTL to GDS II');
-            else if (ec.day1Workshop === 'fpga') parts.push('FPGA Workshop');
-            if (ec.sharkTank) parts.push('Shark Tank');
-            if (ec.treasureHunt) parts.push('Treasure Hunt');
-            if (ec.silentGallery) parts.push('Silent Gallery');
-            return parts.join(', ');
-        };
-        const excelData = filteredParticipants.map((p, index) => ({
-            'S.No': index + 1,
-            'Reg ID': p.registrationId || '',
-            'Name': p.name || '',
-            'Email': p.email || '',
-            'Phone': p.phone || '',
-            'College': p.college || '',
-            'Department': p.department || '',
-            'Student ID': p.studentId || '',
-            'Year': p.yearOfStudy || '',
-            'Workshop (Day 1)': p.eventChoices?.day1Workshop || '',
-            'Event Choices': eventChoiceSummary(p.eventChoices),
-            'Payment ID': p.paymentRef || '',
-            'Amount Paid': p.paymentAmount || 299,
-            'Status': p.verificationStatus || 'approved',
-            'Registered On': p.timestamp ? new Date(p.timestamp).toLocaleDateString('en-IN') : ''
-        }))
+    const handleExport = async () => {
+        try {
+            setActionLoading('export')
+            // Fetch ALL participants from server (no pagination) — full detail
+            const res = await api.get('/participants/export')
+            const allData = res.data.participants || []
 
-        // Create worksheet
-        const worksheet = XLSX.utils.json_to_sheet(excelData)
+            const workshopLabel = (w) => {
+                if (w === 'rtl-gds') return 'RTL to GDS II Workshop'
+                if (w === 'fpga') return 'FPGA Interfacing Workshop'
+                return 'None'
+            }
 
-        // Set column widths
-        worksheet['!cols'] = [
-            { wch: 6 },   // S.No
-            { wch: 12 },  // Reg ID
-            { wch: 25 },  // Name
-            { wch: 30 },  // Email
-            { wch: 15 },  // Phone
-            { wch: 28 },  // College
-            { wch: 22 },  // Department
-            { wch: 14 },  // Student ID
-            { wch: 10 },  // Year
-            { wch: 14 },  // Workshop
-            { wch: 36 },  // Event Choices
-            { wch: 22 },  // Payment ID
-            { wch: 12 },  // Amount
-            { wch: 12 },  // Status
-            { wch: 15 },  // Date
-        ]
+            const excelData = allData.map((p, index) => ({
+                'S.No': index + 1,
+                'Reg ID': p.registrationId || '',
+                'Name': p.name || '',
+                'Email (Personal)': p.email || '',
+                'Email (University)': p.universityEmail || '',
+                'Phone': p.phone || '',
+                'College / Institution': p.college || '',
+                'Department': p.department || '',
+                'Student ID': p.studentId || '',
+                'Year of Study': p.yearOfStudy || '',
+                'Day 1 Workshop': workshopLabel(p.day1Workshop),
+                'Silicon Shark Tank': p.sharkTank || '',
+                'Treasure Hunt': p.treasureHunt || '',
+                'Silent Gallery': p.silentGallery || '',
+                'All Events': p.allEvents || '',
+                'Payment ID': p.paymentRef || '',
+                'Amount Paid (₹)': p.paymentAmount || 299,
+                'Status': p.verificationStatus || 'approved',
+                'Registered On': p.registeredOn || ''
+            }))
 
-        // Create workbook
-        const workbook = XLSX.utils.book_new()
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Registrations')
+            const worksheet = XLSX.utils.json_to_sheet(excelData)
+            worksheet['!cols'] = [
+                { wch: 6 },   // S.No
+                { wch: 12 },  // Reg ID
+                { wch: 26 },  // Name
+                { wch: 32 },  // Email personal
+                { wch: 32 },  // Email university
+                { wch: 15 },  // Phone
+                { wch: 32 },  // College
+                { wch: 22 },  // Department
+                { wch: 16 },  // Student ID
+                { wch: 14 },  // Year
+                { wch: 28 },  // Day 1 Workshop
+                { wch: 18 },  // Shark Tank
+                { wch: 16 },  // Treasure Hunt
+                { wch: 16 },  // Silent Gallery
+                { wch: 40 },  // All Events
+                { wch: 24 },  // Payment ID
+                { wch: 16 },  // Amount
+                { wch: 12 },  // Status
+                { wch: 16 },  // Date
+            ]
 
-        // Generate filename with date
-        const filename = `Summit_Registrations_${new Date().toISOString().split('T')[0]}.xlsx`
+            const workbook = XLSX.utils.book_new()
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'All Registrations')
 
-        // Download file
-        XLSX.writeFile(workbook, filename)
+            const filename = `SS26_AllRegistrations_${new Date().toISOString().split('T')[0]}.xlsx`
+            XLSX.writeFile(workbook, filename)
+        } catch (err) {
+            alert('Export failed: ' + (err.response?.data?.error || err.message))
+        } finally {
+            setActionLoading(null)
+        }
     }
 
 
@@ -441,6 +448,7 @@ const FacultyDashboard = () => {
                             participants={participants}
                             filteredParticipants={filteredParticipants}
                             loading={loading}
+                            actionLoading={actionLoading}
                             searchTerm={searchTerm}
                             setSearchTerm={setSearchTerm}
                             selectedEvent={selectedEvent}

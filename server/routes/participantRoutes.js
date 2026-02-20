@@ -100,6 +100,7 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
                     registrationId: user.registrationId || null,
                     name: user.name,
                     email: user.email,
+                    universityEmail: user.universityEmail || '',
                     mustChangePassword: user.mustChangePassword,
                     college: user.college,
                     phone: user.phone,
@@ -132,47 +133,54 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
     }
 });
 
-// Export participants to CSV (Faculty only)
+// Full export — ALL participants, all fields, no pagination (Faculty only)
 router.get('/export', authenticate, authorize('faculty'), async (req, res) => {
     try {
-        const users = await User.find({ role: 'participant' }).sort({ createdAt: -1 });
+        const users = await User.find({ role: 'participant' }).sort({ createdAt: 1 });
         const registrations = await Registration.find().populate('event');
 
-        const participants = users.map(user => {
-            const userRegs = registrations.filter(r => r.user.toString() === user._id.toString());
+        const data = users.map(user => {
+            const userRegs = registrations.filter(r =>
+                r.user && r.user.toString() === user._id.toString()
+            );
+            const ec = user.eventChoices || {};
+            const eventsList = [];
+            if (ec.day1Workshop === 'rtl-gds') eventsList.push('RTL to GDS II Workshop');
+            else if (ec.day1Workshop === 'fpga') eventsList.push('FPGA Interfacing Workshop');
+            if (ec.sharkTank) eventsList.push('Silicon Shark Tank');
+            if (ec.treasureHunt) eventsList.push('Treasure Hunt');
+            if (ec.silentGallery) eventsList.push('Silicon Silent Gallery');
+            const legacyEvents = userRegs.map(r => r.event?.title || '').filter(Boolean);
+            const allEvents = [...new Set([...eventsList, ...legacyEvents])];
+
             return {
-                name: user.name,
-                email: user.email,
-                college: user.college,
-                phone: user.phone,
-                events: userRegs.map(r => r.event?.title || 'Unknown').join('; '),
-                selectedEvents: (user.selectedEvents || []).join('; '),
-                paymentRef: user.razorpayPaymentId || user.paymentReference || userRegs[0]?.paymentReference || '',
-                timestamp: user.createdAt
+                registrationId: user.registrationId || '',
+                name: user.name || '',
+                email: user.email || '',
+                universityEmail: user.universityEmail || '',
+                phone: user.phone || '',
+                college: user.college || '',
+                department: user.department || '',
+                studentId: user.studentId || '',
+                yearOfStudy: user.yearOfStudy || '',
+                day1Workshop: ec.day1Workshop || 'none',
+                sharkTank: ec.sharkTank ? 'Yes' : 'No',
+                treasureHunt: ec.treasureHunt ? 'Yes' : 'No',
+                silentGallery: ec.silentGallery ? 'Yes' : 'No',
+                allEvents: allEvents.join(' | '),
+                paymentRef: user.razorpayPaymentId || user.paymentReference || '',
+                paymentAmount: user.paymentAmount || 299,
+                verificationStatus: user.verificationStatus || 'approved',
+                registeredOn: user.createdAt
+                    ? new Date(user.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+                    : ''
             };
         });
 
-        const headers = ['Name', 'Email', 'College', 'Phone', 'Registered Events', 'Selected Events', 'Payment Ref', 'Timestamp'];
-        const csvContent = [
-            headers.join(','),
-            ...participants.map(p => [
-                `"${p.name}"`,
-                p.email,
-                `"${p.college || ''}"`,
-                p.phone || '',
-                `"${p.events}"`,
-                `"${p.selectedEvents}"`,
-                p.paymentRef,
-                p.timestamp
-            ].join(','))
-        ].join('\n');
-
-        res.setHeader('Content-Type', 'text/csv');
-        res.setHeader('Content-Disposition', 'attachment; filename=registrations.csv');
-        res.send(csvContent);
+        res.json({ total: data.length, participants: data });
     } catch (error) {
         console.error('Export error:', error);
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ error: 'Export failed.' });
     }
 });
 
