@@ -399,9 +399,9 @@ const Register = () => {
                             <div className="event-info-body">
                                 <p>Throughout Day 2, the following technical activities run in parallel — drop in any time during the day. No separate registration required.</p>
                                 <div className="event-rounds">
-                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Spin the Wheel</strong><span>Let the Logic Choose Your Challenge.</span></div>
-                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Circuit Puzzle</strong><span>Design It Right or Watch It Fail.</span></div>
-                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Cross the Words</strong><span>Connect the Concepts.</span></div>
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Spin the Wheel — Let the Logic Choose Your Challenge.</strong><span>Spin the wheel and tackle a randomly assigned technical challenge — every spin is a different test of your skills.</span></div>
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Circuit Puzzle — Design It Right or Watch It Fail.</strong><span>Piece together a working circuit from given components — one wrong connection and it all falls apart.</span></div>
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Cross the Words. Connect the Concepts.</strong><span>A technical crossword challenge — fill in the grid using clues from electronics, VLSI, and semiconductor theory.</span></div>
                                 </div>
                                 <div className="info-note small"><Info size={14} /><span>All of the above are included in your registration. Just show up!</span></div>
                             </div>
@@ -481,9 +481,9 @@ const Register = () => {
                             <div className="event-info-body">
                                 <p>Throughout Day 3, the following technical activities run in parallel — drop in any time during the day. No separate registration required.</p>
                                 <div className="event-rounds">
-                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Spin the Wheel</strong><span>Let the Logic Choose Your Challenge.</span></div>
-                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Circuit Puzzle</strong><span>Design It Right or Watch It Fail.</span></div>
-                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Cross the Words</strong><span>Connect the Concepts.</span></div>
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Spin the Wheel — Let the Logic Choose Your Challenge.</strong><span>Spin the wheel and tackle a randomly assigned technical challenge — every spin is a different test of your skills.</span></div>
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Circuit Puzzle — Design It Right or Watch It Fail.</strong><span>Piece together a working circuit from given components — one wrong connection and it all falls apart.</span></div>
+                                    <div className="event-round" style={{ borderLeftColor: '#60a5fa' }}><strong>Cross the Words. Connect the Concepts.</strong><span>A technical crossword challenge — fill in the grid using clues from electronics, VLSI, and semiconductor theory.</span></div>
                                 </div>
                                 <div className="info-note small"><Info size={14} /><span>All of the above are included in your registration. Just show up!</span></div>
                             </div>
