@@ -165,6 +165,18 @@ const FacultyDashboard = () => {
 
 
 
+    const handleBackfillIds = async () => {
+        if (!confirm('Assign SS26-XXX registration IDs to all participants who are missing one?')) return;
+        try {
+            const res = await api.post('/admin/backfill-registration-ids');
+            alert(res.data.message + (res.data.range ? `\nRange: ${res.data.range}` : ''));
+            await fetchData();
+        } catch (err) {
+            alert('Backfill failed: ' + (err.response?.data?.error || err.message));
+        }
+    }
+
+
     const handleExport = () => {
         // Prepare data for Excel
         const eventChoiceSummary = (ec) => {
@@ -179,6 +191,7 @@ const FacultyDashboard = () => {
         };
         const excelData = filteredParticipants.map((p, index) => ({
             'S.No': index + 1,
+            'Reg ID': p.registrationId || '',
             'Name': p.name || '',
             'Email': p.email || '',
             'Phone': p.phone || '',
@@ -200,6 +213,7 @@ const FacultyDashboard = () => {
         // Set column widths
         worksheet['!cols'] = [
             { wch: 6 },   // S.No
+            { wch: 12 },  // Reg ID
             { wch: 25 },  // Name
             { wch: 30 },  // Email
             { wch: 15 },  // Phone
@@ -433,6 +447,7 @@ const FacultyDashboard = () => {
                             setSelectedEvent={setSelectedEvent}
                             events={events}
                             handleExport={handleExport}
+                            handleBackfillIds={handleBackfillIds}
                         />
                     )}
 

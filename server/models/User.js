@@ -86,6 +86,13 @@ const userSchema = new mongoose.Schema({
             default: false
         }
     },
+    // Unique sequential registration ID, e.g. SS26-001
+    registrationId: {
+        type: String,
+        unique: true,
+        sparse: true,   // allows null for users created before this feature
+        trim: true
+    },
     registeredEvents: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Event'

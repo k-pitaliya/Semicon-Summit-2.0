@@ -9,9 +9,9 @@ const RegistrationsTab = ({
     selectedEvent,
     setSelectedEvent,
     events,
-    handleExport
-}) => (
-    <>
+    handleExport,
+    handleBackfillIds
+}) => (<>
         {/* Stats Row */}
         <div className="stats-row">
             <div className="stat-card-small card">
@@ -70,6 +70,18 @@ const RegistrationsTab = ({
                     <Download size={18} />
                     Export Excel
                 </button>
+
+                {/* Backfill IDs Button */}
+                {handleBackfillIds && (
+                    <button
+                        className="btn"
+                        onClick={handleBackfillIds}
+                        title="Assign SS26-XXX IDs to participants who are missing one"
+                        style={{ background: 'rgba(99,179,237,0.12)', border: '1px solid rgba(99,179,237,0.4)', color: '#93c5fd', borderRadius: '8px', padding: '8px 14px', cursor: 'pointer', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+                    >
+                        Assign Missing IDs
+                    </button>
+                )}
             </div>
         </section>
 
@@ -85,6 +97,7 @@ const RegistrationsTab = ({
                     <table className="data-table">
                         <thead>
                             <tr>
+                                <th>Reg ID</th>
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Email</th>
@@ -108,6 +121,7 @@ const RegistrationsTab = ({
                             ) : (
                                 filteredParticipants.map((participant, index) => (
                                     <tr key={participant.id || participant._id || index}>
+                                        <td><code style={{fontSize:'0.8rem', color:'#93c5fd'}}>{participant.registrationId || '—'}</code></td>
                                         <td>{index + 1}</td>
                                         <td className="name-cell">{participant.name}</td>
                                         <td>{participant.email}</td>

@@ -109,6 +109,24 @@ const ParticipantDashboard = () => {
                             <div className="profile-avatar">
                                 <User size={32} />
                             </div>
+                            {user?.registrationId && (
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    marginBottom: '1.2rem'
+                                }}>
+                                    <div style={{
+                                        background: 'linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15))',
+                                        border: '1.5px solid rgba(99,179,237,0.5)',
+                                        borderRadius: '12px',
+                                        padding: '0.6rem 1.4rem',
+                                        textAlign: 'center'
+                                    }}>
+                                        <div style={{ fontSize: '0.72rem', color: 'rgba(148,163,184,0.9)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '2px' }}>Your Registration ID</div>
+                                        <div style={{ fontSize: '1.35rem', fontWeight: 700, letterSpacing: '0.04em', color: '#93c5fd', fontFamily: 'monospace' }}>{user.registrationId}</div>
+                                    </div>
+                                </div>
+                            )}
                             <div className="profile-info">
                                 <div className="profile-row">
                                     <span className="profile-label">Name</span>

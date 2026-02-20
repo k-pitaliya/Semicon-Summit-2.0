@@ -294,7 +294,8 @@ app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) =
                 name: user.name,
                 email: user.email,
                 phone: user.phone,
-                verificationStatus: user.verificationStatus
+                verificationStatus: user.verificationStatus,
+                registrationId: user.registrationId
             },
             password: password
         });
@@ -387,6 +388,54 @@ app.post('/api/admin/reject/:id', authenticate, authorize('faculty'), async (req
     } catch (error) {
         logger.error('Rejection error:', error);
         res.status(500).json({ error: 'Rejection failed: ' + error.message });
+    }
+});
+
+// ==========================================
+// BACKFILL: Assign SS26-XXX IDs to existing participants
+// ==========================================
+app.post('/api/admin/backfill-registration-ids', authenticate, authorize('faculty'), async (req, res) => {
+    try {
+        // Get all participants without a registrationId, ordered by creation date
+        const unassigned = await User.find(
+            { role: 'participant', registrationId: { $exists: false } },
+            null,
+            { sort: { createdAt: 1 } }
+        );
+
+        if (unassigned.length === 0) {
+            return res.json({ message: 'All participants already have registration IDs.', assigned: 0 });
+        }
+
+        // Find the current highest assigned sequence number
+        const lastAssigned = await User.findOne(
+            { role: 'participant', registrationId: { $exists: true, $ne: null } },
+            { registrationId: 1 },
+            { sort: { registrationId: -1 } }
+        );
+
+        let nextNum = 1;
+        if (lastAssigned?.registrationId) {
+            const match = lastAssigned.registrationId.match(/SS26-(\d+)/);
+            if (match) nextNum = parseInt(match[1], 10) + 1;
+        }
+
+        const updates = [];
+        for (const user of unassigned) {
+            user.registrationId = `SS26-${String(nextNum).padStart(3, '0')}`;
+            updates.push(user.save());
+            nextNum++;
+        }
+        await Promise.all(updates);
+
+        res.json({
+            message: `Assigned registration IDs to ${unassigned.length} participants.`,
+            assigned: unassigned.length,
+            range: `SS26-${String(nextNum - unassigned.length).padStart(3, '0')} → SS26-${String(nextNum - 1).padStart(3, '0')}`
+        });
+    } catch (error) {
+        logger.error('Backfill error:', error);
+        res.status(500).json({ error: 'Backfill failed.' });
     }
 });
 

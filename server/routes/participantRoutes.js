@@ -33,6 +33,7 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
                     .limit(limitNum);
                 participants = users.map(user => ({
                     id: user._id,
+                    registrationId: user.registrationId || null,
                     name: user.name,
                     email: user.email,
                     mustChangePassword: user.mustChangePassword,
@@ -61,6 +62,7 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
                         .slice((pageNum - 1) * limitNum, pageNum * limitNum)
                         .map(reg => ({
                             id: reg.user._id,
+                            registrationId: reg.user.registrationId || null,
                             name: reg.user.name,
                             email: reg.user.email,
                             mustChangePassword: reg.user.mustChangePassword,
@@ -95,6 +97,7 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
                 );
                 return {
                     id: user._id,
+                    registrationId: user.registrationId || null,
                     name: user.name,
                     email: user.email,
                     mustChangePassword: user.mustChangePassword,
