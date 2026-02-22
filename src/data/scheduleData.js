@@ -4,17 +4,18 @@ import {
 } from 'lucide-react';
 
 // ─── IMAGE MAPPING ─────────────────────────────────
+// Paths match verified posters in /public/images/posters/ (same as Events.jsx)
 export const EVENT_IMAGES = {
-    'panel-discussion': '/images/New posters/4.panel discussion.jpeg',
-    'rtl-gds-workshop': '/images/New posters/5.workshop experts.jpeg',
-    'verilog-fpga-workshop': '/images/New posters/6.hands on workshop.jpeg',
-    'embedded-vlsi': '/images/New posters/7.expert talk.jpeg',
-    'silicon-shark-tank': '/images/New posters/8.silicon shark tank.jpeg',
-    'wafer-chip-demo': '/images/New posters/10.stall visit.jpeg',
-    'ai-vlsi': '/images/New posters/11.ai in vlsi.jpeg',
-    'silicon-jackpot': '/images/New posters/12.the silicon jackpot.jpeg',
-    'tech-engagement': '/images/New posters/13.interactive tech engagement activities.jpeg',
-    'gallery-walk': '/images/New posters/9.silent silicon gallery.jpeg',
+    'panel-discussion': '/images/posters/fabless-startups.jpg',
+    'rtl-gds-workshop': '/images/posters/rtl-to-gds.jpg',
+    'verilog-fpga-workshop': '/images/posters/verilog-fpga.jpg',
+    'embedded-vlsi': '/images/posters/embedded-vs-vlsi.jpg',
+    'silicon-shark-tank': '/images/posters/silicon-shark-tank.jpg',
+    'wafer-chip-demo': '/images/posters/wafer-to-chip.jpg',
+    'ai-vlsi': '/images/posters/ai-in-vlsi.jpg',
+    'silicon-jackpot': '/images/posters/silicon-jackpot.jpg',
+    'tech-engagement': '/images/posters/silicon-playzone.jpg',
+    'gallery-walk': '/images/posters/silicon-ideas-showcase.jpg',
 };
 
 // ─── ICON MAP ──────────────────────────────────────
