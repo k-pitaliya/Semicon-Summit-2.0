@@ -26,7 +26,7 @@ const INITIAL_FORM = {
     day1Workshop: '',
     panelDiscussion: false,        // Day 1 — Inaugural Talk & Panel Discussion
     expertInsights: false,         // Day 2 — Expert Insights: VLSI vs Embedded
-    aiInVlsi: false,               // Day 3 — Impact of AI in VLSI
+    aiInVlsi: false,               // Day 3 — AI-Powered VLSI Talk
     sharkTank: '', sharkTankRulesAccepted: false,
     treasureHunt: '', silentGallery: '',
     paymentId: '', pdfFile: null,
@@ -382,12 +382,12 @@ const Register = () => {
                         <div className="info-note">
                             <Info size={16} />
                             <span>These two workshops run simultaneously. You can only attend <strong>one</strong>.<br />
-                                🎯 RTL to GDS – recommended for 3rd year &nbsp;|&nbsp; FPGA Workshop – recommended for 1st &amp; 2nd year</span>
+                                🎯 RTL &amp; Testbench – recommended for 3rd &amp; 4th year &nbsp;|&nbsp; FPGA Workshop – recommended for 1st &amp; 2nd year</span>
                         </div>
 
                         <div className="option-cards-col">
                             {[
-                                { val: 'rtl-gds', title: 'Hands-on Workshop on RTL to GDS II Flow', sub: 'Recommended for 3rd year students', soft: !['3rd Year', '4th Year'].includes(formData.yearOfStudy) },
+                                { val: 'rtl-gds', title: 'Writing Industry-Ready RTL & Self-Checking Testbench', sub: 'Recommended for 3rd & 4th year students', soft: !['3rd Year', '4th Year'].includes(formData.yearOfStudy) },
                                 { val: 'fpga', title: 'From Logic to Hardware: FPGA Interfacing Workshop', sub: 'Recommended for 1st & 2nd year students', soft: ['3rd Year', '4th Year'].includes(formData.yearOfStudy) },
                                 { val: 'none', title: 'I will not attend any workshop on Day 1', sub: 'You will still attend the morning sessions', soft: false },
                             ].map(opt => (
@@ -529,7 +529,7 @@ const Register = () => {
                         <div className="schedule-summary">
                             <div className="schedule-row highlight">
                                 <span className="schedule-time">09:30 – 11:00 AM</span>
-                                <span className="schedule-event">Impact of AI in VLSI</span>
+                                <span className="schedule-event">AI-Powered VLSI: Shaping Next-Gen Design Verification Engineers</span>
                                 <span className="schedule-tag choose">Register Below</span>
                             </div>
                             <div className="schedule-row fixed">
@@ -548,16 +548,16 @@ const Register = () => {
                         <div className="event-info-card" style={{ borderColor: 'rgba(167,139,250,0.35)', background: 'rgba(167,139,250,0.05)', marginBottom: '1.5rem' }}>
                             <div className="event-info-header">
                                 <Info size={20} style={{ color: '#a78bfa' }} />
-                                <h3 style={{ color: '#f1f5f9' }}>Impact of AI in VLSI</h3>
+                                <h3 style={{ color: '#f1f5f9' }}>AI-Powered VLSI: Shaping the Next-Gen Design Verification Engineers</h3>
                                 <span className="schedule-tag all" style={{ fontSize: '0.72rem' }}>09:30 – 11:00 AM</span>
                             </div>
                             <div className="event-info-body">
-                                <p>An expert talk exploring how Artificial Intelligence is revolutionizing VLSI design — from automated layout generation and verification to AI-driven chip architecture and future-ready design flows.</p>
+                                <p>Explore how Artificial Intelligence is transforming RTL design and verification workflows — covering AI-assisted verification, automated bug detection, AI-driven PPA prediction, and skills needed for next-gen VLSI engineers.</p>
                             </div>
                         </div>
 
                         <div className="section-label">
-                            <Info size={16} /> Will you attend &ldquo;Impact of AI in VLSI&rdquo;? <span style={{ fontSize: '0.8em', color: 'rgba(148,163,184,0.8)', marginLeft: '6px' }}>(Optional)</span>
+                            <Info size={16} /> Will you attend &ldquo;AI-Powered VLSI: Shaping the Next-Gen Design Verification Engineers&rdquo;? <span style={{ fontSize: '0.8em', color: 'rgba(148,163,184,0.8)', marginLeft: '6px' }}>(Optional)</span>
                         </div>
                         <div className="option-cards-row" style={{ marginBottom: '1.75rem' }}>
                             {[{ val: true, label: '✅  Yes, I will attend' }, { val: false, label: 'No / Undecided' }].map(opt => (
@@ -673,12 +673,12 @@ const Register = () => {
                                     <div className="summary-row"><span>Year</span><strong>{formData.yearOfStudy}</strong></div>
                                     <div className="summary-row"><span>Panel Discussion (Day 1)</span><strong>{formData.panelDiscussion ? '✅ Attending' : '—'}</strong></div>
                                     <div className="summary-row"><span>Day 1 Workshop</span><strong>
-                                        {formData.day1Workshop === 'rtl-gds' ? 'RTL to GDS II Flow' :
+                                        {formData.day1Workshop === 'rtl-gds' ? 'RTL & Self-Checking Testbench Workshop' :
                                             formData.day1Workshop === 'fpga' ? 'FPGA Interfacing Workshop' : 'Not attending workshop'}
                                     </strong></div>
                                     <div className="summary-row"><span>Expert Insights (Day 2)</span><strong>{formData.expertInsights ? '✅ Attending' : '—'}</strong></div>
                                     <div className="summary-row"><span>Silicon Shark Tank</span><strong>{formData.sharkTank === 'yes' ? '✅ Participant' : '👁 Visitor'}</strong></div>
-                                    <div className="summary-row"><span>AI in VLSI (Day 3)</span><strong>{formData.aiInVlsi ? '✅ Attending' : '—'}</strong></div>
+                                    <div className="summary-row"><span>AI-Powered VLSI (Day 3)</span><strong>{formData.aiInVlsi ? '✅ Attending' : '—'}</strong></div>
                                     <div className="summary-row"><span>Treasure Hunt</span><strong>
                                         {!isTreasureHuntEligible ? '⛔ Not eligible (4th year — observer only)' :
                                             formData.treasureHunt === 'yes' ? '✅ Participant' : '❌ Not participating'}

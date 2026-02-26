@@ -278,7 +278,7 @@ app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) =
                 (typeof selectedEvents === 'string' ? JSON.parse(selectedEvents) : []),
             verificationStatus: 'approved',
             paymentStatus: 'completed',
-            paymentAmount: 299,
+            paymentAmount: parseInt(process.env.REGISTRATION_FEE) || 299,
             role: 'participant',
             razorpayPaymentId: normalizedPaymentId,
             paymentScreenshot: `/uploads/receipts/${pdfFile.filename}`,
@@ -308,8 +308,7 @@ app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) =
                 phone: user.phone,
                 verificationStatus: user.verificationStatus,
                 registrationId: user.registrationId
-            },
-            password: password
+            }
         });
     } catch (error) {
         logger.error('Registration error:', error);
@@ -366,9 +365,14 @@ app.post('/api/admin/verify/:id', authenticate, authorize('faculty'), async (req
 
         logger.info('User verified by admin', { userId: user._id, email: user.email });
         res.json({
-            message: 'User verified successfully',
-            user,
-            generatedPassword: password
+            message: 'User verified successfully. Credentials have been emailed to the participant.',
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                verificationStatus: user.verificationStatus,
+                registrationId: user.registrationId || null
+            }
         });
     } catch (error) {
         logger.error('Verification error:', error);

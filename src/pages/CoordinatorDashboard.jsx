@@ -20,6 +20,7 @@ const CoordinatorDashboard = () => {
     const [announcements, setAnnouncements] = useState([]) // Real API state
     const [newAnnouncement, setNewAnnouncement] = useState({ title: '', content: '' })
     const [uploadStatus, setUploadStatus] = useState(null)
+    const [confirmDelete, setConfirmDelete] = useState(null) // { type, id }
     const fileInputRef = useRef(null)
     const docInputRef = useRef(null)
 
@@ -134,23 +135,25 @@ const CoordinatorDashboard = () => {
     }
 
     const handleDelete = async (type, id) => {
-        if (!confirm('Are you sure you want to delete this item?')) return
+        if (!confirmDelete) {
+            // First click — ask for confirmation inline (no window.confirm)
+            setConfirmDelete({ type, id })
+            return
+        }
 
+        // Second click (confirmed)
+        setConfirmDelete(null)
         try {
             if (type === 'announcements') {
                 await api.delete(`/announcements/${id}`)
-            } else if (type === 'photos') {
-                // Gallery endpoint - only faculty can delete
-                alert('Only faculty members can delete gallery photos.')
-                return
             } else {
                 // type is 'documents'
                 await api.delete(`/uploads/${type}/${id}`)
             }
-            fetchData() // Refresh
+            fetchData()
         } catch (err) {
             console.error('Delete error:', err)
-            alert('Failed to delete item: ' + (err.response?.data?.error || err.message))
+            setUploadStatus({ type: 'error', message: 'Failed to delete: ' + (err.response?.data?.error || err.message) })
         }
     }
 
@@ -225,6 +228,30 @@ const CoordinatorDashboard = () => {
                     </div>
                 )}
 
+                {/* Confirm Delete Inline Banner */}
+                {confirmDelete && (
+                    <div className="upload-status error" style={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <AlertCircle size={18} />
+                            Are you sure you want to delete this item? This cannot be undone.
+                        </span>
+                        <span style={{ display: 'flex', gap: '0.5rem' }}>
+                            <button
+                                onClick={() => handleDelete(confirmDelete.type, confirmDelete.id)}
+                                style={{ padding: '0.3rem 1rem', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 600 }}
+                            >
+                                Yes, Delete
+                            </button>
+                            <button
+                                onClick={() => setConfirmDelete(null)}
+                                style={{ padding: '0.3rem 1rem', background: 'rgba(255,255,255,0.1)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '6px', cursor: 'pointer' }}
+                            >
+                                Cancel
+                            </button>
+                        </span>
+                    </div>
+                )}
+
                 <div className="dashboard-content">
                     {/* Photos Tab */}
                     {activeTab === 'photos' && (
@@ -265,12 +292,7 @@ const CoordinatorDashboard = () => {
                                                 <span className="uploaded-name">{photo.name}</span>
                                                 <span className="uploaded-meta">{photo.size} • {photo.uploaded}</span>
                                             </div>
-                                            <button
-                                                className="delete-btn"
-                                                onClick={() => handleDelete('photos', photo.id)}
-                                            >
-                                                <Trash2 size={16} />
-                                            </button>
+                                            {/* Coordinators cannot delete gallery photos — button intentionally hidden */}
                                         </div>
                                     ))}
                                 </div>

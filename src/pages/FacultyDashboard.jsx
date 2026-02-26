@@ -53,11 +53,11 @@ const FacultyDashboard = () => {
     // Event filter options — match keys used in User.eventChoices (set by 5-step registration form)
     const events = [
         { label: 'Panel Discussion (Day 1)', value: 'panelDiscussion' },
-        { label: 'RTL to GDS II Workshop (Day 1)', value: 'rtl-gds' },
+        { label: 'RTL & Self-Checking Testbench Workshop (Day 1)', value: 'rtl-gds' },
         { label: 'FPGA Interfacing Workshop (Day 1)', value: 'fpga' },
         { label: 'Expert Insights: VLSI vs Embedded (Day 2)', value: 'expertInsights' },
         { label: 'Silicon Shark Tank (Day 2)', value: 'sharkTank' },
-        { label: 'Impact of AI in VLSI (Day 3)', value: 'aiInVlsi' },
+        { label: 'AI-Powered VLSI Talk (Day 3)', value: 'aiInVlsi' },
         { label: 'Silicon Jackpot / Treasure Hunt (Day 3)', value: 'treasureHunt' },
         { label: 'Silicon Silent Gallery (Day 3)', value: 'silentGallery' },
     ]
@@ -212,10 +212,10 @@ const FacultyDashboard = () => {
                         'Student ID': p.studentId || '',
                         'Year of Study': p.yearOfStudy || '',
                         'Panel Discussion (D1)': yesNo(ec.panelDiscussion),
-                        'Workshop (D1)': ec.day1Workshop === 'rtl-gds' ? 'RTL to GDS II' : ec.day1Workshop === 'fpga' ? 'FPGA Workshop' : ec.day1Workshop || 'None',
+                        'Workshop (D1)': ec.day1Workshop === 'rtl-gds' ? 'RTL & Testbench Workshop' : ec.day1Workshop === 'fpga' ? 'FPGA Workshop' : ec.day1Workshop || 'None',
                         'Expert Insights (D2)': yesNo(ec.expertInsights),
                         'Shark Tank (D2)': yesNo(ec.sharkTank),
-                        'AI in VLSI (D3)': yesNo(ec.aiInVlsi),
+                        'AI-Powered VLSI (D3)': yesNo(ec.aiInVlsi),
                         'Treasure Hunt (D3)': yesNo(ec.treasureHunt),
                         'Silent Gallery (D3)': yesNo(ec.silentGallery),
                         'Payment ID': p.paymentRef || '',

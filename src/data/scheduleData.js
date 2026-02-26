@@ -4,18 +4,18 @@ import {
 } from 'lucide-react';
 
 // ─── IMAGE MAPPING ─────────────────────────────────
-// Paths match verified posters in /public/images/posters/ (same as Events.jsx)
+// Paths point to the new Final posters in /public/images/New posters/Final/
 export const EVENT_IMAGES = {
-    'panel-discussion': '/images/posters/fabless-startups.jpg',
-    'rtl-gds-workshop': '/images/posters/rtl-to-gds.jpg',
-    'verilog-fpga-workshop': '/images/posters/verilog-fpga.jpg',
-    'embedded-vlsi': '/images/posters/embedded-vs-vlsi.jpg',
-    'silicon-shark-tank': '/images/posters/silicon-shark-tank.jpg',
-    'wafer-chip-demo': '/images/posters/wafer-to-chip.jpg',
-    'ai-vlsi': '/images/posters/ai-in-vlsi.jpg',
-    'silicon-jackpot': '/images/posters/silicon-jackpot.jpg',
-    'tech-engagement': '/images/posters/silicon-playzone.jpg',
-    'gallery-walk': '/images/posters/silicon-ideas-showcase.jpg',
+    'panel-discussion': '/images/New posters/Final/Fabless Startups & MSMEs Powering India\'s Semiconductor Growth.png',
+    'rtl-gds-workshop': '/images/New posters/Final/Testbench workshop _ Code Like  a Chip Designer.png',
+    'verilog-fpga-workshop': '/images/New posters/Final/Verilog & FPGA Getting Started with Digital Design.png',
+    'embedded-vlsi': '/images/New posters/Final/Embedded vs VLSI What Should I Choose.png',
+    'silicon-shark-tank': '/images/New posters/Final/Silicon Shark Tank Industry-Driven Idea Pitching.png',
+    'wafer-chip-demo': '/images/New posters/Final/Wafer to Chip Live Demonstration by Monk9.png',
+    'ai-vlsi': '/images/New posters/Final/AI vs VLSI.png',
+    'silicon-jackpot': '/images/New posters/Final/The Silicon Jackpot Decode the Logic. Hunt the Clues. Complete the Silicon.png',
+    'tech-engagement': '/images/New posters/Final/Silicon PlayZone Technical Game Arena.png',
+    'gallery-walk': '/images/New posters/Final/Silicon Ideas Showcase Silent Feedback Edition.png',
 };
 
 // ─── ICON MAP ──────────────────────────────────────
@@ -36,11 +36,11 @@ export const ICON_MAP = {
 export const EVENTS_DATA = [
     {
         id: 'panel-discussion',
-        name: 'Fabless Startups and Fabless MSMEs',
-        subtitle: 'Amazing Semiconductor Growth',
+        name: 'Fabless Semiconductor Innovation: RTL to ASIC / SoC Implementation',
+        subtitle: 'Powering India\'s Semiconductor Growth',
         tagline: 'Shaping the Future of Silicon',
-        description: 'Panel discussion on fabless startups and MSMEs in semiconductor industry',
-        fullDescription: 'Join industry leaders for an insightful panel discussion on the rise of fabless startups and MSMEs in the semiconductor ecosystem. Explore business models, challenges, opportunities, and the future of fabless semiconductor companies in India.',
+        description: 'Panel discussion with semiconductor industry experts and innovators driving India\'s fabless ecosystem.',
+        fullDescription: 'Interact with semiconductor industry experts and innovators driving India\'s fabless ecosystem. This panel discussion explores the journey from RTL to ASIC and SoC implementation — covering business models, design challenges, opportunities, and the future of fabless semiconductor companies in India.',
         day: 'Day 1',
         date: 'March 17, 2026',
         weekday: 'Tuesday',
@@ -49,10 +49,10 @@ export const EVENTS_DATA = [
         category: 'Panel Discussion',
         color: '#3b82f6',
         highlights: [
-            'Fabless business model insights',
-            'Startup ecosystem in semiconductors',
-            'MSME opportunities and challenges',
-            'Industry expert panel',
+            'Fabless semiconductor innovation insights',
+            'RTL to ASIC / SoC implementation journeys',
+            'Startup and MSME ecosystem in India',
+            'Industry expert panel discussion',
             'Interactive Q&A session'
         ],
         rules: [
@@ -64,10 +64,10 @@ export const EVENTS_DATA = [
     },
     {
         id: 'rtl-gds-workshop',
-        name: 'RTL to GDS II (Open Source)',
-        tagline: 'Ready to Design Your Own Chip?',
-        description: 'Hands-on workshop on the complete RTL to GDS II flow using open-source EDA tools - For 3rd and 4th year students',
-        fullDescription: 'Learn the complete chip design flow from RTL (Register Transfer Level) to GDSII using cutting-edge open-source EDA tools. This hands-on workshop covers the entire ASIC design flow including synthesis, place and route, and verification. This workshop is specifically designed for 3rd and 4th year students.',
+        name: 'Writing Industry-Ready RTL & Self-Checking Testbench',
+        tagline: 'Code Like a Chip Designer.',
+        description: 'Hands-on workshop on industry-standard RTL coding practices and modern verification methodologies — for 3rd and 4th year students.',
+        fullDescription: 'This workshop focuses on industry-standard RTL coding practices and modern verification methodologies used in semiconductor companies. The session covers writing clean, synthesizable, and modular RTL; parameterized and scalable design techniques; and developing self-checking testbenches. Participants will gain practical exposure to real-world RTL design and verification strategies aligned with current industry expectations. Specifically designed for 3rd and 4th year students.',
         day: 'Day 1',
         date: 'March 17, 2026',
         weekday: 'Tuesday',
@@ -76,18 +76,18 @@ export const EVENTS_DATA = [
         category: 'Hands-on Workshop',
         color: '#8b5cf6',
         highlights: [
-            'Complete RTL to GDSII flow',
-            'Open-source EDA tools (OpenROAD, Yosys)',
-            'Synthesis and Place & Route',
-            'Timing analysis and verification',
-            'Hands-on practical sessions'
+            'Writing clean, synthesizable, and modular RTL',
+            'Parameterized and scalable design techniques',
+            'Developing self-checking testbenches',
+            'Industry-standard verification methodologies',
+            'Real-world RTL design & verification strategies'
         ],
         rules: [
             'Specifically for 3rd and 4th year students only',
-            'Bring your own laptop with required software pre-installed',
-            'Basic Verilog knowledge is mandatory'
+            'Bring your own laptop',
+            'Basic Verilog knowledge is recommended'
         ],
-        prerequisites: 'Basic knowledge of digital design and Verilog - For 3rd and 4th year students'
+        prerequisites: 'Basic knowledge of digital design and Verilog — For 3rd and 4th year students'
     },
     {
         id: 'verilog-fpga-workshop',
@@ -254,8 +254,8 @@ export const EVENTS_DATA = [
         id: 'gallery-walk',
         name: 'Silent Silicon Ideas Gallery Walk',
         tagline: 'Ideas Shaped in Silicon',
-        description: 'Exhibition of student projects, research posters, and semiconductor innovations',
-        fullDescription: 'Explore innovative projects and ideas from students and participants! The Silent Silicon Ideas Gallery showcases creative semiconductor projects, research posters, and innovative designs. Walk through a gallery where ideas become insight and creativity meets silicon.',
+        description: 'Exhibition of student projects, research posters, and semiconductor innovations — featuring Technical Poster Presentation & Live Project Demonstration.',
+        fullDescription: 'Explore innovative projects and ideas from students and participants! The Silent Silicon Ideas Gallery showcases creative semiconductor projects, research posters, and innovative designs — featuring Technical Poster Presentation & Live Project Demonstration. Walk through a gallery where ideas become insight and creativity meets silicon.',
         day: 'Day 2',
         date: 'March 18, 2026',
         weekday: 'Wednesday',
@@ -264,10 +264,10 @@ export const EVENTS_DATA = [
         category: 'Gallery Walk & Exhibition',
         color: '#06b6d4',
         highlights: [
+            'Technical Poster Presentation & Live Project Demonstration',
             'Student project exhibitions',
             'Innovative chip design showcases',
             'Research poster presentations',
-            'Peer learning opportunities',
             'Networking with innovators'
         ],
         rules: [
@@ -279,10 +279,10 @@ export const EVENTS_DATA = [
     },
     {
         id: 'ai-vlsi',
-        name: 'AI in VLSI: Will it Change or Replace the VLSI Engineer?',
+        name: 'AI-Powered VLSI: Shaping the Next-Gen Design Verification Engineers',
         tagline: 'Transforming the Engineer — Not Replacing Them',
-        description: 'Exploring the impact of AI on VLSI design and engineering careers',
-        fullDescription: 'Explore how artificial intelligence is transforming VLSI design. Will AI replace VLSI engineers or become a powerful tool? This session discusses AI-driven EDA tools, machine learning in chip design, and the future role of VLSI engineers in an AI-enhanced world.',
+        description: 'Explore how Artificial Intelligence is transforming RTL design and verification workflows.',
+        fullDescription: 'Explore how Artificial Intelligence is transforming RTL design and verification workflows. This talk addresses AI-assisted verification and test generation, automated bug detection and coverage optimization, AI-driven PPA prediction and analysis, intelligent regression and simulation acceleration, and the skills required for next-generation VLSI engineers. Participants will understand how AI is redefining semiconductor design productivity and verification efficiency.',
         day: 'Day 3',
         date: 'March 19, 2026',
         weekday: 'Thursday',
@@ -291,11 +291,11 @@ export const EVENTS_DATA = [
         category: 'Insight Session',
         color: '#f59e0b',
         highlights: [
-            'AI in chip design workflows',
-            'Machine-learning-driven EDA tools',
-            'Future of VLSI engineering careers',
-            'Human-AI collaboration in design',
-            'Industry perspectives and Q&A'
+            'AI-assisted verification and test generation',
+            'Automated bug detection and coverage optimization',
+            'AI-driven PPA prediction and analysis',
+            'Intelligent regression and simulation acceleration',
+            'Skills for next-gen VLSI design verification engineers'
         ],
         rules: [
             'Open to all registered participants',
@@ -309,8 +309,8 @@ export const EVENTS_DATA = [
         name: 'The Silicon Jackpot',
         subtitle: 'Technical Treasure Hunt',
         tagline: 'Decode the Logic. Hunt the Clues. Complete the Silicon.',
-        description: 'A multi-stage technical treasure challenge testing semiconductor fundamentals and digital systems',
-        fullDescription: 'The Silicon Jackpot – "Decode the Logic. Hunt the Clues. Complete the Silicon." is a multi-stage technical treasure challenge designed to test students in semiconductor fundamentals and digital systems through knowledge, speed, collaboration, and practical implementation. The event unfolds across three progressive rounds where participants unlock clues, collect technical flags, and ultimately complete the word VLSI, symbolizing mastery in Very Large Scale Integration. Round 1, The Silicon Screening – Flag Hunt, is conducted separately for First Year, Second Year, and Third Year students, each receiving curriculum-based technical questions aligned with their academic level. Participants must solve the problem to unlock the first flag containing the letter "V" and a location clue. From each year, the first students to successfully complete the challenge qualify. These qualifiers are then grouped into interdisciplinary teams consisting of one student from each academic year, forming balanced teams. This round evaluates conceptual clarity, speed, accuracy, and individual problem-solving ability. Round 2, The Logic Conquest – Unified Challenge, brings the 20 teams together at a common location where they face a shared technical problem focused on applied digital logic, analytical reasoning, and teamwork. Upon solving the challenge, teams receive the second flag containing the letter "L" and additional clues to collect the letter "S." Based on accuracy and completion time, only the top teams advance to the final round. This stage assesses collaborative thinking, logical structuring, time management, and technical communication. Round 3, Kaun Banega Summit Samrat – The FPGA Finale, is a KBC-inspired technical showdown where the top 5 teams compete in an FPGA-based quiz featuring progressively complex digital electronics and Verilog questions. Successful teams collect the final flag containing the letter "I," completing the word VLSI. This finale evaluates practical HDL knowledge, hardware understanding, debugging skills, and performance under pressure. The team that excels across all stages and performs best in the FPGA finale will be crowned the Summit Samrat of Silicon, symbolizing their journey from V → L → S → I and their technical excellence in the semiconductor domain.',
+        description: 'An exciting multi-round technical challenge designed to test analytical skills, logic, and hardware understanding.',
+        fullDescription: 'An exciting multi-round technical challenge designed to test analytical skills, logic, and hardware understanding. Round 1 — Where Aptitude Meets Adventure: A high-energy technical aptitude challenge combining problem-solving and logical reasoning. Round 2 — Decode the Clues, Conquer the Flag: A clue-based technical hunt designed to test Digital Electronics skills. Round 3 — Kaun Banega Summit Samrat – The FPGA FaceOff: No Verilog coding — just Press & Play on FPGA. Participants will compete using hands-on FPGA-based challenges focused on logic implementation and hardware interaction.',
         day: 'Day 3',
         date: 'March 19, 2026',
         weekday: 'Thursday',
@@ -319,19 +319,44 @@ export const EVENTS_DATA = [
         category: 'Technical Treasure Hunt',
         color: '#ec4899',
         highlights: [
-            'Semiconductor-themed puzzles',
-            'Team-based campus-wide competition',
-            'Aptitude + Basic Digital Logic rounds',
-            'Live Aptitude, Digital & Verilog on FPGA',
+            'Multi-round semiconductor-themed challenges',
+            'Technical aptitude and logical reasoning',
+            'Digital Electronics clue-based hunt',
+            'Live FPGA-based finale (No Verilog coding)',
             'Exciting prizes for winners'
         ],
-        rules: [
-            'Form teams of 3–4 members',
-            'Solve questions → Collect flags to advance',
-            'All team members must be registered participants',
-            'Use of mobile phones for internet search is prohibited during rounds'
+        eventStructure: [
+            {
+                round: 'Round 1: Where Aptitude Meets Adventure',
+                details: [
+                    'A high-energy technical aptitude challenge',
+                    'Combines problem-solving and logical reasoning',
+                    'Individual participation round'
+                ]
+            },
+            {
+                round: 'Round 2: Decode the Clues, Conquer the Flag',
+                details: [
+                    'A clue-based technical hunt',
+                    'Tests Digital Electronics skills',
+                    'Team-based challenge'
+                ]
+            },
+            {
+                round: 'Round 3: Kaun Banega Summit Samrat – The FPGA FaceOff',
+                details: [
+                    'No Verilog coding required — just Press & Play on FPGA',
+                    'Hands-on FPGA-based challenges',
+                    'Focused on logic implementation and hardware interaction'
+                ]
+            }
         ],
-        prerequisites: 'Form teams of 3–4 members before the event'
+        rules: [
+            'Open to 1st, 2nd and 3rd year students',
+            'Use of mobile phones for internet search is prohibited during rounds',
+            '4th year students may attend as observers only'
+        ],
+        prerequisites: 'Open to 1st, 2nd and 3rd year students'
     },
     {
         id: 'tech-engagement',

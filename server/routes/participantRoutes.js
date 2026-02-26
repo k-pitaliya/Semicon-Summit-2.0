@@ -149,11 +149,11 @@ router.get('/export', authenticate, authorize('faculty'), async (req, res) => {
             const ec = user.eventChoices || {};
             const eventsList = [];
             if (ec.panelDiscussion) eventsList.push('Inaugural Talk & Panel Discussion');
-            if (ec.day1Workshop === 'rtl-gds') eventsList.push('RTL to GDS II Workshop');
+            if (ec.day1Workshop === 'rtl-gds') eventsList.push('RTL & Self-Checking Testbench Workshop');
             else if (ec.day1Workshop === 'fpga') eventsList.push('FPGA Interfacing Workshop');
             if (ec.expertInsights) eventsList.push('Expert Insights: VLSI vs Embedded');
             if (ec.sharkTank) eventsList.push('Silicon Shark Tank');
-            if (ec.aiInVlsi) eventsList.push('Impact of AI in VLSI');
+            if (ec.aiInVlsi) eventsList.push('AI-Powered VLSI: Next-Gen Design Verification');
             if (ec.treasureHunt) eventsList.push('Silicon Jackpot (Treasure Hunt)');
             if (ec.silentGallery) eventsList.push('Silicon Silent Gallery');
             const legacyEvents = userRegs.map(r => r.event?.title || '').filter(Boolean);
@@ -170,7 +170,7 @@ router.get('/export', authenticate, authorize('faculty'), async (req, res) => {
                 studentId: user.studentId || '',
                 yearOfStudy: user.yearOfStudy || '',
                 panelDiscussion: ec.panelDiscussion ? 'Yes' : 'No',
-                day1Workshop: ec.day1Workshop === 'rtl-gds' ? 'RTL to GDS II' : ec.day1Workshop === 'fpga' ? 'FPGA Workshop' : 'None',
+                day1Workshop: ec.day1Workshop === 'rtl-gds' ? 'RTL & Self-Checking Testbench' : ec.day1Workshop === 'fpga' ? 'FPGA Workshop' : 'None',
                 expertInsights: ec.expertInsights ? 'Yes' : 'No',
                 sharkTank: ec.sharkTank ? 'Yes' : 'No',
                 aiInVlsi: ec.aiInVlsi ? 'Yes' : 'No',

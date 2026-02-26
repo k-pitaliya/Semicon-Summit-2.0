@@ -83,7 +83,9 @@ router.post('/register', async (req, res) => {
 });
 
 // Forgot Password (Public)
+// NOTE: Always returns 200 with the same message to prevent user enumeration attacks
 router.post('/forgot-password', async (req, res) => {
+    const SAFE_MESSAGE = 'If an account exists with this email, a new password has been sent.';
     try {
         const { email } = req.body;
 
@@ -92,8 +94,10 @@ router.post('/forgot-password', async (req, res) => {
         }
 
         const user = await User.findOne({ email: email.toLowerCase() });
+
+        // Always return the same response — never reveal whether the email exists
         if (!user) {
-            return res.status(404).json({ error: 'User not found' });
+            return res.json({ message: SAFE_MESSAGE });
         }
 
         const newPassword = generatePassword();
@@ -103,8 +107,8 @@ router.post('/forgot-password', async (req, res) => {
 
         await sendPasswordResetEmail(user, newPassword);
 
-        console.log(`🔐 Public password reset request for: ${user.email}`);
-        res.json({ message: 'If an account exists with this email, a new password has been sent.' });
+        console.log(`🔐 Public password reset for: ${user.email}`);
+        res.json({ message: SAFE_MESSAGE });
     } catch (error) {
         console.error('Forgot password error:', error);
         res.status(500).json({ error: 'Server error' });

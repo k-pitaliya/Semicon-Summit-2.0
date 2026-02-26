@@ -192,7 +192,7 @@ const EventModal = ({ event, onClose }) => {
                         <div className="ev-modal-section">
                             <h3><Star size={18} /> What You'll Experience</h3>
                             <ul className="ev-modal-highlights">
-                                {event.highlights.map((h, i) => (
+                                {(event.highlights ?? []).map((h, i) => (
                                     <li key={i}>
                                         <CheckCircle size={15} />
                                         <span>{h}</span>
@@ -206,7 +206,7 @@ const EventModal = ({ event, onClose }) => {
                             <div className="ev-modal-section ev-modal-rules-section">
                                 <h3><AlertTriangle size={18} /> Rules & Guidelines</h3>
                                 <ul className="ev-modal-rules-list">
-                                    {event.rules.map((r, i) => (
+                                    {(event.rules ?? []).map((r, i) => (
                                         <li key={i}>
                                             <ChevronRight size={14} />
                                             <span>{r}</span>
@@ -362,177 +362,177 @@ const Schedule = () => {
                     <ParticleField count={40} />
                 </div>
                 <div className="events-container">
-                {/* Day Filter Tabs */}
-                <div className="day-tabs">
-                    <button
-                        className={`day-tab ${selectedDay === 'all' ? 'active' : ''}`}
-                        onClick={() => setSelectedDay('all')}
-                    >
-                        <span className="tab-label">All Days</span>
-                        <span className="tab-count">{EVENTS_DATA.length} events</span>
-                    </button>
-                    {DAYS.map(day => {
-                        const eventCount = getEventCount(day.id);
+                    {/* Day Filter Tabs */}
+                    <div className="day-tabs">
+                        <button
+                            className={`day-tab ${selectedDay === 'all' ? 'active' : ''}`}
+                            onClick={() => setSelectedDay('all')}
+                        >
+                            <span className="tab-label">All Days</span>
+                            <span className="tab-count">{EVENTS_DATA.length} events</span>
+                        </button>
+                        {DAYS.map(day => {
+                            const eventCount = getEventCount(day.id);
+                            return (
+                                <button
+                                    key={day.id}
+                                    className={`day-tab ${selectedDay === day.id ? 'active' : ''}`}
+                                    onClick={() => setSelectedDay(day.id)}
+                                    style={{ '--tab-accent': day.color }}
+                                >
+                                    <span className="tab-label">{day.label}</span>
+                                    <span className="tab-date">{day.date} ({day.weekday})</span>
+                                    <span className="tab-count">({eventCount} events)</span>
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    {/* Schedule Timeline */}
+                    {(selectedDay === 'all' ? DAYS : DAYS.filter(d => d.id === selectedDay)).map(day => {
+                        const scheduleItems = FULL_SCHEDULE[day.id] || [];
+                        if (scheduleItems.length === 0) return null;
+
                         return (
-                            <button
-                                key={day.id}
-                                className={`day-tab ${selectedDay === day.id ? 'active' : ''}`}
-                                onClick={() => setSelectedDay(day.id)}
-                                style={{ '--tab-accent': day.color }}
-                            >
-                                <span className="tab-label">{day.label}</span>
-                                <span className="tab-date">{day.date} ({day.weekday})</span>
-                                <span className="tab-count">({eventCount} events)</span>
-                            </button>
-                        );
-                    })}
-                </div>
-
-                {/* Schedule Timeline */}
-                {(selectedDay === 'all' ? DAYS : DAYS.filter(d => d.id === selectedDay)).map(day => {
-                    const scheduleItems = FULL_SCHEDULE[day.id] || [];
-                    if (scheduleItems.length === 0) return null;
-
-                    return (
-                        <div key={day.id} className="schedule-day">
-                            {/* Day header */}
-                            <div className="schedule-day-header" style={{ '--day-color': day.color }}>
-                                <div className="schedule-day-badge">
-                                    <Calendar size={18} />
-                                    <span className="schedule-day-label">{day.label}</span>
+                            <div key={day.id} className="schedule-day">
+                                {/* Day header */}
+                                <div className="schedule-day-header" style={{ '--day-color': day.color }}>
+                                    <div className="schedule-day-badge">
+                                        <Calendar size={18} />
+                                        <span className="schedule-day-label">{day.label}</span>
+                                    </div>
+                                    <span className="schedule-day-date">{day.date}, 2026 · {day.weekday}</span>
+                                    <span className="schedule-day-count">
+                                        ({getEventCount(day.id)} events) · {getTotalItems(day.id)} activities
+                                    </span>
                                 </div>
-                                <span className="schedule-day-date">{day.date}, 2026 · {day.weekday}</span>
-                                <span className="schedule-day-count">
-                                    ({getEventCount(day.id)} events) · {getTotalItems(day.id)} activities
-                                </span>
-                            </div>
 
-                            {/* Timeline items */}
-                            <div className="schedule-timeline">
-                                {scheduleItems.map((item, idx) => {
-                                    // ─── BREAK ITEM (non-clickable) ───
-                                    if (item.type === 'break') {
-                                        const BreakIcon = item.icon || Coffee;
-                                        return (
-                                            <div
-                                                key={`break-${idx}`}
-                                                className="schedule-item schedule-break"
-                                                style={{ '--item-color': item.color, animationDelay: `${idx * 0.06}s` }}
-                                            >
-                                                <div className="schedule-time">
-                                                    <span className="schedule-time-text">{item.time}</span>
-                                                </div>
-                                                <div className="schedule-dot-col">
-                                                    <div className="schedule-dot schedule-dot-break">
-                                                        <BreakIcon size={14} />
+                                {/* Timeline items */}
+                                <div className="schedule-timeline">
+                                    {scheduleItems.map((item, idx) => {
+                                        // ─── BREAK ITEM (non-clickable) ───
+                                        if (item.type === 'break') {
+                                            const BreakIcon = item.icon || Coffee;
+                                            return (
+                                                <div
+                                                    key={`break-${idx}`}
+                                                    className="schedule-item schedule-break"
+                                                    style={{ '--item-color': item.color, animationDelay: `${idx * 0.06}s` }}
+                                                >
+                                                    <div className="schedule-time">
+                                                        <span className="schedule-time-text">{item.time}</span>
                                                     </div>
-                                                    {idx < scheduleItems.length - 1 && <div className="schedule-line schedule-line-break" />}
+                                                    <div className="schedule-dot-col">
+                                                        <div className="schedule-dot schedule-dot-break">
+                                                            <BreakIcon size={14} />
+                                                        </div>
+                                                        {idx < scheduleItems.length - 1 && <div className="schedule-line schedule-line-break" />}
+                                                    </div>
+                                                    <div className="schedule-content schedule-break-content">
+                                                        <span className="schedule-break-title">{item.title}</span>
+                                                    </div>
                                                 </div>
-                                                <div className="schedule-content schedule-break-content">
-                                                    <span className="schedule-break-title">{item.title}</span>
-                                                </div>
-                                            </div>
-                                        );
-                                    }
+                                            );
+                                        }
 
-                                    // ─── CEREMONY ITEM (clickable, mini modal) ───
-                                    if (item.type === 'ceremony') {
-                                        const CeremonyIcon = item.icon || Mic;
+                                        // ─── CEREMONY ITEM (clickable, mini modal) ───
+                                        if (item.type === 'ceremony') {
+                                            const CeremonyIcon = item.icon || Mic;
+                                            return (
+                                                <div
+                                                    key={`ceremony-${idx}`}
+                                                    className="schedule-item schedule-ceremony"
+                                                    onClick={() => setSelectedCeremony(item)}
+                                                    style={{ '--item-color': item.color, animationDelay: `${idx * 0.06}s` }}
+                                                >
+                                                    <div className="schedule-time">
+                                                        <span className="schedule-time-text">{item.time}</span>
+                                                    </div>
+                                                    <div className="schedule-dot-col">
+                                                        <div className="schedule-dot">
+                                                            <CeremonyIcon size={14} />
+                                                        </div>
+                                                        {idx < scheduleItems.length - 1 && <div className="schedule-line" />}
+                                                    </div>
+                                                    <div className="schedule-content">
+                                                        <span className="schedule-category" style={{ background: `${item.color}15`, color: item.color, borderColor: `${item.color}30` }}>
+                                                            Ceremony
+                                                        </span>
+                                                        <h3 className="schedule-event-name">{item.title}</h3>
+                                                        {item.description && <p className="schedule-desc">{item.description}</p>}
+                                                        {item.venue && (
+                                                            <div className="schedule-venue-row">
+                                                                <MapPin size={13} />
+                                                                <span>{item.venue}</span>
+                                                            </div>
+                                                        )}
+                                                        <span className="schedule-view-btn">
+                                                            View Details <ChevronRight size={14} />
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            );
+                                        }
+
+                                        // ─── EVENT ITEM (clickable, full modal) ───
+                                        const event = EVENTS_MAP[item.eventId];
+                                        if (!event) return null;
+                                        const IconComp = ICON_MAP[event.id] || Zap;
+
                                         return (
                                             <div
-                                                key={`ceremony-${idx}`}
-                                                className="schedule-item schedule-ceremony"
-                                                onClick={() => setSelectedCeremony(item)}
-                                                style={{ '--item-color': item.color, animationDelay: `${idx * 0.06}s` }}
+                                                key={event.id}
+                                                className="schedule-item"
+                                                onClick={() => setSelectedEvent(event)}
+                                                style={{ '--item-color': event.color, animationDelay: `${idx * 0.06}s` }}
                                             >
+                                                {/* Time column */}
                                                 <div className="schedule-time">
-                                                    <span className="schedule-time-text">{item.time}</span>
+                                                    <span className="schedule-time-text">{event.time}</span>
                                                 </div>
+
+                                                {/* Dot & line */}
                                                 <div className="schedule-dot-col">
                                                     <div className="schedule-dot">
-                                                        <CeremonyIcon size={14} />
+                                                        <IconComp size={14} />
                                                     </div>
                                                     {idx < scheduleItems.length - 1 && <div className="schedule-line" />}
                                                 </div>
+
+                                                {/* Content */}
                                                 <div className="schedule-content">
-                                                    <span className="schedule-category" style={{ background: `${item.color}15`, color: item.color, borderColor: `${item.color}30` }}>
-                                                        Ceremony
-                                                    </span>
-                                                    <h3 className="schedule-event-name">{item.title}</h3>
-                                                    {item.description && <p className="schedule-desc">{item.description}</p>}
-                                                    {item.venue && (
-                                                        <div className="schedule-venue-row">
-                                                            <MapPin size={13} />
-                                                            <span>{item.venue}</span>
-                                                        </div>
-                                                    )}
+                                                    <span className="schedule-category">{event.category}</span>
+                                                    <h3 className="schedule-event-name">{event.name}</h3>
+                                                    {event.tagline && <p className="schedule-tagline">{event.tagline}</p>}
+                                                    <p className="schedule-desc">{event.description}</p>
+                                                    <div className="schedule-venue-row">
+                                                        <MapPin size={13} />
+                                                        <span>{event.venue}</span>
+                                                    </div>
                                                     <span className="schedule-view-btn">
                                                         View Details <ChevronRight size={14} />
                                                     </span>
                                                 </div>
                                             </div>
                                         );
-                                    }
-
-                                    // ─── EVENT ITEM (clickable, full modal) ───
-                                    const event = EVENTS_MAP[item.eventId];
-                                    if (!event) return null;
-                                    const IconComp = ICON_MAP[event.id] || Zap;
-
-                                    return (
-                                        <div
-                                            key={event.id}
-                                            className="schedule-item"
-                                            onClick={() => setSelectedEvent(event)}
-                                            style={{ '--item-color': event.color, animationDelay: `${idx * 0.06}s` }}
-                                        >
-                                            {/* Time column */}
-                                            <div className="schedule-time">
-                                                <span className="schedule-time-text">{event.time}</span>
-                                            </div>
-
-                                            {/* Dot & line */}
-                                            <div className="schedule-dot-col">
-                                                <div className="schedule-dot">
-                                                    <IconComp size={14} />
-                                                </div>
-                                                {idx < scheduleItems.length - 1 && <div className="schedule-line" />}
-                                            </div>
-
-                                            {/* Content */}
-                                            <div className="schedule-content">
-                                                <span className="schedule-category">{event.category}</span>
-                                                <h3 className="schedule-event-name">{event.name}</h3>
-                                                {event.tagline && <p className="schedule-tagline">{event.tagline}</p>}
-                                                <p className="schedule-desc">{event.description}</p>
-                                                <div className="schedule-venue-row">
-                                                    <MapPin size={13} />
-                                                    <span>{event.venue}</span>
-                                                </div>
-                                                <span className="schedule-view-btn">
-                                                    View Details <ChevronRight size={14} />
-                                                </span>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
+                                    })}
+                                </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
 
-                {/* CTA */}
-                <div className="events-cta-section">
-                    <div className="cta-glass">
-                        <Sparkles size={32} className="cta-icon" />
-                        <h2>Ready to Join the Summit?</h2>
-                        <p>Register now for all 10+ events — Only ₹299</p>
-                        <Link to="/register" className="btn btn-primary btn-large cta-btn">
-                            Register Now <ArrowRight size={20} />
-                        </Link>
+                    {/* CTA */}
+                    <div className="events-cta-section">
+                        <div className="cta-glass">
+                            <Sparkles size={32} className="cta-icon" />
+                            <h2>Ready to Join the Summit?</h2>
+                            <p>Register now for all 10+ events — Only ₹299</p>
+                            <Link to="/register" className="btn btn-primary btn-large cta-btn">
+                                Register Now <ArrowRight size={20} />
+                            </Link>
+                        </div>
                     </div>
                 </div>
-            </div>
             </section>
 
             <Footer />

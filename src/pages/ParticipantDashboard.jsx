@@ -99,215 +99,222 @@ const ParticipantDashboard = () => {
                     </div>
                 </header>
 
-                <div className="dashboard-content">
-                    {/* Profile Section */}
-                    <section id="profile" className="dashboard-section">
-                        <div className="section-header-row">
-                            <h2>Your Profile</h2>
-                        </div>
-                        <div className="profile-card card">
-                            <div className="profile-avatar">
-                                <User size={32} />
+                {loading ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '40vh', gap: '1rem', color: 'rgba(148,163,184,0.8)' }}>
+                        <div className="loading-spinner-small" style={{ width: '40px', height: '40px' }} />
+                        <span>Loading your dashboard...</span>
+                    </div>
+                ) : (
+                    <div className="dashboard-content">
+                        {/* Profile Section */}
+                        <section id="profile" className="dashboard-section">
+                            <div className="section-header-row">
+                                <h2>Your Profile</h2>
                             </div>
-                            {user?.registrationId && (
-                                <div style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    marginBottom: '1.2rem'
-                                }}>
+                            <div className="profile-card card">
+                                <div className="profile-avatar">
+                                    <User size={32} />
+                                </div>
+                                {user?.registrationId && (
                                     <div style={{
-                                        background: 'linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15))',
-                                        border: '1.5px solid rgba(99,179,237,0.5)',
-                                        borderRadius: '12px',
-                                        padding: '0.6rem 1.4rem',
-                                        textAlign: 'center'
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        marginBottom: '1.2rem'
                                     }}>
-                                        <div style={{ fontSize: '0.72rem', color: 'rgba(148,163,184,0.9)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '2px' }}>Your Registration ID</div>
-                                        <div style={{ fontSize: '1.35rem', fontWeight: 700, letterSpacing: '0.04em', color: '#93c5fd', fontFamily: 'monospace' }}>{user.registrationId}</div>
-                                    </div>
-                                </div>
-                            )}
-                            <div className="profile-info">
-                                <div className="profile-row">
-                                    <span className="profile-label">Name</span>
-                                    <span className="profile-value">{user?.name || 'John Doe'}</span>
-                                </div>
-                                <div className="profile-row">
-                                    <span className="profile-label">Email</span>
-                                    <span className="profile-value">{user?.email || 'user@example.com'}</span>
-                                </div>
-                                <div className="profile-row">
-                                    <span className="profile-label">College</span>
-                                    <span className="profile-value">{user?.college || '—'}</span>
-                                </div>
-                                {user?.department && (
-                                    <div className="profile-row">
-                                        <span className="profile-label">Department</span>
-                                        <span className="profile-value">{user.department}</span>
+                                        <div style={{
+                                            background: 'linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15))',
+                                            border: '1.5px solid rgba(99,179,237,0.5)',
+                                            borderRadius: '12px',
+                                            padding: '0.6rem 1.4rem',
+                                            textAlign: 'center'
+                                        }}>
+                                            <div style={{ fontSize: '0.72rem', color: 'rgba(148,163,184,0.9)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '2px' }}>Your Registration ID</div>
+                                            <div style={{ fontSize: '1.35rem', fontWeight: 700, letterSpacing: '0.04em', color: '#93c5fd', fontFamily: 'monospace' }}>{user.registrationId}</div>
+                                        </div>
                                     </div>
                                 )}
-                                {user?.yearOfStudy && (
+                                <div className="profile-info">
                                     <div className="profile-row">
-                                        <span className="profile-label">Year</span>
-                                        <span className="profile-value">{user.yearOfStudy}</span>
+                                        <span className="profile-label">Name</span>
+                                        <span className="profile-value">{user?.name || 'John Doe'}</span>
                                     </div>
-                                )}
-                                {user?.studentId && (
                                     <div className="profile-row">
-                                        <span className="profile-label">Student ID</span>
-                                        <span className="profile-value">{user.studentId}</span>
+                                        <span className="profile-label">Email</span>
+                                        <span className="profile-value">{user?.email || 'user@example.com'}</span>
                                     </div>
-                                )}
-                                {user?.universityEmail && (
                                     <div className="profile-row">
-                                        <span className="profile-label">University Email</span>
-                                        <span className="profile-value">{user.universityEmail}</span>
+                                        <span className="profile-label">College</span>
+                                        <span className="profile-value">{user?.college || '—'}</span>
                                     </div>
-                                )}
-                                <div className="profile-row">
-                                    <span className="profile-label">Phone</span>
-                                    <span className="profile-value">{user?.phone || '—'}</span>
+                                    {user?.department && (
+                                        <div className="profile-row">
+                                            <span className="profile-label">Department</span>
+                                            <span className="profile-value">{user.department}</span>
+                                        </div>
+                                    )}
+                                    {user?.yearOfStudy && (
+                                        <div className="profile-row">
+                                            <span className="profile-label">Year</span>
+                                            <span className="profile-value">{user.yearOfStudy}</span>
+                                        </div>
+                                    )}
+                                    {user?.studentId && (
+                                        <div className="profile-row">
+                                            <span className="profile-label">Student ID</span>
+                                            <span className="profile-value">{user.studentId}</span>
+                                        </div>
+                                    )}
+                                    {user?.universityEmail && (
+                                        <div className="profile-row">
+                                            <span className="profile-label">University Email</span>
+                                            <span className="profile-value">{user.universityEmail}</span>
+                                        </div>
+                                    )}
+                                    <div className="profile-row">
+                                        <span className="profile-label">Phone</span>
+                                        <span className="profile-value">{user?.phone || '—'}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </section>
+                        </section>
 
-                    {/* Events Section */}
-                    <section id="events" className="dashboard-section">
-                        <div className="section-header-row">
-                            <h2>Registered Events</h2>
-                        </div>
-                        <div className="events-list">
-                            {(() => {
-                                // Build event list from eventChoices (new format) or selectedEvents (legacy)
-                                const ec = user?.eventChoices || {}
-                                const derived = []
-                                // Day 1
-                                if (ec.panelDiscussion)
-                                    derived.push({ name: 'Inaugural Talk & Panel Discussion', day: 'Day 1 — 17 Mar', note: '10:00 – 11:30 AM' })
-                                if (ec.day1Workshop === 'rtl-gds')
-                                    derived.push({ name: 'RTL to GDS II Workshop', day: 'Day 1 — 17 Mar', note: 'Full-day technical workshop · 1:30 – 4:30 PM' })
-                                else if (ec.day1Workshop === 'fpga')
-                                    derived.push({ name: 'FPGA Interfacing Workshop', day: 'Day 1 — 17 Mar', note: 'Full-day technical workshop · 1:30 – 4:30 PM' })
-                                // Day 2
-                                if (ec.expertInsights)
-                                    derived.push({ name: 'Expert Insights: VLSI vs Embedded', day: 'Day 2 — 18 Mar', note: '9:30 – 11:30 AM' })
-                                if (ec.sharkTank)
-                                    derived.push({ name: 'Silicon Shark Tank', day: 'Day 2 — 18 Mar', note: 'Business pitch competition · 12:30 – 4:30 PM' })
-                                // Day 3
-                                if (ec.aiInVlsi)
-                                    derived.push({ name: 'Impact of AI in VLSI', day: 'Day 3 — 19 Mar', note: '9:30 – 11:00 AM' })
-                                if (ec.treasureHunt)
-                                    derived.push({ name: 'Silicon Jackpot (Treasure Hunt)', day: 'Day 3 — 19 Mar', note: 'Team-based treasure hunt' })
-                                if (ec.silentGallery)
-                                    derived.push({ name: 'Silicon Silent Gallery', day: 'Day 3 — 19 Mar', note: 'Poster presentation' })
+                        {/* Events Section */}
+                        <section id="events" className="dashboard-section">
+                            <div className="section-header-row">
+                                <h2>Registered Events</h2>
+                            </div>
+                            <div className="events-list">
+                                {(() => {
+                                    // Build event list from eventChoices (new format) or selectedEvents (legacy)
+                                    const ec = user?.eventChoices || {}
+                                    const derived = []
+                                    // Day 1
+                                    if (ec.panelDiscussion)
+                                        derived.push({ name: 'Inaugural Talk & Panel Discussion', day: 'Day 1 — 17 Mar', note: '10:00 – 11:30 AM' })
+                                    if (ec.day1Workshop === 'rtl-gds')
+                                        derived.push({ name: 'RTL & Self-Checking Testbench Workshop', day: 'Day 1 — 17 Mar', note: 'Full-day technical workshop · 1:30 – 4:30 PM' })
+                                    else if (ec.day1Workshop === 'fpga')
+                                        derived.push({ name: 'FPGA Interfacing Workshop', day: 'Day 1 — 17 Mar', note: 'Full-day technical workshop · 1:30 – 4:30 PM' })
+                                    // Day 2
+                                    if (ec.expertInsights)
+                                        derived.push({ name: 'Expert Insights: VLSI vs Embedded', day: 'Day 2 — 18 Mar', note: '9:30 – 11:30 AM' })
+                                    if (ec.sharkTank)
+                                        derived.push({ name: 'Silicon Shark Tank', day: 'Day 2 — 18 Mar', note: 'Business pitch competition · 12:30 – 4:30 PM' })
+                                    // Day 3
+                                    if (ec.aiInVlsi)
+                                        derived.push({ name: 'AI-Powered VLSI: Next-Gen Design Verification', day: 'Day 3 — 19 Mar', note: '9:30 – 11:00 AM' })
+                                    if (ec.treasureHunt)
+                                        derived.push({ name: 'Silicon Jackpot (Treasure Hunt)', day: 'Day 3 — 19 Mar', note: 'Team-based treasure hunt' })
+                                    if (ec.silentGallery)
+                                        derived.push({ name: 'Silicon Silent Gallery', day: 'Day 3 — 19 Mar', note: 'Poster presentation' })
 
-                                // Fallback for legacy users with selectedEvents array
-                                const legacy = (user?.selectedEvents || []).filter(e =>
-                                    !derived.some(d => d.name === e)
-                                ).map(e => ({ name: e, day: '', note: 'Scheduled time will be announced soon' }))
+                                    // Fallback for legacy users with selectedEvents array
+                                    const legacy = (user?.selectedEvents || []).filter(e =>
+                                        !derived.some(d => d.name === e)
+                                    ).map(e => ({ name: e, day: '', note: 'Scheduled time will be announced soon' }))
 
-                                const all = [...derived, ...legacy]
+                                    const all = [...derived, ...legacy]
 
-                                if (all.length === 0) {
-                                    return (
-                                        <div className="empty-state">
-                                            <Calendar size={32} />
-                                            <p>No events registered yet</p>
+                                    if (all.length === 0) {
+                                        return (
+                                            <div className="empty-state">
+                                                <Calendar size={32} />
+                                                <p>No events registered yet</p>
+                                            </div>
+                                        )
+                                    }
+
+                                    return all.map((event, index) => (
+                                        <div key={index} className="event-item card">
+                                            <div className="event-item-icon">
+                                                <Calendar size={20} />
+                                            </div>
+                                            <div className="event-item-info">
+                                                <h4>{event.name}</h4>
+                                                <p>{event.day ? `${event.day} · ` : ''}{event.note}</p>
+                                            </div>
+                                            <ChevronRight size={20} className="event-item-arrow" />
                                         </div>
-                                    )
-                                }
+                                    ))
+                                })()}
+                            </div>
+                        </section>
 
-                                return all.map((event, index) => (
-                                    <div key={index} className="event-item card">
-                                        <div className="event-item-icon">
-                                            <Calendar size={20} />
-                                        </div>
-                                        <div className="event-item-info">
-                                            <h4>{event.name}</h4>
-                                            <p>{event.day ? `${event.day} · ` : ''}{event.note}</p>
-                                        </div>
-                                        <ChevronRight size={20} className="event-item-arrow" />
+                        {/* Announcements Section */}
+                        <section id="announcements" className="dashboard-section">
+                            <div className="section-header-row">
+                                <h2>Announcements</h2>
+                            </div>
+                            <div className="announcements-list">
+                                {announcements.length === 0 ? (
+                                    <div className="empty-state">
+                                        <Bell size={32} />
+                                        <p>No announcements yet</p>
                                     </div>
-                                ))
-                            })()}
-                        </div>
-                    </section>
-
-                    {/* Announcements Section */}
-                    <section id="announcements" className="dashboard-section">
-                        <div className="section-header-row">
-                            <h2>Announcements</h2>
-                        </div>
-                        <div className="announcements-list">
-                            {announcements.length === 0 ? (
-                                <div className="empty-state">
-                                    <Bell size={32} />
-                                    <p>No announcements yet</p>
-                                </div>
-                            ) : (
-                                announcements.map((announcement) => (
-                                    <div key={announcement._id || announcement.id} className="announcement-item card">
-                                        <div className="announcement-header">
-                                            <h4>{announcement.title}</h4>
-                                            <span className="announcement-date">
-                                                {(() => {
-                                                    const raw = announcement.date || announcement.createdAt;
-                                                    if (!raw) return 'N/A';
-                                                    return new Date(raw).toLocaleDateString('en-IN', {
-                                                        day: 'numeric', month: 'short', year: 'numeric'
-                                                    });
-                                                })()}
-                                            </span>
+                                ) : (
+                                    announcements.map((announcement) => (
+                                        <div key={announcement._id || announcement.id} className="announcement-item card">
+                                            <div className="announcement-header">
+                                                <h4>{announcement.title}</h4>
+                                                <span className="announcement-date">
+                                                    {(() => {
+                                                        const raw = announcement.date || announcement.createdAt;
+                                                        if (!raw) return 'N/A';
+                                                        return new Date(raw).toLocaleDateString('en-IN', {
+                                                            day: 'numeric', month: 'short', year: 'numeric'
+                                                        });
+                                                    })()}
+                                                </span>
+                                            </div>
+                                            <p>{announcement.content}</p>
                                         </div>
-                                        <p>{announcement.content}</p>
+                                    ))
+                                )}
+                            </div>
+                        </section>
+
+                        {/* Gallery Section */}
+                        <section id="gallery" className="dashboard-section">
+                            <div className="section-header-row">
+                                <h2>Photo Gallery</h2>
+                            </div>
+                            <div className="gallery-grid">
+                                {loading ? (
+                                    <div className="loading-state">
+                                        <div className="loading-spinner-small"></div>
+                                        <span>Loading gallery...</span>
                                     </div>
-                                ))
-                            )}
-                        </div>
-                    </section>
-
-                    {/* Gallery Section */}
-                    <section id="gallery" className="dashboard-section">
-                        <div className="section-header-row">
-                            <h2>Photo Gallery</h2>
-                        </div>
-                        <div className="gallery-grid">
-                            {loading ? (
-                                <div className="loading-state">
-                                    <div className="loading-spinner-small"></div>
-                                    <span>Loading gallery...</span>
-                                </div>
-                            ) : photos.length === 0 ? (
-                                <div className="empty-state">
-                                    <Image size={32} />
-                                    <p>No photos uploaded yet</p>
-                                </div>
-                            ) : (
-                                photos.map((photo) => (
-                                    <div key={photo._id || photo.id} className="gallery-item card">
-                                        <div className="gallery-image-container">
-                                            <img
-                                                src={photo.thumbnailUrl || photo.url}
-                                                alt={photo.title || photo.caption || 'Gallery image'}
-                                                className="gallery-img"
-                                                loading="lazy"
-                                                decoding="async"
-                                            />
-                                        </div>
-                                        <div className="gallery-caption">
-                                            <h4>{photo.title || 'Untitled'}</h4>
-                                            {photo.description && <p>{photo.description}</p>}
-                                        </div>
+                                ) : photos.length === 0 ? (
+                                    <div className="empty-state">
+                                        <Image size={32} />
+                                        <p>No photos uploaded yet</p>
                                     </div>
-                                ))
-                            )}
-                        </div>
-                    </section>
+                                ) : (
+                                    photos.map((photo) => (
+                                        <div key={photo._id || photo.id} className="gallery-item card">
+                                            <div className="gallery-image-container">
+                                                <img
+                                                    src={photo.thumbnailUrl || photo.url}
+                                                    alt={photo.title || photo.caption || 'Gallery image'}
+                                                    className="gallery-img"
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                />
+                                            </div>
+                                            <div className="gallery-caption">
+                                                <h4>{photo.title || 'Untitled'}</h4>
+                                                {photo.description && <p>{photo.description}</p>}
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </section>
 
-                </div>
+                    </div>
+                )}
             </main>
-        </div>
+        </div >
     )
 }
 

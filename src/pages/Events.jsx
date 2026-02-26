@@ -53,28 +53,25 @@ const EVENTS = [
     {
         id: 'fabless-startups',
         categoryId: 'industry-strategy',
-        title: 'Fabless Startups & MSMEs',
-        subtitle: "Powering India's Semiconductor Growth",
+        title: 'Fabless Semiconductor Innovation',
+        subtitle: 'RTL to ASIC / SoC Implementation',
         type: 'Industry Panel',
         icon: Users,
-        poster: '/images/posters/fabless-startups.jpg',
+        poster: '/images/New posters/Final/Fabless Startups & MSMEs Powering India\'s Semiconductor Growth.png',
         prize: 'Networking',
-        description: "Powering India's Semiconductor Growth. Interact with leading semiconductor innovators and founders driving the fabless revolution.",
-        fullDescription: `Fabless Startups & MSMEs
-Powering India's Semiconductor Growth
+        description: "Interact with semiconductor industry experts and innovators driving India's fabless ecosystem — exploring the journey from RTL to ASIC and SoC implementation.",
+        fullDescription: `Fabless Semiconductor Innovation: RTL to ASIC / SoC Implementation
 
-Interact with leading semiconductor innovators and founders driving the fabless revolution.
+Interact with semiconductor industry experts and innovators driving India's fabless ecosystem.
 
-Get the opportunity to ask your questions directly and explore real industry insights.
+This panel discussion explores:
+• The journey from RTL to ASIC and SoC implementation
+• Business models, design challenges and opportunities
+• Fabless semiconductor company growth in India
+• Startup and MSME ecosystem insights
+• Policy support and talent requirements
 
-This session will address:
-• Growth of fabless semiconductor startups in India
-• Opportunities and challenges in the MSME ecosystem
-• Policy support and industry collaborations
-• Talent requirements and future demand
-• Building a sustainable semiconductor value chain
-
-Participants will gain insights directly from industry experts shaping the next phase of India's semiconductor development.`,
+Participants will gain insights directly from industry experts shaping India\'s semiconductor future.`,
         date: 'Tuesday, March 17, 2026',
         time: '11:30 AM – 12:30 PM',
         venue: 'Seminar Hall, First Floor, EC Dept., A6 Building, CHARUSAT',
@@ -84,18 +81,25 @@ Participants will gain insights directly from industry experts shaping the next 
     {
         id: 'ai-vlsi',
         categoryId: 'industry-strategy',
-        title: 'AI in VLSI',
-        subtitle: 'Will It Change the VLSI Engineer?',
+        title: 'AI-Powered VLSI',
+        subtitle: 'Shaping the Next-Gen Design Verification Engineers',
         type: 'Expert Insight',
         icon: Brain,
-        poster: '/images/posters/ai-in-vlsi.jpg',
+        poster: '/images/New posters/Final/AI vs VLSI.png',
         prize: 'Knowledge',
-        description: 'Artificial Intelligence is reshaping semiconductor design workflows. This session examines how AI-driven EDA tools are redefining the role of VLSI engineers.',
-        fullDescription: `Artificial Intelligence is reshaping semiconductor design workflows. This session examines how AI-driven EDA tools, automation in physical design, and intelligent verification systems are redefining the role of VLSI engineers.
+        description: 'Explore how Artificial Intelligence is transforming RTL design and verification workflows — and what it means for the next-gen VLSI engineer.',
+        fullDescription: `AI-Powered VLSI: Shaping the Next-Gen Design Verification Engineers
 
-Participants will gain clarity on evolving skill requirements and future industry expectations.
+Explore how Artificial Intelligence is transforming RTL design and verification workflows.
 
-A must-attend discussion for students preparing for careers in chip design and automation-driven environments.`,
+This talk addresses:
+• AI-assisted verification and test generation
+• Automated bug detection and coverage optimization
+• AI-driven PPA prediction and analysis
+• Intelligent regression and simulation acceleration
+• Skills required for next-generation VLSI engineers
+
+Participants will understand how AI is redefining semiconductor design productivity and verification efficiency.`,
         date: 'Thursday, March 19, 2026',
         time: '09:45 AM – 11:00 AM',
         venue: 'Seminar Hall, First Floor, EC Dept., A6 Building, CHARUSAT',
@@ -109,7 +113,7 @@ A must-attend discussion for students preparing for careers in chip design and a
         subtitle: 'What Should I Choose?',
         type: 'Career Guidance',
         icon: GraduationCap,
-        poster: '/images/posters/embedded-vs-vlsi.jpg',
+        poster: '/images/New posters/Final/Embedded vs VLSI What Should I Choose.png',
         prize: 'Career Path',
         description: 'An interactive session designed to help students understand the differences between embedded systems and VLSI domains.',
         fullDescription: `An interactive session designed to help students understand the differences between embedded systems and VLSI domains.
@@ -132,29 +136,28 @@ This session aims to provide clarity for students at early academic stages.`,
     {
         id: 'rtl-gds',
         categoryId: 'workshops',
-        title: 'RTL to GDS II',
-        subtitle: 'Open Source ASIC Design Flow',
+        title: 'Writing Industry-Ready RTL & Self-Checking Testbench',
+        subtitle: 'Code Like a Chip Designer',
         type: 'Advanced Workshop',
         icon: Layers,
-        poster: '/images/posters/rtl-to-gds.jpg',
+        poster: '/images/New posters/Final/Testbench workshop _ Code Like  a Chip Designer.png',
         prize: 'Certificates',
-        description: 'Explore the complete open-source ASIC design flow — from RTL design to GDS II generation. Specifically for 3rd and 4th year students.',
-        fullDescription: `This advanced, hands-on workshop is specifically designed for 3rd and 4th year students with prior knowledge of digital design and HDL concepts.
+        description: 'Hands-on workshop on industry-standard RTL coding practices and modern verification methodologies. For 3rd and 4th year students.',
+        fullDescription: `Writing Industry-Ready RTL & Self-Checking Testbench
 
-Participants will explore the complete open-source ASIC design flow — from RTL design to GDS II generation.
+This workshop focuses on industry-standard RTL coding practices and modern verification methodologies used in semiconductor companies.
 
-Workshop Coverage:
-• RTL design concepts
-• Synthesis using open-source tools
-• Static timing considerations
-• Floorplanning & placement basics
-• Routing and layout generation
-• Understanding GDS II output
+The session covers:
+• Writing clean, synthesizable, and modular RTL
+• Parameterized and scalable design techniques
+• Developing self-checking testbenches
+
+Participants will gain practical exposure to real-world RTL design and verification strategies aligned with current industry expectations.
 
 Recommended For: 3rd and 4th year students only.`,
         date: 'Tuesday, March 17, 2026',
         time: '01:30 PM – 04:30 PM',
-        venue: 'Lab No. 218, First Floor, EC Dept., A6 Building, CHARUSAT',
+        venue: 'Seminar Hall, First Floor, EC Dept., A6 Building, CHARUSAT',
         fee: 'Included',
         rulesUrl: null
     },
@@ -165,7 +168,7 @@ Recommended For: 3rd and 4th year students only.`,
         subtitle: 'Getting Started with Digital Design',
         type: 'Beginner Workshop',
         icon: CircuitBoard,
-        poster: '/images/posters/verilog-fpga.jpg',
+        poster: '/images/New posters/Final/Verilog & FPGA Getting Started with Digital Design.png',
         prize: 'Certificates',
         description: 'Beginner-friendly workshop covering Verilog programming and basic FPGA-based system development for 1st and 2nd year students.',
         fullDescription: `This beginner-friendly workshop is designed for 1st and 2nd year students who want to build a strong foundation in digital hardware design and FPGA implementation.
@@ -196,7 +199,7 @@ Recommended For: 1st and 2nd year students.`,
         subtitle: 'Industry-Driven Idea Pitching',
         type: 'Flagship Event',
         icon: Lightbulb,
-        poster: '/images/posters/silicon-shark-tank.jpg',
+        poster: '/images/New posters/Final/Silicon Shark Tank Industry-Driven Idea Pitching.png',
         prize: 'Internships',
         description: 'Industry-Driven Idea Pitching. Winners get a FREE Internship Opportunity!',
         fullDescription: `This competition is open to undergraduate engineering students, with a maximum of two members per team. Cross-department participation is encouraged, and each team must nominate one Team Leader for official communication. Teams are required to pitch original, innovation-driven ideas related to Semiconductor Design & Technology, VLSI (RTL to GDS, Physical Design, Verification), Embedded Systems & FPGA-based solutions, Hardware–Software Co-Design, AI/ML Accelerators & Edge Computing, Low-Power and High-Performance Design, Semiconductor Manufacturing Challenges, EDA Tools & Automation, or Smart Electronic/System-Level solutions. AI-generated or plagiarized content is strictly prohibited and may lead to disqualification.
@@ -214,16 +217,21 @@ The event consists of two rounds. In Round 1 (Idea Screening), teams must submit
         subtitle: 'Decode the Logic. Hunt the Clues. Complete the Silicon.',
         type: 'Competition',
         icon: Target,
-        poster: '/images/posters/silicon-jackpot.jpg',
-        prize: '₹15,000 Pool',
-        description: 'A multi-stage technical treasure challenge testing semiconductor fundamentals and digital systems.',
-        fullDescription: `The Silicon Jackpot – "Decode the Logic. Hunt the Clues. Complete the Silicon." is a multi-stage technical treasure challenge designed to test students in semiconductor fundamentals and digital systems through knowledge, speed, collaboration, and practical implementation. The event unfolds across three progressive rounds where participants unlock clues, collect technical flags, and ultimately complete the word VLSI, symbolizing mastery in Very Large Scale Integration.
+        poster: '/images/New posters/Final/The Silicon Jackpot Decode the Logic. Hunt the Clues. Complete the Silicon.png',
+        prize: 'Prizes',
+        description: 'An exciting multi-round technical challenge designed to test analytical skills, logic, and hardware understanding.',
+        fullDescription: `The Silicon Jackpot — Decode the Logic. Hunt the Clues. Complete the Silicon.
 
-Round 1, The Silicon Screening – Flag Hunt, is conducted separately for First Year, Second Year, and Third Year students, each receiving curriculum-based technical questions aligned with their academic level. Participants must solve the problem to unlock the first flag containing the letter "V" and a location clue. From each year, the first students to successfully complete the challenge qualify. These qualifiers are then grouped into interdisciplinary teams consisting of one student from each academic year, forming balanced teams. This round evaluates conceptual clarity, speed, accuracy, and individual problem-solving ability.
+An exciting multi-round technical challenge designed to test analytical skills, logic, and hardware understanding.
 
-Round 2, The Logic Conquest – Unified Challenge, brings the 20 teams together at a common location where they face a shared technical problem focused on applied digital logic, analytical reasoning, and teamwork. Upon solving the challenge, teams receive the second flag containing the letter "L" and additional clues to collect the letter "S." Based on accuracy and completion time, only the top teams advance to the final round. This stage assesses collaborative thinking, logical structuring, time management, and technical communication.
+Round 1 — Where Aptitude Meets Adventure
+A high-energy technical aptitude challenge combining problem-solving and logical reasoning.
 
-Round 3, Kaun Banega Summit Samrat – The FPGA Finale, is a KBC-inspired technical showdown where the top 5 teams compete in an FPGA-based quiz featuring progressively complex digital electronics and Verilog questions. Successful teams collect the final flag containing the letter "I," completing the word VLSI. This finale evaluates practical HDL knowledge, hardware understanding, debugging skills, and performance under pressure. The team that excels across all stages and performs best in the FPGA finale will be crowned the Summit Samrat of Silicon, symbolizing their journey from V → L → S → I and their technical excellence in the semiconductor domain.`,
+Round 2 — Decode the Clues, Conquer the Flag
+A clue-based technical hunt designed to test Digital Electronics skills.
+
+Round 3 — Kaun Banega Summit Samrat – The FPGA FaceOff
+No Verilog coding — just Press & Play on FPGA. Participants will compete using hands-on FPGA-based challenges focused on logic implementation and hardware interaction.`,
         date: 'Thursday, March 19, 2026',
         time: '12:10 PM – 03:30 PM',
         venue: 'EC Department, A6 Building, CHARUSAT',
@@ -237,7 +245,7 @@ Round 3, Kaun Banega Summit Samrat – The FPGA Finale, is a KBC-inspired techni
         subtitle: 'Technical Game Arena',
         type: 'Interactive',
         icon: Gamepad2,
-        poster: '/images/posters/silicon-playzone.jpg',
+        poster: '/images/New posters/Final/Silicon PlayZone Technical Game Arena.png',
         prize: 'Merchandise',
         description: 'Hands-On. Minds-On. A dynamic zone designed to make engineering interactive and engaging.',
         fullDescription: `A dynamic zone designed to make engineering interactive and engaging.
@@ -260,12 +268,13 @@ Activities include:
         subtitle: 'Silent Feedback Edition',
         type: 'Exhibition',
         icon: Eye,
-        poster: '/images/posters/silicon-ideas-showcase.jpg',
+        poster: '/images/New posters/Final/Silicon Ideas Showcase Silent Feedback Edition.png',
         prize: 'Best Idea',
-        description: 'Walk Through Innovation. Leave Your Insight. Silent poster exhibition with QR-based digital feedback system.',
-        fullDescription: `Silent Silicon — Innovation Gallery Walk
+        description: 'Technical Poster Presentation & Live Project Demonstration. Walk through innovation and leave your insight.',
+        fullDescription: `Silicon Ideas Showcase — Silent Feedback Edition
+Featuring Technical Poster Presentation & Live Project Demonstration
 
-Students present semiconductor and hardware innovation ideas through poster exhibits. Instead of traditional verbal presentations, participants receive structured written feedback from visitors via sticky notes and digital interaction.
+Students present semiconductor and hardware innovation ideas through poster exhibits and live project demonstrations. Instead of traditional verbal presentations, participants receive structured written feedback from visitors via sticky notes and digital interaction.
 
 Each poster includes a QR code enabling attendees to:
 • Access detailed technical explanations
@@ -286,7 +295,7 @@ Each poster includes a QR code enabling attendees to:
         subtitle: 'Live Demonstration by Monk9',
         type: 'Industry Demo',
         icon: Cpu,
-        poster: '/images/posters/wafer-to-chip.jpg',
+        poster: '/images/New posters/Final/Wafer to Chip Live Demonstration by Monk9.png',
         prize: 'Learning',
         description: 'See How a Chip Comes to Life — From Silicon Wafer to Working Chip. An industry-led demonstration by Monk9.',
         fullDescription: `Wafer to Chip — Live Demonstration by Monk9

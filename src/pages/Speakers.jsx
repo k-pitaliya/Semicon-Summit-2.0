@@ -94,7 +94,7 @@ const Speakers = () => {
                             </div>
                             <div>
                                 <h2>Panel <span className="text-gradient">Discussion</span></h2>
-                                <p className="reveal-subtitle">Fabless Startups & MSMEs: Powering India's Semiconductor Growth</p>
+                                <p className="reveal-subtitle">Fabless Semiconductor Innovation: RTL to ASIC / SoC Implementation</p>
                             </div>
                         </div>
 
@@ -143,13 +143,13 @@ const Speakers = () => {
                                 <Building2 size={16} />
                                 <span>Industry Experts</span>
                             </div>
-                            <h3>Expert instructors for RTL to GDS II and Verilog & FPGA workshops</h3>
-                            <p>Workshop leaders with extensive industry experience will guide participants through hands-on sessions covering complete ASIC design flow and FPGA implementation.</p>
+                            <h3>Expert instructors for RTL &amp; Self-Checking Testbench and Verilog &amp; FPGA workshops</h3>
+                            <p>Workshop leaders with extensive industry experience will guide participants through hands-on sessions covering industry-ready RTL design, self-checking verification, and FPGA implementation.</p>
 
                             <div className="speaker-profile-grid">
                                 {[
-                                    { name: 'Vaibhav Joshi', role: 'VLSI Engineer – Monk9 Tech', photo: '/images/panelists/vaibhav-joshi.jpeg' },
-                                    { name: 'Anushka Tripathi', role: 'VLSI Engineer – Monk9 Tech', photo: '/images/panelists/anushka-tripathi.jpeg' }
+                                    { name: 'Kaushal Modi', role: 'Associate Director (Design Verification) · eInfochips (An Arrow Company)', photo: '/images/panelists/Kausal_Modi.jpeg' },
+                                    { name: 'Ashish Christain', role: 'Senior Design Verification Engineer · eInfochips (An Arrow Company)', photo: '/images/panelists/Ashish_Christain.jpeg' }
                                 ].map((instructor, i) => (
                                     <div key={i} className="speaker-profile-card" style={{ animationDelay: `${i * 0.2}s` }}>
                                         <div className="speaker-profile-photo-wrap">

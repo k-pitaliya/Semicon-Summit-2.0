@@ -49,7 +49,7 @@ const Landing = () => {
     ]
 
     const features = [
-        { icon: BookOpen, title: 'Industry-Led Workshops', description: 'Hands-on sessions from RTL to GDS II flow and FPGA design under expert guidance.' },
+        { icon: BookOpen, title: 'Industry-Led Workshops', description: 'Hands-on RTL & Self-Checking Testbench and FPGA sessions under expert guidance.' },
         { icon: Mic2, title: 'Panel Discussions', description: 'Insightful conversations with leaders from the semiconductor ecosystem.' },
         { icon: Trophy, title: 'Technical Competitions', description: 'Silicon Shark Tank, treasure hunts, and innovation challenges.' },
         { icon: Handshake, title: 'Executive Networking', description: 'Connect with industry experts, peers, and potential employers.' }
@@ -57,7 +57,7 @@ const Landing = () => {
 
     const whyAttend = [
         { icon: Zap, title: 'Structured Industry Exposure', description: 'Gain insights from panel discussions and expert sessions with industry leaders.' },
-        { icon: Sparkles, title: 'Practical Learning', description: 'Hands-on workshops covering RTL to GDS II flow and FPGA design.' },
+        { icon: Sparkles, title: 'Practical Learning', description: 'Hands-on workshops covering Industry-Ready RTL & Testbench and FPGA design.' },
         { icon: Target, title: 'Career Clarity', description: 'Guidance on choosing between Embedded Systems and VLSI domains.' },
         { icon: Users, title: 'Networking Opportunities', description: 'Connect with peers, mentors, and potential employers.' }
     ]

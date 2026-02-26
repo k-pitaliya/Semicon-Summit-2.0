@@ -2,12 +2,12 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const logger = require('../utils/logger');
 
-// Validate JWT_SECRET in production
-const JWT_SECRET = process.env.JWT_SECRET || 'semiconductor_summit_2026_secret_key';
-if (!process.env.JWT_SECRET && process.env.NODE_ENV === 'production') {
-    logger.error('CRITICAL: JWT_SECRET is not set in production environment!');
-    throw new Error('JWT_SECRET must be set in production');
+// JWT_SECRET is required in ALL environments — no insecure fallback
+if (!process.env.JWT_SECRET) {
+    logger.error('CRITICAL: JWT_SECRET environment variable is not set!');
+    throw new Error('JWT_SECRET must be set in all environments. Set it in your .env file.');
 }
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
@@ -36,8 +36,8 @@ const authenticate = async (req, res, next) => {
 
             // Check if password has expired (password rotation)
             if (user.passwordExpiresAt && new Date() > user.passwordExpiresAt) {
-                return res.status(401).json({ 
-                    error: 'Password expired', 
+                return res.status(401).json({
+                    error: 'Password expired',
                     message: 'Your password has expired. Please reset your password.',
                     passwordExpired: true
                 });
@@ -47,25 +47,8 @@ const authenticate = async (req, res, next) => {
             req.token = token;
             next();
         } catch (jwtError) {
-            // Fallback: check if token is a valid MongoDB ObjectId (backward compatibility)
-            const mongoose = require('mongoose');
-            if (mongoose.Types.ObjectId.isValid(token)) {
-                const user = await User.findById(token);
-                if (user) {
-                    // Check password expiration for old tokens too
-                    if (user.passwordExpiresAt && new Date() > user.passwordExpiresAt) {
-                        return res.status(401).json({ 
-                            error: 'Password expired', 
-                            message: 'Your password has expired. Please reset your password.',
-                            passwordExpired: true
-                        });
-                    }
-                    req.user = user;
-                    req.token = token;
-                    return next();
-                }
-            }
-            return res.status(401).json({ error: 'Token is not valid' });
+            // Token is invalid or expired — no ObjectId fallback (security: prevents auth bypass)
+            return res.status(401).json({ error: 'Token is not valid or has expired. Please log in again.' });
         }
     } catch (error) {
         logger.error('Auth middleware error:', error);

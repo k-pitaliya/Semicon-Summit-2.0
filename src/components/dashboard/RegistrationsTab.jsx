@@ -136,11 +136,11 @@ const RegistrationsTab = ({
                                 const ec = participant.eventChoices || {};
                                 const badges = [];
                                 if (ec.panelDiscussion) badges.push({ label: 'Panel Disc.', color: '#3b82f6' });
-                                if (ec.day1Workshop === 'rtl-gds') badges.push({ label: 'RTL→GDS', color: '#8b5cf6' });
+                                if (ec.day1Workshop === 'rtl-gds') badges.push({ label: 'RTL & Testbench', color: '#8b5cf6' });
                                 else if (ec.day1Workshop === 'fpga') badges.push({ label: 'FPGA', color: '#8b5cf6' });
                                 if (ec.expertInsights) badges.push({ label: 'Expert Talk', color: '#f59e0b' });
                                 if (ec.sharkTank) badges.push({ label: 'Shark Tank', color: '#ef4444' });
-                                if (ec.aiInVlsi) badges.push({ label: 'AI in VLSI', color: '#f59e0b' });
+                                if (ec.aiInVlsi) badges.push({ label: 'AI-Powered VLSI', color: '#f59e0b' });
                                 if (ec.treasureHunt) badges.push({ label: 'Jackpot', color: '#ec4899' });
                                 if (ec.silentGallery) badges.push({ label: 'Gallery', color: '#06b6d4' });
 

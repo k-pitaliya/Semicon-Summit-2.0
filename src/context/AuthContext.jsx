@@ -21,12 +21,18 @@ export const AuthProvider = ({ children }) => {
         if (storedUser) {
             try {
                 const parsedUser = JSON.parse(storedUser)
-                // Validate token with backend
-                const token = parsedUser.token || parsedUser._id
+                // Use only the real JWT token — never fall back to _id (security: prevents auth bypass)
+                const token = parsedUser.token
+                if (!token) {
+                    // No valid JWT stored — clear and force re-login
+                    localStorage.removeItem('summitUser')
+                    setLoading(false)
+                    return
+                }
                 authAPI.validateToken(token)
                     .then(validatedUser => {
-                        // Preserve the token from stored data
-                        validatedUser.token = parsedUser.token || parsedUser._id
+                        // Preserve the JWT token from stored data
+                        validatedUser.token = parsedUser.token
                         setUser(validatedUser)
                     })
                     .catch(() => {
