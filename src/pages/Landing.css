@@ -264,6 +264,41 @@
     background: var(--border-default);
 }
 
+/* Hero CTA Inline — visible above the fold */
+.hero-cta-inline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.875rem;
+    flex-wrap: wrap;
+    margin-top: 2.5rem;
+}
+
+.hero-register-btn {
+    font-size: 1.05rem;
+    font-weight: 700;
+    padding: 0.875rem 2rem !important;
+    border-radius: 14px !important;
+    box-shadow:
+        0 0 20px rgba(34, 197, 94, 0.35),
+        0 4px 15px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+}
+
+.hero-register-btn:hover {
+    box-shadow:
+        0 0 40px rgba(34, 197, 94, 0.55),
+        0 8px 25px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px);
+}
+
+.hero-events-btn {
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.875rem 1.5rem !important;
+    border-radius: 14px !important;
+}
+
 /* ────────────────────────────────
    HERO CTA CARD — "Ready to Join"
    ──────────────────────────────── */

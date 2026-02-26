@@ -59,12 +59,12 @@ const Speakers = () => {
                             <p>Our industry sharks are top leaders from the semiconductor ecosystem. Their profiles will be revealed in a series of announcements leading up to the summit.</p>
                             <div className="reveal-phases">
                                 <div className="reveal-phase">
-                                    <div className="phase-dot active" />
-                                    <span>Phase 1 — Coming Soon</span>
+                                    <div className="phase-dot active" style={{ background: '#22c55e', borderColor: '#22c55e' }} />
+                                    <span style={{ color: '#4ade80', fontWeight: 600 }}>Phase 1 — ✓ Revealed</span>
                                 </div>
                                 <div className="reveal-phase">
-                                    <div className="phase-dot" />
-                                    <span>Phase 2 — March 2026</span>
+                                    <div className="phase-dot active" />
+                                    <span style={{ color: '#4ade80', fontWeight: 600 }}>Phase 2 — Active (March 2026)</span>
                                 </div>
                                 <div className="reveal-phase">
                                     <div className="phase-dot" />

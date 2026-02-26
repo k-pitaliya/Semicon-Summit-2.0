@@ -120,6 +120,16 @@ const Landing = () => {
                             <span>Electronics and Communication Department (A6 Building), CHARUSAT</span>
                         </div>
                     </div>
+
+                    {/* Hero CTA — visible above the fold */}
+                    <div className="hero-cta-inline hero-animate hero-animate-delay-4">
+                        <Link to="/register" className="btn btn-primary btn-lg hero-register-btn">
+                            Register Now — ₹299 <ArrowRight size={20} />
+                        </Link>
+                        <Link to="/events" className="btn btn-secondary hero-events-btn">
+                            <Eye size={18} /> View Events
+                        </Link>
+                    </div>
                 </div>
 
                 <div className="hero-floating">
