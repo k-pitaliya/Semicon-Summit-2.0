@@ -68,7 +68,7 @@ const FACULTY_CO_COORDINATORS = [
 
 const CORE_LEADS = [
     { name: 'Dhruv Rupapara', role: null, designation: 'Core Head', image: "/images/members/coords/Dhruv_Ruppapara.jpg", icon: <Star size={16} /> },
-    { name: 'Dhruti Panchal', role: null, designation: 'Core Head', image: "/images/members/coords/Dhruti_Panchal_head.jpg", icon: <Palette size={16} /> },
+    { name: 'Dhruti Panchal', role: null, designation: 'Core Head', image: "/images/members/coords/Dhruti_Panchal.jpg", icon: <Palette size={16} /> },
 ];
 
 const CORE_COMMITTEE = [
