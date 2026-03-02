@@ -33,6 +33,7 @@ const galleryRoutes = require('./routes/galleryRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const webhookRoutes = require('./routes/webhookRoutes');
 const paymentVerificationRoutes = require('./routes/paymentVerificationRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -152,6 +153,7 @@ app.use('/api/events', eventRoutes);
 app.use('/api/announcements', announcementRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/uploads', uploadRoutes);
+app.use('/api/contact', contactRoutes);
 
 // ==========================================
 // PUBLIC REGISTRATION (kept inline for PDF receipt handling)

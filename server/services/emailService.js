@@ -399,10 +399,62 @@ const sendPasswordResetEmail = async (user, newPassword) => {
   }
 };
 
+// ── Contact Form Email ──────────────────────────────────────────────────────
+// Sends an email to the summit team whenever someone submits the contact form.
+const sendContactEmail = async ({ name, email, subject, message }) => {
+  const contentHtml = `
+    <h2 style="margin:0 0 8px;font-family:Arial,sans-serif;font-size:20px;font-weight:700;color:#0f172a;">
+      📩 New Contact Form Submission
+    </h2>
+    <p style="margin:0 0 24px;font-family:Arial,sans-serif;font-size:14px;color:#64748b;">
+      Someone submitted the contact form on the Semiconductor Summit 2.0 website.
+    </p>
+
+    ${sectionCard('Sender Details', `
+      ${credentialBox('Name', name, false)}
+      ${credentialBox('Email', email, false)}
+    `, '#22c55e')}
+
+    ${sectionCard('Message', `
+      ${credentialBox('Subject', subject, false)}
+      <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+        <tr>
+          <td style="padding:14px 16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;">
+            <p style="margin:0 0 4px;font-family:Arial,sans-serif;font-size:11px;font-weight:600;
+              color:#64748b;text-transform:uppercase;letter-spacing:0.08em;">Message</p>
+            <p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:#0f172a;
+              line-height:1.6;white-space:pre-wrap;">${message.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
+          </td>
+        </tr>
+      </table>
+    `, '#22c55e')}
+
+    <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;color:#94a3b8;text-align:center;">
+      Reply directly to <strong>${email}</strong> to respond to this inquiry.
+    </p>
+  `;
+
+  const html = baseTemplate({ accentColor: '#22c55e', contentHtml });
+
+  try {
+    await sendMail({
+      to: EMAIL_USER, // sends to semisummit.ec@charusat.ac.in
+      subject: `[Semicon Summit] Contact: ${subject}`,
+      html
+    });
+    console.log(`✅ Contact form email received from ${email}`);
+    return true;
+  } catch (err) {
+    console.error(`❌ Contact email failed: ${err.message}`);
+    return false;
+  }
+};
+
 module.exports = {
   generatePassword,
   sendCredentialsEmail,
   sendRejectionEmail,
   sendPasswordResetEmail,
+  sendContactEmail,
   verifyEmailTransporter
 };

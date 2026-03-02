@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Send, CheckCircle, ArrowRight } from 'lucide-react';
+import axios from 'axios';
+import { Mail, Phone, MapPin, Send, CheckCircle, ArrowRight, AlertCircle } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ParticleField from '../components/ParticleField';
@@ -28,12 +29,18 @@ const Contact = () => {
         setLoading(true);
         setFormStatus({ submitted: false, error: '' });
 
-        // Simulate form submission (replace with actual API call)
-        setTimeout(() => {
+        try {
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+            await axios.post(`${apiUrl}/contact`, formData);
             setFormStatus({ submitted: true, error: '' });
-            setLoading(false);
             setFormData({ name: '', email: '', subject: '', message: '' });
-        }, 1500);
+        } catch (err) {
+            const msg = err.response?.data?.error ||
+                'Something went wrong. Please email us directly at semisummit.ec@charusat.ac.in';
+            setFormStatus({ submitted: false, error: msg });
+        } finally {
+            setLoading(false);
+        }
     };
 
     const venue = {
@@ -179,8 +186,9 @@ const Contact = () => {
                                 </div>
 
                                 {formStatus.error && (
-                                    <div className="error-message">
-                                        {formStatus.error}
+                                    <div className="error-message" style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+                                        <AlertCircle size={18} style={{ flexShrink: 0, marginTop: '2px' }} />
+                                        <span>{formStatus.error}</span>
                                     </div>
                                 )}
 
