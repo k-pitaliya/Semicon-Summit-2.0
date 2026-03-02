@@ -17,6 +17,7 @@ const Speakers = lazy(() => import('./pages/Speakers'))
 const About = lazy(() => import('./pages/About'))
 const Contact = lazy(() => import('./pages/Contact'))
 const Committee = lazy(() => import('./pages/Committee'))
+const Travel = lazy(() => import('./pages/Travel'))
 const ParticipantDashboard = lazy(() => import('./pages/ParticipantDashboard'))
 const CoordinatorDashboard = lazy(() => import('./pages/CoordinatorDashboard'))
 const FacultyDashboard = lazy(() => import('./pages/FacultyDashboard'))
@@ -46,6 +47,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/committee" element={<Committee />} />
+          <Route path="/travel" element={<Travel />} />
 
           {/* Protected Routes */}
           <Route
