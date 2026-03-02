@@ -10,6 +10,7 @@
         "seed:fresh": "node seeders/seed.js --fresh",
         "seed:users": "node seeders/seed.js --users",
         "seed:gallery": "node seeders/seed.js --gallery",
+        "seed:faculty": "node seeders/seed_faculty.js",
         "test": "jest --coverage --detectOpenHandles",
         "test:watch": "jest --watch",
         "test:announcements": "jest tests/announcement.test.js"

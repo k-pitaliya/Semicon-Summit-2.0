@@ -290,6 +290,26 @@ app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) =
 
         await user.save();
 
+        // ── Auto-assign sequential registration ID (SS26-001, SS26-002, …) ──────
+        try {
+            const lastUser = await User.findOne(
+                { role: 'participant', registrationId: { $exists: true, $ne: null } },
+                { registrationId: 1 },
+                { sort: { registrationId: -1 } }
+            );
+            let nextNum = 1;
+            if (lastUser?.registrationId) {
+                const match = lastUser.registrationId.match(/SS26-(\d+)/);
+                if (match) nextNum = parseInt(match[1], 10) + 1;
+            }
+            user.registrationId = `SS26-${String(nextNum).padStart(3, '0')}`;
+            await user.save();
+            logger.info('Registration ID assigned', { registrationId: user.registrationId, userId: user._id });
+        } catch (idError) {
+            // Non-fatal — participant can still function, backfill can fix later
+            logger.error('Failed to assign registrationId', { error: idError.message, userId: user._id });
+        }
+
         // Send email asynchronously (don't block response)
         sendCredentialsEmail(user, password)
             .then((emailSent) => {
@@ -299,7 +319,7 @@ app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) =
                 logger.error('Email sending failed (async)', { error: emailError, userId: user._id });
             });
 
-        logger.info('User registered and auto-approved', { userId: user._id, email: user.email });
+        logger.info('User registered and auto-approved', { userId: user._id, email: user.email, registrationId: user.registrationId });
 
         res.status(201).json({
             message: 'Registration successful! Check your email for login credentials.',
@@ -461,48 +481,7 @@ app.post('/api/admin/backfill-registration-ids', authenticate, authorize('facult
     }
 });
 
-// ==========================================
-// SEED DATABASE WITH DEMO DATA (dev-only, faculty auth required)
-// ==========================================
-app.post('/api/seed', authenticate, authorize('faculty'), async (req, res) => {
-    try {
-        const demoUsers = [
-            { name: 'John Participant', email: 'participant@demo.com', password: 'demo123', role: 'participant', college: 'Tech University', phone: '9876543210' },
-            { name: 'Jane Coordinator', email: 'coordinator@demo.com', password: 'demo123', role: 'coordinator' },
-            { name: 'Dr. Faculty', email: 'faculty@demo.com', password: 'demo123', role: 'faculty' }
-        ];
-
-        for (const userData of demoUsers) {
-            const exists = await User.findOne({ email: userData.email });
-            if (!exists) {
-                const user = new User(userData);
-                await user.save();
-                logger.info('Created demo user', { email: userData.email });
-            }
-        }
-
-        const demoEvents = [
-            { title: 'VLSI Design Workshop', description: 'Learn VLSI design fundamentals', date: new Date('2026-03-15'), time: '10:00 AM', venue: 'Hall A', category: 'workshop', capacity: 100, registrationFee: 400 },
-            { title: 'Chip Architecture Talk', description: 'Expert talk on modern chip architectures', date: new Date('2026-03-15'), time: '2:00 PM', venue: 'Hall B', category: 'talk', capacity: 200, registrationFee: 0 },
-            { title: 'Embedded Systems Hackathon', description: '24-hour hackathon', date: new Date('2026-03-16'), time: '9:00 AM', venue: 'Lab 1', category: 'hackathon', capacity: 50, registrationFee: 200 },
-            { title: 'Industry Panel Discussion', description: 'Panel with industry leaders', date: new Date('2026-03-16'), time: '4:00 PM', venue: 'Main Hall', category: 'networking', capacity: 300, registrationFee: 0 }
-        ];
-
-        for (const eventData of demoEvents) {
-            const exists = await Event.findOne({ title: eventData.title });
-            if (!exists) {
-                const event = new Event(eventData);
-                await event.save();
-                logger.info('Created demo event', { title: eventData.title });
-            }
-        }
-
-        res.json({ success: true, message: 'Demo data seeded successfully' });
-    } catch (error) {
-        logger.error('Seed error:', error);
-        res.status(500).json({ error: 'Seed failed: ' + error.message });
-    }
-});
+// (seed-faculty and demo-seed endpoints removed — no longer needed in production)
 
 // ==========================================
 // HEALTH CHECK

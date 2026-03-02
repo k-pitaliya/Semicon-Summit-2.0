@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+// Default to port 3001 (server/.env PORT=3001). Override via VITE_API_URL in .env.local for prod.
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
 
 // Create axios instance
 const api = axios.create({
@@ -18,12 +19,10 @@ api.interceptors.request.use((config) => {
             const user = JSON.parse(userData)
             if (user.token) {
                 config.headers.Authorization = `Bearer ${user.token}`
-            } else if (user._id) {
-                // Backward compatibility: use _id as token
-                config.headers.Authorization = `Bearer ${user._id}`
             }
+            // Note: _id-as-token fallback removed — JWT is always required (security)
         } catch (e) {
-            // Invalid JSON in storage
+            // Invalid JSON in storage — ignore
         }
     }
     return config
