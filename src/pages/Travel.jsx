@@ -36,8 +36,8 @@ const ACCOMMODATION = [
         mapUrl: 'https://maps.app.goo.gl/z2SWS7D2GYKDQTr16',
         description: 'Comfortable and economical accommodation available on a sharing basis.',
         pricing: [
-            { label: 'AC Room', price: '₹800', note: 'per person' },
-            { label: 'Non-AC Room', price: '₹500', note: 'per person' },
+            { label: 'AC Room', price: '₹800', note: 'per room · up to 4 persons' },
+            { label: 'Non-AC Room', price: '₹500', note: 'per room · up to 4 persons' },
         ],
         deposit: 'Security Deposit: Applicable (Refundable at checkout)',
         note: 'All room booking arrangements must be made personally by the participants.'
@@ -295,9 +295,13 @@ const Travel = () => {
                                     <div className="accom-pricing">
                                         {place.pricing.map((p, i) => (
                                             <div key={i} className="price-row">
-                                                <span className="price-label">{p.label}</span>
-                                                <span className="price-value" style={{ color: place.color }}>{p.price}</span>
-                                                <span className="price-note">{p.note}</span>
+                                                <div className="price-left">
+                                                    <span className="price-label">{p.label}</span>
+                                                    <span className="price-note">{p.note}</span>
+                                                </div>
+                                                <div className="price-right">
+                                                    <span className="price-value" style={{ color: place.color }}>{p.price}</span>
+                                                </div>
                                             </div>
                                         ))}
                                         {place.deposit && (
