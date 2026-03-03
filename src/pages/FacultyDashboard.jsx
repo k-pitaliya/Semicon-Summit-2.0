@@ -191,6 +191,21 @@ const FacultyDashboard = () => {
         }
     }
 
+    // Resend credentials email from the Email Failed alert banner
+    const handleResendEmail = async (userId, userEmail) => {
+        try {
+            const res = await api.post(`/participants/${userId}/resend-credentials`)
+            if (res.data.emailSent) {
+                alert(`✅ Credentials emailed to ${userEmail}`)
+            } else {
+                alert(`⚠️ Email delivery failed again.\nNew password: ${res.data.newPassword}\nShare this manually with ${userEmail}`)
+            }
+            await fetchData() // Refresh to clear the alert banner if email succeeded
+        } catch (err) {
+            alert('Resend failed: ' + (err.response?.data?.error || err.message))
+        }
+    }
+
 
     const handleExport = () => {
         setActionLoading('export');
@@ -458,6 +473,7 @@ const FacultyDashboard = () => {
                             events={events}
                             handleExport={handleExport}
                             handleBackfillIds={handleBackfillIds}
+                            onResendEmail={handleResendEmail}
                         />
                     )}
 

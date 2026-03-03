@@ -156,6 +156,14 @@ const userSchema = new mongoose.Schema({
     paymentReference: {
         type: String
     },
+    // Email delivery tracking — set after registration / re-send
+    credentialsEmailSent: {
+        type: Boolean,
+        default: false
+    },
+    credentialsEmailFailedAt: {
+        type: Date
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -178,7 +186,7 @@ userSchema.pre('save', async function () {
 
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-    
+
     // Set password expiration date if rotation is enabled
     if (this.isModified('password') && this.passwordRotationDays > 0) {
         this.passwordChangedAt = new Date();

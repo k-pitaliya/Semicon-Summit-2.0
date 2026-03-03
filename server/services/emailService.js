@@ -68,6 +68,28 @@ const sendMail = async ({ to, subject, html }) => {
   }
 };
 
+// ── Retry wrapper — up to 3 attempts with exponential back-off ───────────────
+// Delays: 1 s → 2 s → 4 s  (covers transient Gmail API / network blips)
+const sendWithRetry = async (mailOpts, maxAttempts = 3) => {
+  let lastErr;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      await sendMail(mailOpts);
+      return true; // success
+    } catch (err) {
+      lastErr = err;
+      if (attempt < maxAttempts) {
+        const delay = Math.pow(2, attempt - 1) * 1000; // 1000, 2000, 4000 ms
+        console.warn(`⚠️  Email attempt ${attempt}/${maxAttempts} failed — retrying in ${delay / 1000}s…`);
+        await new Promise(r => setTimeout(r, delay));
+      }
+    }
+  }
+  console.error(`❌ Email failed after ${maxAttempts} attempts: ${lastErr?.message}`);
+  return false; // all attempts exhausted
+};
+
+
 // ── Shared base template (table-based for email client compat) ─────────────
 // accentColor: top accent bar color  |  headerBg: header background
 const baseTemplate = ({ accentColor, contentHtml }) => `
@@ -310,18 +332,17 @@ const sendCredentialsEmail = async (user, password) => {
 
   const html = baseTemplate({ accentColor: '#2563eb', contentHtml });
 
-  try {
-    await sendMail({
-      to: user.email,
-      subject: 'Your Semiconductor Summit 2.0 Login Credentials',
-      html
-    });
+  const sent = await sendWithRetry({
+    to: user.email,
+    subject: 'Your Semiconductor Summit 2.0 Login Credentials',
+    html
+  });
+  if (sent) {
     console.log(`✅ Credentials email sent to ${user.email}`);
-    return true;
-  } catch (err) {
-    console.error(`❌ Credentials email failed: ${err.message}`);
-    return false;
+  } else {
+    console.error(`❌ Credentials email failed for ${user.email} after all retries`);
   }
+  return sent;
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -349,18 +370,14 @@ const sendRejectionEmail = async (user, reason) => {
 
   const html = baseTemplate({ accentColor: '#ef4444', contentHtml });
 
-  try {
-    await sendMail({
-      to: user.email,
-      subject: 'Semiconductor Summit 2.0 - Registration Status Update',
-      html
-    });
-    console.log(`✅ Rejection email sent to ${user.email}`);
-    return true;
-  } catch (err) {
-    console.error(`❌ Rejection email failed: ${err.message}`);
-    return false;
-  }
+  const sent = await sendWithRetry({
+    to: user.email,
+    subject: 'Semiconductor Summit 2.0 - Registration Status Update',
+    html
+  });
+  if (sent) console.log(`✅ Rejection email sent to ${user.email}`);
+  else console.error(`❌ Rejection email failed for ${user.email}`);
+  return sent;
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -385,18 +402,14 @@ const sendPasswordResetEmail = async (user, newPassword) => {
 
   const html = baseTemplate({ accentColor: '#7c3aed', contentHtml });
 
-  try {
-    await sendMail({
-      to: user.email,
-      subject: 'Semiconductor Summit 2.0 - Your Password Has Been Reset',
-      html
-    });
-    console.log(`✅ Password reset email sent to ${user.email}`);
-    return true;
-  } catch (err) {
-    console.error(`❌ Password reset email failed: ${err.message}`);
-    return false;
-  }
+  const sent = await sendWithRetry({
+    to: user.email,
+    subject: 'Semiconductor Summit 2.0 - Your Password Has Been Reset',
+    html
+  });
+  if (sent) console.log(`✅ Password reset email sent to ${user.email}`);
+  else console.error(`❌ Password reset email failed for ${user.email}`);
+  return sent;
 };
 
 // ── Contact Form Email ──────────────────────────────────────────────────────
@@ -436,18 +449,14 @@ const sendContactEmail = async ({ name, email, subject, message }) => {
 
   const html = baseTemplate({ accentColor: '#22c55e', contentHtml });
 
-  try {
-    await sendMail({
-      to: EMAIL_USER, // sends to semisummit.ec@charusat.ac.in
-      subject: `[Semicon Summit] Contact: ${subject}`,
-      html
-    });
-    console.log(`✅ Contact form email received from ${email}`);
-    return true;
-  } catch (err) {
-    console.error(`❌ Contact email failed: ${err.message}`);
-    return false;
-  }
+  const sent = await sendWithRetry({
+    to: EMAIL_USER,
+    subject: `[Semicon Summit] Contact: ${subject}`,
+    html
+  });
+  if (sent) console.log(`✅ Contact form email received from ${email}`);
+  else console.error(`❌ Contact email failed from ${email}`);
+  return sent;
 };
 
 module.exports = {

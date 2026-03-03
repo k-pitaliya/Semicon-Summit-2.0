@@ -116,6 +116,8 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
                     paymentRef: user.razorpayPaymentId || user.paymentReference || userRegs[0]?.paymentReference || 'N/A',
                     paymentAmount: user.paymentAmount || 299,
                     verificationStatus: user.verificationStatus || 'approved',
+                    credentialsEmailSent: user.credentialsEmailSent ?? null,
+                    credentialsEmailFailedAt: user.credentialsEmailFailedAt || null,
                     timestamp: user.createdAt
                 };
             });
@@ -280,6 +282,15 @@ router.post('/:id/resend-credentials', authenticate, authorize('faculty', 'coord
         await user.save();
 
         const emailSent = await sendCredentialsEmail(user, password);
+
+        // Persist delivery status so faculty dashboard stays accurate
+        user.credentialsEmailSent = emailSent;
+        if (emailSent) {
+            user.credentialsEmailFailedAt = undefined;
+        } else {
+            user.credentialsEmailFailedAt = new Date();
+        }
+        await user.save();
 
         console.log(`📧 Credentials resent to ${user.email} (emailSent=${emailSent})`);
         res.json({

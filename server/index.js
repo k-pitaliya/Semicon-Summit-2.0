@@ -310,16 +310,31 @@ app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) =
             logger.error('Failed to assign registrationId', { error: idError.message, userId: user._id });
         }
 
-        // Send email asynchronously (don't block response)
-        sendCredentialsEmail(user, password)
-            .then((emailSent) => {
-                logger.info('Credentials email sent', { success: emailSent, userId: user._id });
-            })
-            .catch((emailError) => {
-                logger.error('Email sending failed (async)', { error: emailError, userId: user._id });
-            });
+        // Send email — with retry (3 attempts, exponential back-off)
+        // Awaited so we can mark success/failure on the user record
+        let emailSent = false;
+        try {
+            emailSent = await sendCredentialsEmail(user, password);
+        } catch (emailError) {
+            // sendCredentialsEmail already retries internally; this catch is a final safety net
+            logger.error('Credentials email failed after all retries', { error: emailError.message, userId: user._id });
+        }
 
-        logger.info('User registered and auto-approved', { userId: user._id, email: user.email, registrationId: user.registrationId });
+        // Persist email delivery status so faculty dashboard can surface failures
+        try {
+            user.credentialsEmailSent = emailSent;
+            if (!emailSent) user.credentialsEmailFailedAt = new Date();
+            await user.save();
+        } catch (saveErr) {
+            logger.error('Failed to persist email status on user', { error: saveErr.message, userId: user._id });
+        }
+
+        logger.info('User registered and auto-approved', {
+            userId: user._id,
+            email: user.email,
+            registrationId: user.registrationId,
+            credentialsEmailSent: emailSent
+        });
 
         res.status(201).json({
             message: 'Registration successful! Check your email for login credentials.',
