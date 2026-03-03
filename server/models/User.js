@@ -157,9 +157,9 @@ const userSchema = new mongoose.Schema({
         type: String
     },
     // Email delivery tracking — set after registration / re-send
+    // No default: null means "unknown" (old record), false = failed, true = sent
     credentialsEmailSent: {
-        type: Boolean,
-        default: false
+        type: Boolean
     },
     credentialsEmailFailedAt: {
         type: Date
