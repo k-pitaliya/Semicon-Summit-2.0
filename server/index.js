@@ -323,6 +323,10 @@ app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) =
 
         res.status(201).json({
             message: 'Registration successful! Check your email for login credentials.',
+            // Return plaintext password so the success screen can show it
+            // (only shown once on screen — never stored in plaintext in DB)
+            password: password,
+            registrationId: user.registrationId,
             user: {
                 id: user._id,
                 name: user.name,
