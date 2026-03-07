@@ -248,12 +248,21 @@ app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) =
                 pdfText = pdfData.text;
                 logger.debug('PDF text extracted', { length: pdfText.length });
 
-                const escapedId = normalizedPaymentId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                const paymentIdRegex = new RegExp(escapedId, 'i');
-                if (!paymentIdRegex.test(pdfText)) {
-                    // Clean up uploaded file before returning error
-                    try { fs.unlinkSync(pdfFile.path); } catch (_) { }
-                    return res.status(400).json({ error: 'Payment ID not found in the uploaded PDF. Please verify the Payment ID and try again.' });
+                if (pdfText.trim().length < 30) {
+                    // PDF is mostly image-based (scanned / QR-only Razorpay receipt).
+                    // We cannot extract text, so skip automated verification and
+                    // let faculty review the uploaded screenshot manually.
+                    logger.warn('PDF text too short — image-only PDF, skipping auto-verification', {
+                        paymentId: normalizedPaymentId, textLength: pdfText.trim().length
+                    });
+                } else {
+                    const escapedId = normalizedPaymentId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    const paymentIdRegex = new RegExp(escapedId, 'i');
+                    if (!paymentIdRegex.test(pdfText)) {
+                        // Clean up uploaded file before returning error
+                        try { fs.unlinkSync(pdfFile.path); } catch (_) { }
+                        return res.status(400).json({ error: 'Payment ID not found in the uploaded PDF. Please make sure you entered the correct Payment ID (starts with pay_) and uploaded the right receipt. Alternatively, upload a screenshot image of your receipt.' });
+                    }
                 }
             } catch (pdfError) {
                 logger.error('PDF parsing error:', pdfError);
@@ -515,6 +524,38 @@ app.get('/api/health', (req, res) => {
         timestamp: new Date().toISOString(),
         database: 'MongoDB',
         cloudinary: !!(process.env.CLOUDINARY_CLOUD_NAME)
+    });
+});
+
+// ==========================================
+// GLOBAL ERROR HANDLER — must be last, after all routes
+// Catches multer errors (file-too-large, wrong type) and any other
+// unhandled errors and returns clean JSON instead of HTML.
+// ==========================================
+app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
+    // Clean up any partially uploaded file so disk stays clean
+    if (req.file?.path) {
+        try { fs.unlinkSync(req.file.path); } catch (_) {}
+    }
+
+    // Multer: file exceeds size limit
+    if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({ error: 'File is too large. Maximum allowed size is 10 MB.' });
+    }
+
+    // Multer: fileFilter rejected the type
+    if (err.message && (err.message.includes('Only PDF') || err.message.includes('image screenshots'))) {
+        return res.status(400).json({ error: 'Invalid file type. Please upload a PDF receipt or an image screenshot (JPG/PNG).' });
+    }
+
+    // CORS rejection
+    if (err.message === 'Not allowed by CORS') {
+        return res.status(403).json({ error: 'CORS: origin not allowed.' });
+    }
+
+    logger.error('Unhandled server error:', { message: err.message, code: err.code, stack: err.stack });
+    res.status(err.status || err.statusCode || 500).json({
+        error: err.message || 'Something went wrong on our end. Please try again.'
     });
 });
 

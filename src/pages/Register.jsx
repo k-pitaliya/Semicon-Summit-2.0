@@ -119,6 +119,9 @@ const Register = () => {
         setError('');
         setLoadingMessage('Uploading receipt...');
 
+        // Keep track of timers so we can cancel them on completion
+        const timers = [];
+
         try {
             const data = new FormData();
             data.append('name', formData.name.trim());
@@ -142,22 +145,34 @@ const Register = () => {
                 silentGallery: formData.silentGallery === 'yes',
             }));
 
-            setTimeout(() => setLoadingMessage('Verifying payment receipt...'), 500);
-            setTimeout(() => setLoadingMessage('Finalizing your registration...'), 2000);
+            // Progressive loading messages — spaced out to match real server processing time
+            timers.push(setTimeout(() => setLoadingMessage('Verifying payment receipt...'), 4000));
+            timers.push(setTimeout(() => setLoadingMessage('Creating your account...'), 12000));
+            timers.push(setTimeout(() => setLoadingMessage('Sending confirmation email...'), 22000));
+            timers.push(setTimeout(() => setLoadingMessage('Almost done, please wait...'), 40000));
+            timers.push(setTimeout(() => setLoadingMessage('Still processing — server is waking up, please stay on this page...'), 60000));
 
             const response = await api.post('/register', data, {
                 headers: { 'Content-Type': 'multipart/form-data' },
-                timeout: 30000,
+                timeout: 120000, // 2 minutes — handles Render cold start (30–60 s) + processing
             });
 
+            // Cancel any pending loading-message timers
+            timers.forEach(t => clearTimeout(t));
+
             if (response.data.password) setGeneratedPassword(response.data.password);
-            setLoadingMessage('Registration complete!');
-            setTimeout(() => setSuccess(true), 500);
+            setLoadingMessage('Registration complete! 🎉');
+            setTimeout(() => setSuccess(true), 600);
         } catch (err) {
+            timers.forEach(t => clearTimeout(t));
             if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
-                setError('Request timed out. Please check your connection. If this persists, your registration may already be saved — check your email.');
+                setError('The request is taking longer than expected. Please check your email — your registration may have been saved. If not, try again.');
             } else {
-                setError(err.response?.data?.error || 'Registration failed. Please try again.');
+                // err.response?.data?.error  → JSON error from server
+                // err.response?.data?.message → fallback for some server formats
+                // err.message                 → network-level error (no response)
+                const serverMsg = err.response?.data?.error || err.response?.data?.message;
+                setError(serverMsg || 'Registration failed. Please check your receipt details and try again.');
             }
         } finally {
             setLoading(false);
@@ -236,7 +251,7 @@ const Register = () => {
                         <div className="loading-card">
                             <div className="loading-spinner" />
                             <h3>{loadingMessage}</h3>
-                            <p>Please wait, this typically takes 10–15 seconds...</p>
+                            <p>Please wait — this can take up to 60 seconds.</p>
                             <small>⚠️ Do not close this page or press back</small>
                         </div>
                     </div>
