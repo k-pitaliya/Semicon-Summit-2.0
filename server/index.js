@@ -32,7 +32,6 @@ const announcementRoutes = require('./routes/announcementRoutes');
 const galleryRoutes = require('./routes/galleryRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const webhookRoutes = require('./routes/webhookRoutes');
-const paymentVerificationRoutes = require('./routes/paymentVerificationRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 
 const app = express();
@@ -125,9 +124,6 @@ app.use('/api/webhooks', webhookRoutes);
 
 // Body parsing with size limit
 app.use(express.json({ limit: '10mb' }));
-
-// Payment verification routes (after express.json so req.body is parsed)
-app.use('/api', paymentVerificationRoutes);
 
 // Static uploads
 const uploadsDir = path.join(__dirname, 'uploads');
@@ -300,23 +296,38 @@ app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) =
         await user.save();
 
         // ── Auto-assign sequential registration ID (SS26-001, SS26-002, …) ──────
-        try {
-            const lastUser = await User.findOne(
-                { role: 'participant', registrationId: { $exists: true, $ne: null } },
-                { registrationId: 1 },
-                { sort: { registrationId: -1 } }
-            );
-            let nextNum = 1;
-            if (lastUser?.registrationId) {
-                const match = lastUser.registrationId.match(/SS26-(\d+)/);
-                if (match) nextNum = parseInt(match[1], 10) + 1;
+        // Retry loop: if two concurrent registrations pick the same number,
+        // MongoDB’s unique sparse index throws code 11000 and we pick the next one.
+        let idAssigned = false;
+        for (let attempt = 1; attempt <= 5 && !idAssigned; attempt++) {
+            try {
+                if (attempt > 1) await new Promise(r => setTimeout(r, 60 * attempt));
+                const lastUser = await User.findOne(
+                    { role: 'participant', registrationId: { $exists: true, $ne: null } },
+                    { registrationId: 1 },
+                    { sort: { registrationId: -1 } }
+                );
+                let nextNum = 1;
+                if (lastUser?.registrationId) {
+                    const match = lastUser.registrationId.match(/SS26-(\d+)/);
+                    if (match) nextNum = parseInt(match[1], 10) + 1;
+                }
+                user.registrationId = `SS26-${String(nextNum).padStart(3, '0')}`;
+                await user.save();
+                idAssigned = true;
+                logger.info('Registration ID assigned', { registrationId: user.registrationId, userId: user._id, attempt });
+            } catch (idError) {
+                if (idError.code === 11000) {
+                    // Another concurrent request grabbed this number — retry with higher
+                    logger.warn('registrationId collision on attempt ' + attempt, { userId: user._id });
+                    continue;
+                }
+                logger.error('Failed to assign registrationId', { error: idError.message, userId: user._id });
+                break; // non-duplicate error — give up
             }
-            user.registrationId = `SS26-${String(nextNum).padStart(3, '0')}`;
-            await user.save();
-            logger.info('Registration ID assigned', { registrationId: user.registrationId, userId: user._id });
-        } catch (idError) {
-            // Non-fatal — participant can still function, backfill can fix later
-            logger.error('Failed to assign registrationId', { error: idError.message, userId: user._id });
+        }
+        if (!idAssigned) {
+            logger.error('Could not assign registrationId after 5 attempts — backfill needed', { userId: user._id });
         }
 
         // Send email — with retry (3 attempts, exponential back-off)

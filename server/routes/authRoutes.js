@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const { generateToken, authenticate } = require('../middleware/auth');
-const { generatePassword, sendPasswordResetEmail } = require('../services/emailService');
+const { sendPasswordResetEmail, sendPasswordChangedEmail } = require('../services/emailService');
 
 // Login
 router.post('/login', async (req, res) => {
@@ -82,35 +82,55 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// Forgot Password (Public)
-// NOTE: Always returns 200 with the same message to prevent user enumeration attacks
+// Forgot Password (Public) — user supplies their own new password
+// NOTE: Always returns the same success message to prevent user enumeration attacks
 router.post('/forgot-password', async (req, res) => {
-    const SAFE_MESSAGE = 'If an account exists with this email, a new password has been sent.';
+    const SAFE_MESSAGE = 'Password updated successfully. You can now sign in with your new password.';
     try {
-        const { email } = req.body;
+        const { email, newPassword, confirmPassword } = req.body;
 
-        if (!email) {
-            return res.status(400).json({ error: 'Email is required' });
-        }
+        if (!email) return res.status(400).json({ error: 'Email is required' });
+        if (!newPassword) return res.status(400).json({ error: 'New password is required' });
+        if (newPassword.length < 8) return res.status(400).json({ error: 'Password must be at least 8 characters' });
+        if (newPassword !== confirmPassword) return res.status(400).json({ error: 'Passwords do not match' });
 
         const user = await User.findOne({ email: email.toLowerCase() });
+        // Always return the same message — never reveal whether the email exists
+        if (!user) return res.json({ message: SAFE_MESSAGE });
 
-        // Always return the same response — never reveal whether the email exists
-        if (!user) {
-            return res.json({ message: SAFE_MESSAGE });
-        }
-
-        const newPassword = generatePassword();
-        user.password = newPassword;
-        user.mustChangePassword = true;
+        user.password = newPassword; // bcrypt hashing runs via pre-save hook
+        user.mustChangePassword = false;
         await user.save();
 
-        await sendPasswordResetEmail(user, newPassword);
+        // Send a confirmation-only email (no password shown)
+        await sendPasswordChangedEmail(user);
 
-        console.log(`🔐 Public password reset for: ${user.email}`);
+        console.log(`🔐 Password reset (user-chosen) for: ${user.email}`);
         res.json({ message: SAFE_MESSAGE });
     } catch (error) {
         console.error('Forgot password error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Change Password (Authenticated) — enforces mustChangePassword after first login
+router.put('/change-password', authenticate, async (req, res) => {
+    try {
+        const { newPassword } = req.body;
+        if (!newPassword || newPassword.length < 8) {
+            return res.status(400).json({ error: 'Password must be at least 8 characters' });
+        }
+        const user = await User.findById(req.user._id);
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+        user.password = newPassword;
+        user.mustChangePassword = false;
+        await user.save();
+
+        console.log(`🔑 User changed password: ${user.email}`);
+        res.json({ message: 'Password changed successfully' });
+    } catch (error) {
+        console.error('Change password error:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });

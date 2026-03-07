@@ -412,6 +412,35 @@ const sendPasswordResetEmail = async (user, newPassword) => {
   return sent;
 };
 
+// ══════════════════════════════════════════════════════════════════════════════
+//  4. PASSWORD CHANGED CONFIRMATION EMAIL
+//  Sent after a user resets their own password via the Forgot Password flow.
+//  Does NOT include the new password \u2014 it\u2019s a security notification only.
+// ══════════════════════════════════════════════════════════════════════════════
+const sendPasswordChangedEmail = async (user) => {
+  const contentHtml = `
+      ${greeting(user.name)}
+      ${bodyText('Your password for <strong>Semiconductor Summit 2.0</strong> has been successfully changed. You can now sign in with your new password.')}
+
+      <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom:28px;">
+        <tr><td align="center">${ctaButton(LOGIN_URL, 'Sign In Now', '#7c3aed')}</td></tr>
+      </table>
+
+      ${warningNote('&#128274;&nbsp; <strong>Didn\'t request this change?</strong> If you did not reset your password, please contact us at <strong>semisummit.ec@charusat.ac.in</strong> immediately.')}
+    `;
+
+  const html = baseTemplate({ accentColor: '#7c3aed', contentHtml });
+
+  const sent = await sendWithRetry({
+    to: user.email,
+    subject: 'Semiconductor Summit 2.0 \u2014 Password Changed Successfully',
+    html
+  });
+  if (sent) console.log(`\u2705 Password-changed confirmation email sent to ${user.email}`);
+  else console.error(`\u274c Password-changed email failed for ${user.email}`);
+  return sent;
+};
+
 // ── Contact Form Email ──────────────────────────────────────────────────────
 // Sends an email to the summit team whenever someone submits the contact form.
 const sendContactEmail = async ({ name, email, subject, message }) => {
@@ -464,6 +493,7 @@ module.exports = {
   sendCredentialsEmail,
   sendRejectionEmail,
   sendPasswordResetEmail,
+  sendPasswordChangedEmail,
   sendContactEmail,
   verifyEmailTransporter
 };
