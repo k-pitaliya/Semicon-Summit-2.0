@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import {
     Upload, CheckCircle, AlertCircle, ArrowLeft, ArrowRight,
     CreditCard, User, Mail, Phone, Building,
-    ExternalLink, FileText, Info, Calendar, Zap, Target, Image
+    ExternalLink, FileText, Info, Calendar, Zap, Target, Image,
+    Copy, Check as CheckIcon
 } from 'lucide-react';
 import api from '../services/api';
 import ParticleField from '../components/ParticleField';
@@ -33,13 +34,26 @@ const INITIAL_FORM = {
 };
 
 const Register = () => {
+    const [searchParams] = useSearchParams();
     const [step, setStep] = useState(1);
-    const [formData, setFormData] = useState(INITIAL_FORM);
+    const [formData, setFormData] = useState(() => {
+        const ev = searchParams.get('event');
+        if (!ev) return INITIAL_FORM;
+        return {
+            ...INITIAL_FORM,
+            panelDiscussion: ev === 'panelDiscussion',
+            expertInsights: ev === 'expertInsights',
+            aiInVlsi: ev === 'aiInVlsi',
+            day1Workshop: ['rtl-gds', 'fpga'].includes(ev) ? ev : '',
+        };
+    });
+    const [fieldErrors, setFieldErrors] = useState({});
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [loadingMessage, setLoadingMessage] = useState('');
     const [success, setSuccess] = useState(false);
     const [generatedPassword, setGeneratedPassword] = useState('');
+    const [copiedPwd, setCopiedPwd] = useState(false);
     // Fix #6 — Prevent double-tap / double-submission
     const isSubmitting = useRef(false);
 
@@ -47,6 +61,24 @@ const Register = () => {
         const { name, value, type, checked } = e.target;
         setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
         setError('');
+        setFieldErrors(prev => {
+            const next = { ...prev };
+            if (name === 'email' || name === 'universityEmail') {
+                if (value && !/^\S+@\S+\.\S+$/.test(value)) {
+                    next[name] = 'Please enter a valid email address';
+                } else {
+                    delete next[name];
+                }
+            }
+            if (name === 'phone') {
+                if (value && !/^\d{10}$/.test(value)) {
+                    next.phone = 'Enter a valid 10-digit mobile number';
+                } else {
+                    delete next.phone;
+                }
+            }
+            return next;
+        });
     };
 
     // Fix #4 — Accept PDF or image (iOS users often screenshot receipt instead of saving PDF)
@@ -194,9 +226,22 @@ const Register = () => {
                     <p className="success-message">Your account has been created! Use the credentials below to login. We've also sent a confirmation email (check spam if not in inbox).</p>
                     <div className="success-info">
                         <div className="info-item"><User size={20} /><span>Email: <strong>{formData.email}</strong></span></div>
-                        <div className="info-item" style={{ background: 'rgba(34,197,94,0.1)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(34,197,94,0.3)' }}>
-                            <Mail size={20} style={{ color: '#22c55e' }} />
+                        <div className="info-item" style={{ background: 'rgba(34,197,94,0.1)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(34,197,94,0.3)', gap: '10px' }}>
+                            <Mail size={20} style={{ color: '#22c55e', flexShrink: 0 }} />
                             <span>Password: <code style={{ background: '#fff', color: '#0f172a', padding: '4px 8px', borderRadius: '4px', fontFamily: 'monospace', fontSize: '16px', fontWeight: 'bold' }}>{generatedPassword}</code></span>
+                            <button
+                                onClick={() => {
+                                    navigator.clipboard.writeText(generatedPassword).then(() => {
+                                        setCopiedPwd(true);
+                                        setTimeout(() => setCopiedPwd(false), 2000);
+                                    });
+                                }}
+                                title="Copy password"
+                                style={{ background: 'none', border: '1px solid rgba(34,197,94,0.4)', borderRadius: '6px', cursor: 'pointer', padding: '4px 8px', color: copiedPwd ? '#22c55e' : 'rgba(148,163,184,0.8)', display: 'inline-flex', alignItems: 'center', gap: 4, flexShrink: 0 }}
+                            >
+                                {copiedPwd ? <CheckIcon size={15} /> : <Copy size={15} />}
+                                {copiedPwd ? 'Copied' : 'Copy'}
+                            </button>
                         </div>
                         <div className="info-item"><CreditCard size={20} /><span>Payment ID: <strong>{formData.paymentId}</strong></span></div>
                     </div>
@@ -297,18 +342,23 @@ const Register = () => {
 
                             <div className="input-group">
                                 <label>University Email Address <span className="required">*</span></label>
-                                <input type="email" name="universityEmail" value={formData.universityEmail} onChange={handleChange} placeholder={formData.isCharusat === 'charusat' ? 'e.g., 22ec048@charusat.ac.in' : 'your@university.edu'} className="input" />
+                                <input type="email" name="universityEmail" value={formData.universityEmail} onChange={handleChange} placeholder={formData.isCharusat === 'charusat' ? 'e.g., 22ec048@charusat.ac.in' : 'your@university.edu'} className={`input${fieldErrors.universityEmail ? ' input-error' : ''}`} />
+                                {fieldErrors.universityEmail && <small className="field-error">{fieldErrors.universityEmail}</small>}
                             </div>
 
                             <div className="input-group">
                                 <label>Personal Email Address <span className="required">*</span></label>
-                                <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="your@gmail.com" className="input" autoComplete="email" />
-                                <small className="input-hint">This will be your login email for the portal</small>
+                                <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="your@gmail.com" className={`input${fieldErrors.email ? ' input-error' : ''}`} autoComplete="email" />
+                                {fieldErrors.email
+                                    ? <small className="field-error">{fieldErrors.email}</small>
+                                    : <small className="input-hint">This will be your login email for the portal</small>
+                                }
                             </div>
 
                             <div className="input-group">
                                 <label>Phone Number <span className="required">*</span></label>
-                                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="10-digit mobile number" className="input" autoComplete="tel" />
+                                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="10-digit mobile number" className={`input${fieldErrors.phone ? ' input-error' : ''}`} autoComplete="tel" />
+                                {fieldErrors.phone && <small className="field-error">{fieldErrors.phone}</small>}
                             </div>
 
                             <div className="input-group">

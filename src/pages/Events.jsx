@@ -81,6 +81,7 @@ Participants will gain insights directly from industry experts shaping India\'s 
     {
         id: 'ai-vlsi',
         categoryId: 'industry-strategy',
+        formKey: 'aiInVlsi',
         title: 'AI-Powered VLSI',
         subtitle: 'Shaping the Next-Gen Design Verification Engineers',
         type: 'Expert Insight',
@@ -109,6 +110,7 @@ Participants will understand how AI is redefining semiconductor design productiv
     {
         id: 'embedded-vlsi',
         categoryId: 'industry-strategy',
+        formKey: 'expertInsights',
         title: 'Embedded vs VLSI',
         subtitle: 'What Should I Choose?',
         type: 'Career Guidance',
@@ -136,6 +138,7 @@ This session aims to provide clarity for students at early academic stages.`,
     {
         id: 'rtl-gds',
         categoryId: 'workshops',
+        formKey: 'rtl-gds',
         title: 'Writing Industry-Ready RTL & Self-Checking Testbench',
         subtitle: 'Code Like a Chip Designer',
         type: 'Advanced Workshop',
@@ -164,6 +167,7 @@ Recommended For: 3rd and 4th year students only.`,
     {
         id: 'verilog-fpga',
         categoryId: 'workshops',
+        formKey: 'fpga',
         title: 'Verilog & FPGA',
         subtitle: 'Getting Started with Digital Design',
         type: 'Beginner Workshop',
@@ -195,6 +199,7 @@ Recommended For: 1st and 2nd year students.`,
     {
         id: 'shark-tank',
         categoryId: 'innovation',
+        formKey: 'sharkTank',
         title: 'Silicon Shark Tank',
         subtitle: 'Industry-Driven Idea Pitching',
         type: 'Flagship Event',
@@ -213,6 +218,7 @@ The event consists of two rounds. In Round 1 (Idea Screening), teams must submit
     {
         id: 'silicon-jackpot',
         categoryId: 'innovation',
+        formKey: 'treasureHunt',
         title: 'The Silicon Jackpot',
         subtitle: 'Decode the Logic. Hunt the Clues. Complete the Silicon.',
         type: 'Competition',
@@ -264,6 +270,7 @@ Activities include:
     {
         id: 'ideas-showcase',
         categoryId: 'innovation',
+        formKey: 'silentGallery',
         title: 'Silicon Ideas Showcase',
         subtitle: 'Silent Feedback Edition',
         type: 'Exhibition',
@@ -391,7 +398,7 @@ const EventModal = ({ event, onClose }) => {
                                 <FileText size={18} /> Event Rules
                             </button>
                         )}
-                        <Link to="/register" className="ev-btn-primary">
+                        <Link to={event.formKey ? `/register?event=${event.formKey}` : '/register'} className="ev-btn-primary">
                             Register Now <ExternalLink size={18} />
                         </Link>
                     </div>

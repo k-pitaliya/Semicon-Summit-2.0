@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
     Users, Download, Filter, Search, LogOut, Image,
-    AlertTriangle, X, Key, Trash2, UserCog, Upload, ImagePlus, Bell, Copy, Check
+    AlertTriangle, X, Key, Trash2, UserCog, Upload, ImagePlus, Bell, Copy, Check, Menu
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
@@ -17,7 +17,12 @@ import AnnouncementsTab from '../components/dashboard/AnnouncementsTab'
 const FacultyDashboard = () => {
     const { user, logout } = useAuth()
     const navigate = useNavigate()
-    const [activeTab, setActiveTab] = useState('registrations')
+    const [searchParams, setSearchParams] = useSearchParams()
+    const [activeTab, setActiveTab] = useState(() => {
+        const tab = searchParams.get('tab')
+        return ['registrations', 'users', 'announcements', 'gallery'].includes(tab) ? tab : 'registrations'
+    })
+    const [sidebarOpen, setSidebarOpen] = useState(false)
     const [participants, setParticipants] = useState([])
     const [filteredParticipants, setFilteredParticipants] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
@@ -135,6 +140,12 @@ const FacultyDashboard = () => {
 
         setFilteredParticipants(filtered)
     }, [searchTerm, selectedEvent, participants])
+
+    const switchTab = (tab) => {
+        setActiveTab(tab)
+        setSearchParams({ tab })
+        setSidebarOpen(false)
+    }
 
     const handleLogout = () => {
         logout()
@@ -382,8 +393,13 @@ const FacultyDashboard = () => {
                 <div className="hero-glow hero-glow-1" style={{ top: '-20%', left: '20%', opacity: 0.3 }} />
             </div>
 
+            {/* Mobile sidebar overlay */}
+            {sidebarOpen && (
+                <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />
+            )}
+
             {/* Sidebar */}
-            <aside className="dashboard-sidebar">
+            <aside className={`dashboard-sidebar ${sidebarOpen ? 'open' : ''}`}>
                 <div className="sidebar-header">
                     <div className="sidebar-logo">
                         <div className="logo-icon-small">SS</div>
@@ -394,28 +410,28 @@ const FacultyDashboard = () => {
                 <nav className="sidebar-nav">
                     <button
                         className={`nav-item ${activeTab === 'registrations' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('registrations')}
+                        onClick={() => switchTab('registrations')}
                     >
                         <Users size={20} />
                         <span>All Registrations</span>
                     </button>
                     <button
                         className={`nav-item ${activeTab === 'users' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('users')}
+                        onClick={() => switchTab('users')}
                     >
                         <UserCog size={20} />
                         <span>User Management</span>
                     </button>
                     <button
                         className={`nav-item ${activeTab === 'announcements' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('announcements')}
+                        onClick={() => switchTab('announcements')}
                     >
                         <Bell size={20} />
                         <span>Announcements</span>
                     </button>
                     <button
                         className={`nav-item ${activeTab === 'gallery' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('gallery')}
+                        onClick={() => switchTab('gallery')}
                     >
                         <Image size={20} />
                         <span>Gallery</span>
@@ -433,14 +449,19 @@ const FacultyDashboard = () => {
             {/* Main Content */}
             <main className="dashboard-main" style={{ position: 'relative', zIndex: 1 }}>
                 <header className="dashboard-header">
-                    <div className="header-content">
-                        <h1>Welcome, {user?.name || 'Faculty'}!</h1>
-                        <p>Faculty Dashboard - {
-                            activeTab === 'registrations' ? 'View All Registrations' :
-                                activeTab === 'users' ? 'User Management' :
-                                    activeTab === 'announcements' ? 'Announcements' :
-                                        'Gallery Management'
-                        }</p>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <button className="sidebar-mobile-toggle" onClick={() => setSidebarOpen(o => !o)} aria-label="Toggle navigation menu">
+                            <Menu size={20} />
+                        </button>
+                        <div className="header-content">
+                            <h1>Welcome, {user?.name || 'Faculty'}!</h1>
+                            <p>Faculty Dashboard - {
+                                activeTab === 'registrations' ? 'View All Registrations' :
+                                    activeTab === 'users' ? 'User Management' :
+                                        activeTab === 'announcements' ? 'Announcements' :
+                                            'Gallery Management'
+                            }</p>
+                        </div>
                     </div>
                     <div className="header-actions">
                         <span className="badge badge-warning">Faculty</span>

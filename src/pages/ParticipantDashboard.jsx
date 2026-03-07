@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     User, Calendar, Bell, Image, LogOut,
-    ChevronRight, ChevronDown, ExternalLink, Edit2, Check, X, MessageCircle, Plus, MapPin, Clock, Info
+    ChevronRight, ChevronDown, ExternalLink, Edit2, Check, X, MessageCircle, Plus, MapPin, Clock, Info, Menu
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
@@ -86,6 +86,8 @@ const ParticipantDashboard = () => {
 
     // Event expand/detail state
     const [expandedEvent, setExpandedEvent] = useState(null)
+    // Mobile sidebar state
+    const [sidebarOpen, setSidebarOpen] = useState(false)
 
     // Event-update state
     const [showEventEditor, setShowEventEditor] = useState(false)
@@ -162,8 +164,13 @@ const ParticipantDashboard = () => {
                 <div className="hero-glow hero-glow-1" style={{ top: '-20%', left: '20%', opacity: 0.3 }} />
             </div>
 
+            {/* Mobile sidebar overlay */}
+            {sidebarOpen && (
+                <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />
+            )}
+
             {/* Sidebar */}
-            <aside className="dashboard-sidebar">
+            <aside className={`dashboard-sidebar ${sidebarOpen ? 'open' : ''}`}>
                 <div className="sidebar-header">
                     <div className="sidebar-logo">
                         <div className="logo-icon-small">SS</div>
@@ -172,28 +179,29 @@ const ParticipantDashboard = () => {
                 </div>
 
                 <nav className="sidebar-nav">
-                    <a href="#profile" className="nav-item active">
+                    <button className="nav-item" onClick={() => { document.getElementById('profile')?.scrollIntoView({ behavior: 'smooth' }); setSidebarOpen(false) }}>
                         <User size={20} />
                         <span>Profile</span>
-                    </a>
-                    <a href="#events" className="nav-item">
+                    </button>
+                    <button className="nav-item" onClick={() => { document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' }); setSidebarOpen(false) }}>
                         <Calendar size={20} />
                         <span>My Events</span>
-                    </a>
-                    <a href="#announcements" className="nav-item">
+                    </button>
+                    <button className="nav-item" onClick={() => { document.getElementById('announcements')?.scrollIntoView({ behavior: 'smooth' }); setSidebarOpen(false) }}>
                         <Bell size={20} />
                         <span>Announcements</span>
-                    </a>
-                    <a href="#gallery" className="nav-item">
+                    </button>
+                    <button className="nav-item" onClick={() => { document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' }); setSidebarOpen(false) }}>
                         <Image size={20} />
                         <span>Gallery</span>
-                    </a>
+                    </button>
                     <a
                         href={WHATSAPP_LINK}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="nav-item"
                         style={{ color: '#22c55e' }}
+                        onClick={() => setSidebarOpen(false)}
                     >
                         <MessageCircle size={20} />
                         <span>WhatsApp Group</span>
@@ -211,9 +219,14 @@ const ParticipantDashboard = () => {
             {/* Main Content */}
             <main className="dashboard-main" style={{ position: 'relative', zIndex: 1 }}>
                 <header className="dashboard-header">
-                    <div className="header-content">
-                        <h1>Welcome, {user?.name || 'Participant'}!</h1>
-                        <p>Your participant dashboard</p>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <button className="sidebar-mobile-toggle" onClick={() => setSidebarOpen(o => !o)} aria-label="Toggle navigation menu">
+                            <Menu size={20} />
+                        </button>
+                        <div className="header-content">
+                            <h1>Welcome, {user?.name || 'Participant'}!</h1>
+                            <p>Your participant dashboard</p>
+                        </div>
                     </div>
                     <div className="header-actions">
                         <span className="badge badge-success">Registered</span>
@@ -591,13 +604,28 @@ const ParticipantDashboard = () => {
                                 <h2>Announcements</h2>
                             </div>
                             <div className="announcements-list">
-                                {announcements.length === 0 ? (
-                                    <div className="empty-state">
-                                        <Bell size={32} />
-                                        <p>No announcements yet</p>
-                                    </div>
-                                ) : (
-                                    announcements.map((announcement) => (
+                                {(() => {
+                                    const ec = user?.eventChoices || {}
+                                    const userEventKeys = new Set([
+                                        ec.panelDiscussion && 'panelDiscussion',
+                                        ec.day1Workshop === 'rtl-gds' && 'rtl-gds',
+                                        ec.day1Workshop === 'fpga' && 'fpga',
+                                        ec.expertInsights && 'expertInsights',
+                                        ec.sharkTank && 'sharkTank',
+                                        ec.aiInVlsi && 'aiInVlsi',
+                                        ec.treasureHunt && 'treasureHunt',
+                                        ec.silentGallery && 'silentGallery',
+                                    ].filter(Boolean))
+                                    const visibleAnnouncements = announcements.filter(a =>
+                                        !a.targetEvent || a.targetEvent === '' || userEventKeys.has(a.targetEvent)
+                                    )
+                                    return visibleAnnouncements.length === 0 ? (
+                                        <div className="empty-state">
+                                            <Bell size={32} />
+                                            <p>No announcements yet</p>
+                                        </div>
+                                    ) : (
+                                        visibleAnnouncements.map((announcement) => (
                                         <div key={announcement._id || announcement.id} className="announcement-item card">
                                             <div className="announcement-header">
                                                 <h4>{announcement.title}</h4>
@@ -614,7 +642,8 @@ const ParticipantDashboard = () => {
                                             <p>{announcement.content}</p>
                                         </div>
                                     ))
-                                )}
+                                    )
+                                })()}
                             </div>
                         </section>
 

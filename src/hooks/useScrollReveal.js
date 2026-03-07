@@ -9,6 +9,12 @@ export function useScrollReveal() {
     const observerRef = useRef(null);
 
     useEffect(() => {
+        // Respect prefers-reduced-motion — skip animations entirely
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.querySelectorAll('.reveal').forEach(el => el.classList.add('revealed'));
+            return;
+        }
+
         observerRef.current = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -31,10 +37,7 @@ export function useScrollReveal() {
         return () => observerRef.current?.disconnect();
     }, []);
 
-    // Return an object with reveal function for compatibility
-    return {
-        reveal: () => {}
-    };
+    return { reveal: () => {} };
 }
 
 export default useScrollReveal;

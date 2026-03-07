@@ -9,11 +9,19 @@ const Navbar = () => {
     const location = useLocation()
 
     useEffect(() => {
+        let rafId = null
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50)
+            if (rafId) return
+            rafId = requestAnimationFrame(() => {
+                setIsScrolled(window.scrollY > 50)
+                rafId = null
+            })
         }
-        window.addEventListener('scroll', handleScroll)
-        return () => window.removeEventListener('scroll', handleScroll)
+        window.addEventListener('scroll', handleScroll, { passive: true })
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+            if (rafId) cancelAnimationFrame(rafId)
+        }
     }, [])
 
     // Prevent body scroll when mobile menu is open
@@ -57,6 +65,7 @@ const Navbar = () => {
                             to={link.path}
                             className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
                             onClick={() => setIsMobileMenuOpen(false)}
+                            aria-current={location.pathname === link.path ? 'page' : undefined}
                         >
                             {link.name}
                         </Link>

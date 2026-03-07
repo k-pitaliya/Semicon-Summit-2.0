@@ -350,7 +350,7 @@ const Landing = () => {
                 </div>
                 <div className="container">
                     <div className="countdown-wrapper">
-                        <h3 className="countdown-title">Event Starts In</h3>
+                        <h3 className="countdown-title">Event Starts In <span style={{ fontSize: '0.6em', fontWeight: 400, color: 'rgba(148,163,184,0.55)', letterSpacing: '0.04em' }}>IST</span></h3>
                         <div className="countdown-grid">
                             {[
                                 { val: countdown.days, label: 'Days' },

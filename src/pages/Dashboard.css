@@ -841,7 +841,46 @@
     }
 }
 
+/* Sidebar overlay (mobile) */
+.sidebar-overlay {
+    display: none;
+}
+
+/* Mobile toggle button — hidden on desktop */
+.sidebar-mobile-toggle {
+    display: none;
+}
+
 @media (max-width: 768px) {
+    .sidebar-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 99;
+        backdrop-filter: blur(2px);
+        cursor: pointer;
+    }
+
+    .sidebar-mobile-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        color: var(--text-secondary);
+        cursor: pointer;
+        padding: 0.45rem;
+        margin-right: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    .sidebar-mobile-toggle:hover {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+    }
+
     .dashboard-sidebar {
         transform: translateX(-100%);
         transition: transform var(--transition-normal);

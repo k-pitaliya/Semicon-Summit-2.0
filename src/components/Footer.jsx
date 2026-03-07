@@ -95,10 +95,6 @@ const Footer = () => {
 
                 <div className="footer-bottom">
                     <p>&copy; {currentYear} Semiconductor Summit 2.0. All rights reserved.</p>
-                    <div className="footer-bottom-links">
-                        <a href="#">Privacy Policy</a>
-                        <a href="#">Terms of Service</a>
-                    </div>
                 </div>
             </div>
         </footer>
