@@ -11,42 +11,65 @@ export const useAuth = () => {
     return context
 }
 
+// Decode a JWT payload without any library (base64url → JSON)
+const decodeJwt = (token) => {
+    try {
+        const payload = token.split('.')[1]
+        return JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')))
+    } catch {
+        return null
+    }
+}
+
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        // Check for stored user on mount
         const storedUser = localStorage.getItem('summitUser')
-        if (storedUser) {
-            try {
-                const parsedUser = JSON.parse(storedUser)
-                // Use only the real JWT token — never fall back to _id (security: prevents auth bypass)
-                const token = parsedUser.token
-                if (!token) {
-                    // No valid JWT stored — clear and force re-login
-                    localStorage.removeItem('summitUser')
-                    setLoading(false)
-                    return
-                }
-                authAPI.validateToken(token)
-                    .then(validatedUser => {
-                        // Preserve the JWT token from stored data
-                        validatedUser.token = parsedUser.token
-                        setUser(validatedUser)
-                    })
-                    .catch(() => {
-                        localStorage.removeItem('summitUser')
-                        setUser(null)
-                    })
-                    .finally(() => setLoading(false))
-            } catch {
-                localStorage.removeItem('summitUser')
-                setLoading(false)
-            }
-        } else {
+        if (!storedUser) { setLoading(false); return }
+
+        let parsedUser
+        try { parsedUser = JSON.parse(storedUser) } catch {
+            localStorage.removeItem('summitUser')
             setLoading(false)
+            return
         }
+
+        const token = parsedUser.token
+        if (!token) {
+            localStorage.removeItem('summitUser')
+            setLoading(false)
+            return
+        }
+
+        // Check JWT expiry client-side first (no network call needed)
+        const payload = decodeJwt(token)
+        const nowSec = Math.floor(Date.now() / 1000)
+        if (payload && payload.exp && payload.exp < nowSec) {
+            // Token is expired — clear and force re-login without hitting the server
+            localStorage.removeItem('summitUser')
+            setLoading(false)
+            return
+        }
+
+        // OPTIMISTIC: immediately trust the cached user so the app renders instantly.
+        // The background validate call below will silently fix any stale data.
+        setUser(parsedUser)
+        setLoading(false)
+
+        // Background validation — refreshes user data and catches server-side revocation.
+        // Does NOT block the UI; if it fails we log the user out quietly.
+        authAPI.validateToken(token)
+            .then(validatedUser => {
+                validatedUser.token = token
+                setUser(validatedUser)
+                localStorage.setItem('summitUser', JSON.stringify(validatedUser))
+            })
+            .catch(() => {
+                localStorage.removeItem('summitUser')
+                setUser(null)
+            })
     }, [])
 
     const login = async (email, password) => {

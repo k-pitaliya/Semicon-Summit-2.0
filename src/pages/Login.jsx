@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Cpu, Mail, Lock, ArrowRight, AlertCircle, Eye, EyeOff, CheckCircle } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
@@ -29,6 +29,15 @@ const Login = () => {
     const [showChangePwdNew, setShowChangePwdNew] = useState(false)
     const [changePwdStatus, setChangePwdStatus] = useState({ loading: false, error: '' })
     const [pendingRedirect, setPendingRedirect] = useState('/')
+    const [slowConnection, setSlowConnection] = useState(false)
+    const slowTimer = useRef(null)
+
+    // Pre-warm the Render server as soon as the login page loads.
+    // Render free tier sleeps after 15 min; pinging /health wakes it in the background
+    // so it's ready by the time the user finishes typing and hits Sign In.
+    useEffect(() => {
+        api.get('/health').catch(() => {}) // fire-and-forget, ignore errors
+    }, [])
 
     const { login } = useAuth()
     const navigate = useNavigate()
@@ -38,8 +47,13 @@ const Login = () => {
         e.preventDefault()
         setError('')
         setLoading(true)
+        setSlowConnection(false)
+
+        // After 5 s of waiting, show a 'server is starting up' hint
+        slowTimer.current = setTimeout(() => setSlowConnection(true), 5000)
 
         if (!email || !password) {
+            clearTimeout(slowTimer.current)
             setError('Please enter both email and password')
             setLoading(false)
             return
@@ -71,6 +85,8 @@ const Login = () => {
             setError('An error occurred. Please try again.')
         }
 
+        clearTimeout(slowTimer.current)
+        setSlowConnection(false)
         setLoading(false)
     }
 
@@ -215,6 +231,17 @@ const Login = () => {
                                 </>
                             )}
                         </button>
+
+                        {/* Shown after 5 s — reassures users the server is just warming up */}
+                        {slowConnection && (
+                            <p style={{
+                                marginTop: '12px', fontSize: '13px', color: '#94a3b8',
+                                textAlign: 'center', lineHeight: 1.5
+                            }}>
+                                ⏳ Server is starting up — this happens after a period of inactivity.<br />
+                                <strong>Please wait, do not refresh the page.</strong>
+                            </p>
+                        )}
                     </form>
 
                     <div className="login-footer">
