@@ -23,6 +23,16 @@ const announcementSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
+    },
+    // Optional: target a specific event group. null = all participants
+    targetEvent: {
+        type: String,
+        default: null
+    },
+    // Whether an email blast was triggered when this announcement was created
+    emailSentCount: {
+        type: Number,
+        default: 0
     }
 }, {
     timestamps: true

@@ -2,18 +2,26 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     User, Calendar, Bell, Image, LogOut,
-    ChevronRight, ExternalLink
+    ChevronRight, ExternalLink, Edit2, Check, X, MessageCircle, Plus
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import './Dashboard.css'
 
+const WHATSAPP_LINK = 'https://chat.whatsapp.com/EoU5wuK8RZi2TFSgJLnBcD'
+
 const ParticipantDashboard = () => {
-    const { user, logout } = useAuth()
+    const { user, setUser, logout } = useAuth()
     const navigate = useNavigate()
     const [announcements, setAnnouncements] = useState([])
     const [photos, setPhotos] = useState([])
     const [loading, setLoading] = useState(true)
+
+    // Event-update state
+    const [showEventEditor, setShowEventEditor] = useState(false)
+    const [eventDraft, setEventDraft] = useState({})
+    const [eventSaving, setEventSaving] = useState(false)
+    const [eventSaveMsg, setEventSaveMsg] = useState('')
 
     useEffect(() => {
         const fetchData = async () => {
@@ -41,6 +49,39 @@ const ParticipantDashboard = () => {
     const handleLogout = () => {
         logout()
         navigate('/', { replace: true })
+    }
+
+    const isTreasureHuntEligible = !['4th Year'].includes(user?.yearOfStudy)
+
+    const openEventEditor = () => {
+        // Seed draft from current choices so checkboxes reflect current state
+        setEventDraft(user?.eventChoices ? { ...user.eventChoices } : {})
+        setEventSaveMsg('')
+        setShowEventEditor(true)
+    }
+
+    const handleEventSave = async () => {
+        setEventSaving(true)
+        setEventSaveMsg('')
+        try {
+            const res = await api.patch('/participants/me/event-choices', { updates: eventDraft })
+            // Update local user object so the "Registered Events" list refreshes instantly
+            if (setUser) {
+                setUser(prev => ({ ...prev, eventChoices: res.data.eventChoices }))
+            }
+            const msg = res.data.warnings?.length
+                ? `Saved. Note: ${res.data.warnings.join('; ')}`
+                : 'Events updated successfully!'
+            setEventSaveMsg(msg)
+            setTimeout(() => {
+                setShowEventEditor(false)
+                setEventSaveMsg('')
+            }, 2000)
+        } catch (err) {
+            setEventSaveMsg(err.response?.data?.error || 'Failed to save. Please try again.')
+        } finally {
+            setEventSaving(false)
+        }
     }
 
     return (
@@ -76,6 +117,16 @@ const ParticipantDashboard = () => {
                     <a href="#gallery" className="nav-item">
                         <Image size={20} />
                         <span>Gallery</span>
+                    </a>
+                    <a
+                        href={WHATSAPP_LINK}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="nav-item"
+                        style={{ color: '#22c55e' }}
+                    >
+                        <MessageCircle size={20} />
+                        <span>WhatsApp Group</span>
                     </a>
                 </nav>
 
@@ -237,6 +288,170 @@ const ParticipantDashboard = () => {
                                         </div>
                                     ))
                                 })()}
+                            </div>
+                        </section>
+
+                        {/* Update My Events Section */}
+                        <section id="update-events" className="dashboard-section">
+                            <div className="section-header-row">
+                                <h2>Update My Events</h2>
+                                {!showEventEditor && (
+                                    <button
+                                        className="btn btn-secondary"
+                                        style={{ fontSize: '0.85rem' }}
+                                        onClick={openEventEditor}
+                                    >
+                                        <Edit2 size={16} style={{ marginRight: 6 }} />
+                                        Add Events
+                                    </button>
+                                )}
+                            </div>
+                            {showEventEditor ? (
+                                <div className="card" style={{ padding: '1.5rem' }}>
+                                    <p style={{ color: 'rgba(148,163,184,0.8)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
+                                        ✅ You can add new events. <strong>Already enrolled events cannot be removed.</strong>
+                                    </p>
+
+                                    {/* Boolean toggle events */}
+                                    {[
+                                        { key: 'panelDiscussion', label: 'Inaugural Talk & Panel Discussion', day: 'Day 1 — 17 Mar' },
+                                        { key: 'expertInsights', label: 'Expert Insights: VLSI vs Embedded', day: 'Day 2 — 18 Mar' },
+                                        { key: 'aiInVlsi', label: 'AI-Powered VLSI: Next-Gen Design Verification', day: 'Day 3 — 19 Mar' },
+                                        { key: 'sharkTank', label: 'Silicon Shark Tank', day: 'Day 2 — 18 Mar' },
+                                        { key: 'treasureHunt', label: 'Silicon Jackpot (Treasure Hunt)', day: 'Day 3 — 19 Mar' },
+                                        { key: 'silentGallery', label: 'Silicon Silent Gallery', day: 'Day 3 — 19 Mar' },
+                                    ].map(ev => {
+                                        const enrolled = user?.eventChoices?.[ev.key] === true
+                                        const restricted = ev.key === 'treasureHunt' && !isTreasureHuntEligible
+                                        return (
+                                            <div
+                                                key={ev.key}
+                                                style={{
+                                                    display: 'flex', alignItems: 'center', gap: '0.75rem',
+                                                    marginBottom: '0.6rem', padding: '0.75rem', borderRadius: '8px',
+                                                    background: enrolled ? 'rgba(34,197,94,0.08)' : 'rgba(255,255,255,0.03)',
+                                                    border: `1px solid ${enrolled ? 'rgba(34,197,94,0.3)' : 'rgba(148,163,184,0.1)'}`,
+                                                    opacity: restricted && !enrolled ? 0.6 : 1,
+                                                }}
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    id={`ev-${ev.key}`}
+                                                    checked={eventDraft[ev.key] === true}
+                                                    disabled={enrolled || restricted}
+                                                    onChange={e => setEventDraft(prev => ({ ...prev, [ev.key]: e.target.checked }))}
+                                                    style={{ width: 16, height: 16, accentColor: '#00e5ff', flexShrink: 0 }}
+                                                />
+                                                <label htmlFor={`ev-${ev.key}`} style={{ flex: 1, cursor: enrolled || restricted ? 'default' : 'pointer', margin: 0 }}>
+                                                    <span style={{ fontWeight: 500, color: enrolled ? '#22c55e' : 'inherit' }}>{ev.label}</span>
+                                                    <span style={{ display: 'block', fontSize: '0.75rem', color: 'rgba(148,163,184,0.65)' }}>{ev.day}</span>
+                                                </label>
+                                                {enrolled && <span style={{ fontSize: '0.72rem', color: '#22c55e', whiteSpace: 'nowrap' }}>✓ Enrolled</span>}
+                                                {restricted && !enrolled && <span style={{ fontSize: '0.72rem', color: '#f59e0b', whiteSpace: 'nowrap' }}>4th year not eligible</span>}
+                                            </div>
+                                        )
+                                    })}
+
+                                    {/* Day 1 Workshop (radio, add-only) */}
+                                    {(() => {
+                                        const current = user?.eventChoices?.day1Workshop
+                                        return (
+                                            <div style={{
+                                                marginTop: '0.5rem', marginBottom: '0.6rem', padding: '0.75rem', borderRadius: '8px',
+                                                background: current ? 'rgba(34,197,94,0.08)' : 'rgba(255,255,255,0.03)',
+                                                border: `1px solid ${current ? 'rgba(34,197,94,0.3)' : 'rgba(148,163,184,0.1)'}`,
+                                            }}>
+                                                <p style={{ fontWeight: 500, marginBottom: '0.5rem', margin: '0 0 0.5rem' }}>
+                                                    Day 1 Workshop
+                                                    <span style={{ fontSize: '0.75rem', color: 'rgba(148,163,184,0.65)', marginLeft: 8 }}>Day 1 — 17 Mar</span>
+                                                </p>
+                                                {current ? (
+                                                    <p style={{ fontSize: '0.85rem', color: '#22c55e', margin: 0 }}>
+                                                        ✓ Enrolled: {current === 'rtl-gds' ? 'RTL & Self-Checking Testbench Workshop' : 'FPGA Interfacing Workshop'}
+                                                    </p>
+                                                ) : (
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginTop: '0.5rem' }}>
+                                                        {[
+                                                            { value: 'rtl-gds', label: 'RTL & Self-Checking Testbench Workshop' },
+                                                            { value: 'fpga', label: 'FPGA Interfacing Workshop' },
+                                                        ].map(opt => (
+                                                            <label key={opt.value} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.875rem' }}>
+                                                                <input
+                                                                    type="radio"
+                                                                    name="day1WorkshopDraft"
+                                                                    value={opt.value}
+                                                                    checked={eventDraft.day1Workshop === opt.value}
+                                                                    onChange={e => setEventDraft(prev => ({ ...prev, day1Workshop: e.target.value }))}
+                                                                    style={{ accentColor: '#00e5ff' }}
+                                                                />
+                                                                {opt.label}
+                                                            </label>
+                                                        ))}
+                                                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.875rem', color: 'rgba(148,163,184,0.65)' }}>
+                                                            <input
+                                                                type="radio"
+                                                                name="day1WorkshopDraft"
+                                                                value=""
+                                                                checked={!eventDraft.day1Workshop}
+                                                                onChange={() => setEventDraft(prev => ({ ...prev, day1Workshop: '' }))}
+                                                                style={{ accentColor: '#00e5ff' }}
+                                                            />
+                                                            None / Skip workshop
+                                                        </label>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )
+                                    })()}
+
+                                    {eventSaveMsg && (
+                                        <p style={{
+                                            marginTop: '1rem', padding: '0.75rem', borderRadius: '8px',
+                                            background: eventSaveMsg.includes('✅') ? 'rgba(34,197,94,0.1)' : 'rgba(251,191,36,0.1)',
+                                            color: eventSaveMsg.includes('✅') ? '#22c55e' : '#fbbf24',
+                                            fontSize: '0.875rem', margin: '1rem 0 0',
+                                        }}>
+                                            {eventSaveMsg}
+                                        </p>
+                                    )}
+                                    <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.25rem', flexWrap: 'wrap' }}>
+                                        <button className="btn btn-primary" onClick={handleEventSave} disabled={eventSaving}>
+                                            {eventSaving ? 'Saving...' : <><Check size={16} style={{ marginRight: 6 }} />Save Changes</>}
+                                        </button>
+                                        <button className="btn btn-secondary" onClick={() => { setShowEventEditor(false); setEventSaveMsg('') }}>
+                                            <X size={16} style={{ marginRight: 6 }} />Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <p style={{ color: 'rgba(148,163,184,0.6)', fontSize: '0.875rem', margin: 0 }}>
+                                    Want to join more events? Click <strong>Add Events</strong> above.
+                                </p>
+                            )}
+                        </section>
+
+                        {/* WhatsApp Community Section */}
+                        <section id="whatsapp" className="dashboard-section">
+                            <div className="section-header-row">
+                                <h2>Community</h2>
+                            </div>
+                            <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1.25rem', flexWrap: 'wrap' }}>
+                                <MessageCircle size={36} style={{ color: '#22c55e', flexShrink: 0 }} />
+                                <div style={{ flex: 1, minWidth: 180 }}>
+                                    <h4 style={{ margin: 0 }}>Join the WhatsApp Group</h4>
+                                    <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: 'rgba(148,163,184,0.8)' }}>
+                                        Stay updated with real-time announcements and connect with fellow participants.
+                                    </p>
+                                </div>
+                                <a
+                                    href={WHATSAPP_LINK}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn btn-primary"
+                                    style={{ background: '#22c55e', borderColor: '#22c55e', whiteSpace: 'nowrap', marginLeft: 'auto' }}
+                                >
+                                    <MessageCircle size={18} style={{ marginRight: 6 }} /> Join Group
+                                </a>
                             </div>
                         </section>
 

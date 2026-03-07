@@ -48,7 +48,7 @@ const FacultyDashboard = () => {
 
     // Announcements State
     const [announcements, setAnnouncements] = useState([])
-    const [newAnnouncement, setNewAnnouncement] = useState({ title: '', content: '' })
+    const [newAnnouncement, setNewAnnouncement] = useState({ title: '', content: '', targetEvent: '', sendEmail: false })
 
     // Event filter options — match keys used in User.eventChoices (set by 5-step registration form)
     const events = [
@@ -149,11 +149,14 @@ const FacultyDashboard = () => {
         setActionLoading('announcement')
         try {
             await api.post('/announcements', {
-                ...newAnnouncement,
+                title: newAnnouncement.title,
+                content: newAnnouncement.content,
+                targetEvent: newAnnouncement.targetEvent || null,
+                sendEmail: !!newAnnouncement.sendEmail,
                 role: 'faculty',
                 postedBy: user._id
             })
-            setNewAnnouncement({ title: '', content: '' })
+            setNewAnnouncement({ title: '', content: '', targetEvent: '', sendEmail: false })
             // Refresh
             const annRes = await api.get('/announcements')
             setAnnouncements(annRes.data.announcements ?? annRes.data)
@@ -162,6 +165,17 @@ const FacultyDashboard = () => {
             alert('Failed to create announcement')
         } finally {
             setActionLoading(null)
+        }
+    }
+
+    const handleEditAnnouncement = async (id, { title, content }) => {
+        try {
+            await api.put(`/announcements/${id}`, { title, content })
+            const annRes = await api.get('/announcements')
+            setAnnouncements(annRes.data.announcements ?? annRes.data)
+        } catch (error) {
+            console.error('Error editing announcement:', error)
+            alert('Failed to edit announcement')
         }
     }
 
@@ -508,6 +522,7 @@ const FacultyDashboard = () => {
                             setNewAnnouncement={setNewAnnouncement}
                             handleAddAnnouncement={handleAddAnnouncement}
                             handleDeleteAnnouncement={handleDeleteAnnouncement}
+                            handleEditAnnouncement={handleEditAnnouncement}
                             actionLoading={actionLoading}
                         />
                     )}

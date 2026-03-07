@@ -306,4 +306,62 @@ router.post('/:id/resend-credentials', authenticate, authorize('faculty', 'coord
     }
 });
 
+// ── Participant self-service: ADD optional events (no cancellation allowed) ─
+// A participant can add events they originally skipped, but cannot remove events
+// they are already enrolled in. Day 1 workshop can be switched only if not yet set.
+router.patch('/me/event-choices', authenticate, async (req, res) => {
+    try {
+        if (req.user.role !== 'participant') {
+            return res.status(403).json({ error: 'Only participants can update event choices' });
+        }
+
+        const user = await User.findById(req.user._id);
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+        const { updates } = req.body; // e.g. { panelDiscussion: true, expertInsights: true }
+        if (!updates || typeof updates !== 'object') {
+            return res.status(400).json({ error: 'updates object is required' });
+        }
+
+        const ec = user.eventChoices || {};
+        const allowed = ['panelDiscussion', 'expertInsights', 'aiInVlsi', 'sharkTank', 'treasureHunt', 'silentGallery', 'day1Workshop'];
+        const errors = [];
+
+        for (const [key, value] of Object.entries(updates)) {
+            if (!allowed.includes(key)) continue;
+
+            if (key === 'day1Workshop') {
+                // Workshop can only be set/changed if currently empty/none
+                if (ec.day1Workshop && ec.day1Workshop !== 'none' && ec.day1Workshop !== '') {
+                    errors.push(`Workshop already selected (${ec.day1Workshop}) — cannot change after registration`);
+                } else {
+                    ec.day1Workshop = value;
+                }
+            } else {
+                // Boolean fields: can only be set to true (add), not false (remove)
+                if (ec[key] === true && value === false) {
+                    errors.push(`Cannot remove "${key}" — you are already enrolled`);
+                } else {
+                    ec[key] = value;
+                }
+            }
+        }
+
+        user.eventChoices = ec;
+        await user.save();
+
+        console.log(`📅 Event choices updated for ${user.email}`, ec);
+        res.json({
+            message: errors.length
+                ? 'Some updates applied. Note: ' + errors.join('; ')
+                : 'Event choices updated successfully',
+            eventChoices: ec,
+            warnings: errors
+        });
+    } catch (error) {
+        console.error('Update event choices error:', error);
+        res.status(500).json({ error: 'Failed to update event choices' });
+    }
+});
+
 module.exports = router;

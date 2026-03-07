@@ -441,6 +441,47 @@ const sendPasswordChangedEmail = async (user) => {
   return sent;
 };
 
+// ══════════════════════════════════════════════════════════════════════════════
+//  5. ANNOUNCEMENT EMAIL
+//  Sends an announcement blast to one recipient. Caller is responsible for
+//  iterating over all target users and calling this once per recipient.
+// ══════════════════════════════════════════════════════════════════════════════
+const sendAnnouncementEmail = async (user, { title, content, targetEvent }) => {
+  const audienceNote = targetEvent
+    ? `<p style="margin:0 0 12px;font-family:Arial,sans-serif;font-size:13px;
+        color:#94a3b8;">This message is for participants registered for: <strong style="color:#a78bfa;">${targetEvent}</strong></p>`
+    : '';
+
+  const contentHtml = `
+      ${greeting(user.name)}
+      ${audienceNote}
+      ${bodyText(`You have a new announcement from <strong>Semiconductor Summit 2.0</strong>:`)}
+
+      ${sectionCard(title, `
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+          <tr>
+            <td style="padding:14px 16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;">
+              <p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:#0f172a;
+                line-height:1.7;white-space:pre-wrap;">${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
+            </td>
+          </tr>
+        </table>
+      `, '#22c55e')}
+
+      <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom:28px;">
+        <tr><td align="center">${ctaButton(LOGIN_URL, 'View Dashboard', '#22c55e')}</td></tr>
+      </table>
+    `;
+
+  const html = baseTemplate({ accentColor: '#22c55e', contentHtml });
+
+  return sendWithRetry({
+    to: user.email,
+    subject: `[SS 2.0] ${title}`,
+    html
+  });
+};
+
 // ── Contact Form Email ──────────────────────────────────────────────────────
 // Sends an email to the summit team whenever someone submits the contact form.
 const sendContactEmail = async ({ name, email, subject, message }) => {
@@ -495,5 +536,6 @@ module.exports = {
   sendPasswordResetEmail,
   sendPasswordChangedEmail,
   sendContactEmail,
+  sendAnnouncementEmail,
   verifyEmailTransporter
 };
