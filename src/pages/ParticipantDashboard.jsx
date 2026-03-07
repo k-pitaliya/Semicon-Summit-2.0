@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     User, Calendar, Bell, Image, LogOut,
-    ChevronRight, ExternalLink, Edit2, Check, X, MessageCircle, Plus
+    ChevronRight, ChevronDown, ExternalLink, Edit2, Check, X, MessageCircle, Plus, MapPin, Clock, Info
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
@@ -10,12 +10,82 @@ import './Dashboard.css'
 
 const WHATSAPP_LINK = 'https://chat.whatsapp.com/EoU5wuK8RZi2TFSgJLnBcD'
 
+const EVENT_DETAILS = {
+    panelDiscussion: {
+        emoji: '🎙️',
+        description: 'Kick off the summit with an inspiring inaugural ceremony followed by a thought-provoking panel discussion bringing together industry leaders and academic experts in semiconductor technology.',
+        venue: 'Main Auditorium, CHARUSAT',
+        time: '10:00 AM – 11:30 AM',
+        highlights: ['Keynote address by industry leaders', 'Multi-speaker panel on semiconductor trends', 'Live Q&A session with experts'],
+        whatToBring: 'College ID, Registration ID',
+    },
+    'rtl-gds': {
+        emoji: '🔬',
+        description: 'A hands-on full-day workshop covering RTL design fundamentals through to GDSII sign-off, with self-checking testbench development using industry-standard EDA tools.',
+        venue: 'Computer Lab — Block A, CHARUSAT',
+        time: '1:30 PM – 4:30 PM',
+        highlights: ['RTL design & synthesis flow', 'Self-checking testbench creation', 'GDSII sign-off concepts'],
+        whatToBring: 'Laptop (recommended), Notebook & pen',
+    },
+    fpga: {
+        emoji: '⚡',
+        description: 'Get hands-on with FPGA interfacing techniques, learning peripheral integration and real-time hardware programming on industry-used FPGA development boards.',
+        venue: 'VLSI Lab, CHARUSAT',
+        time: '1:30 PM – 4:30 PM',
+        highlights: ['FPGA peripheral interfacing', 'Real-time hardware programming', 'Hands-on lab sessions with boards'],
+        whatToBring: 'Laptop (recommended), Notebook & pen',
+    },
+    expertInsights: {
+        emoji: '💡',
+        description: 'An expert-led technical session exploring the differences, opportunities, and career paths in VLSI design vs Embedded Systems — helping you chart your specialisation.',
+        venue: 'Seminar Hall, CHARUSAT',
+        time: '9:30 AM – 11:30 AM',
+        highlights: ['Industry speaker panel', 'VLSI vs Embedded career comparison', 'Live Q&A with domain experts'],
+        whatToBring: 'College ID, Questions for the speaker',
+    },
+    sharkTank: {
+        emoji: '🦈',
+        description: 'Pitch your semiconductor startup idea to a panel of industry investors and mentors. Top teams win prizes and mentorship opportunities in this high-energy business competition.',
+        venue: 'Seminar Hall, CHARUSAT',
+        time: '12:30 PM – 4:30 PM',
+        highlights: ['Multiple pitch rounds', 'Panel of investor judges', 'Cash prizes & mentorship for top teams'],
+        whatToBring: 'Pitch deck / presentation, Laptop',
+    },
+    aiInVlsi: {
+        emoji: '🤖',
+        description: 'Explore how Artificial Intelligence is transforming VLSI design and verification — covering AI-driven EDA tools, ML-based testing, and the future of next-gen chip design.',
+        venue: 'Main Auditorium, CHARUSAT',
+        time: '9:30 AM – 11:00 AM',
+        highlights: ['AI-driven EDA & automation tools', 'ML-based design verification', 'Future of next-gen chip design'],
+        whatToBring: 'College ID, Notebook & pen',
+    },
+    treasureHunt: {
+        emoji: '🏆',
+        description: 'An exciting team-based treasure hunt with semiconductor-themed puzzles hidden across campus. Test your knowledge, speed, and teamwork! Open to 1st and 2nd year students only.',
+        venue: 'Campus-wide, CHARUSAT',
+        time: 'Timing announced on Day 3 morning',
+        highlights: ['Team-based puzzle solving', 'Campus-wide clue hunt', 'Prizes for top 3 teams'],
+        whatToBring: 'Team of 3–4 members, College ID',
+    },
+    silentGallery: {
+        emoji: '🖼️',
+        description: 'A curated silent poster presentation where participants showcase their research and project work in semiconductor, VLSI, or embedded domains. Judges evaluate and award top posters.',
+        venue: 'Exhibition Hall, CHARUSAT',
+        time: 'Timing announced on Day 3 morning',
+        highlights: ['Poster presentation format', 'Expert judges panel', 'Awards for top 3 entries'],
+        whatToBring: 'A1/A0 printed poster, Registration ID',
+    },
+}
+
 const ParticipantDashboard = () => {
     const { user, setUser, logout } = useAuth()
     const navigate = useNavigate()
     const [announcements, setAnnouncements] = useState([])
     const [photos, setPhotos] = useState([])
     const [loading, setLoading] = useState(true)
+
+    // Event expand/detail state
+    const [expandedEvent, setExpandedEvent] = useState(null)
 
     // Event-update state
     const [showEventEditor, setShowEventEditor] = useState(false)
@@ -241,23 +311,23 @@ const ParticipantDashboard = () => {
                                     const derived = []
                                     // Day 1
                                     if (ec.panelDiscussion)
-                                        derived.push({ name: 'Inaugural Talk & Panel Discussion', day: 'Day 1 — 17 Mar', note: '10:00 – 11:30 AM' })
+                                        derived.push({ key: 'panelDiscussion', name: 'Inaugural Talk & Panel Discussion', day: 'Day 1 — 17 Mar', note: '10:00 – 11:30 AM' })
                                     if (ec.day1Workshop === 'rtl-gds')
-                                        derived.push({ name: 'RTL & Self-Checking Testbench Workshop', day: 'Day 1 — 17 Mar', note: 'Full-day technical workshop · 1:30 – 4:30 PM' })
+                                        derived.push({ key: 'rtl-gds', name: 'RTL & Self-Checking Testbench Workshop', day: 'Day 1 — 17 Mar', note: 'Full-day technical workshop · 1:30 – 4:30 PM' })
                                     else if (ec.day1Workshop === 'fpga')
-                                        derived.push({ name: 'FPGA Interfacing Workshop', day: 'Day 1 — 17 Mar', note: 'Full-day technical workshop · 1:30 – 4:30 PM' })
+                                        derived.push({ key: 'fpga', name: 'FPGA Interfacing Workshop', day: 'Day 1 — 17 Mar', note: 'Full-day technical workshop · 1:30 – 4:30 PM' })
                                     // Day 2
                                     if (ec.expertInsights)
-                                        derived.push({ name: 'Expert Insights: VLSI vs Embedded', day: 'Day 2 — 18 Mar', note: '9:30 – 11:30 AM' })
+                                        derived.push({ key: 'expertInsights', name: 'Expert Insights: VLSI vs Embedded', day: 'Day 2 — 18 Mar', note: '9:30 – 11:30 AM' })
                                     if (ec.sharkTank)
-                                        derived.push({ name: 'Silicon Shark Tank', day: 'Day 2 — 18 Mar', note: 'Business pitch competition · 12:30 – 4:30 PM' })
+                                        derived.push({ key: 'sharkTank', name: 'Silicon Shark Tank', day: 'Day 2 — 18 Mar', note: 'Business pitch competition · 12:30 – 4:30 PM' })
                                     // Day 3
                                     if (ec.aiInVlsi)
-                                        derived.push({ name: 'AI-Powered VLSI: Next-Gen Design Verification', day: 'Day 3 — 19 Mar', note: '9:30 – 11:00 AM' })
+                                        derived.push({ key: 'aiInVlsi', name: 'AI-Powered VLSI: Next-Gen Design Verification', day: 'Day 3 — 19 Mar', note: '9:30 – 11:00 AM' })
                                     if (ec.treasureHunt)
-                                        derived.push({ name: 'Silicon Jackpot (Treasure Hunt)', day: 'Day 3 — 19 Mar', note: 'Team-based treasure hunt' })
+                                        derived.push({ key: 'treasureHunt', name: 'Silicon Jackpot (Treasure Hunt)', day: 'Day 3 — 19 Mar', note: 'Team-based treasure hunt' })
                                     if (ec.silentGallery)
-                                        derived.push({ name: 'Silicon Silent Gallery', day: 'Day 3 — 19 Mar', note: 'Poster presentation' })
+                                        derived.push({ key: 'silentGallery', name: 'Silicon Silent Gallery', day: 'Day 3 — 19 Mar', note: 'Poster presentation' })
 
                                     // Fallback for legacy users with selectedEvents array
                                     const legacy = (user?.selectedEvents || []).filter(e =>
@@ -275,18 +345,78 @@ const ParticipantDashboard = () => {
                                         )
                                     }
 
-                                    return all.map((event, index) => (
-                                        <div key={index} className="event-item card">
-                                            <div className="event-item-icon">
-                                                <Calendar size={20} />
+                                    return all.map((event, index) => {
+                                        const isOpen = expandedEvent === index
+                                        const details = EVENT_DETAILS[event.key]
+                                        return (
+                                            <div key={index} className="event-item card" style={{ flexDirection: 'column', alignItems: 'stretch', cursor: details ? 'pointer' : 'default', padding: 0, overflow: 'hidden' }}>
+                                                {/* Header row — always visible */}
+                                                <div
+                                                    onClick={() => details && setExpandedEvent(isOpen ? null : index)}
+                                                    style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem 1.25rem' }}
+                                                >
+                                                    <div className="event-item-icon" style={{ fontSize: details?.emoji ? '1.4rem' : undefined }}>
+                                                        {details?.emoji ?? <Calendar size={20} />}
+                                                    </div>
+                                                    <div className="event-item-info" style={{ flex: 1 }}>
+                                                        <h4 style={{ margin: 0 }}>{event.name}</h4>
+                                                        <p style={{ margin: '2px 0 0', fontSize: '0.8rem' }}>
+                                                            {event.day ? `${event.day} · ` : ''}{event.note}
+                                                        </p>
+                                                    </div>
+                                                    {details && (
+                                                        isOpen
+                                                            ? <ChevronDown size={18} style={{ flexShrink: 0, color: '#00e5ff', transition: 'transform 0.2s' }} />
+                                                            : <ChevronRight size={18} style={{ flexShrink: 0, opacity: 0.5, transition: 'transform 0.2s' }} />
+                                                    )}
+                                                </div>
+
+                                                {/* Expanded detail panel */}
+                                                {isOpen && details && (
+                                                    <div style={{
+                                                        borderTop: '1px solid rgba(148,163,184,0.12)',
+                                                        padding: '1rem 1.25rem 1.25rem',
+                                                        background: 'rgba(0,229,255,0.03)',
+                                                        animation: 'fadeIn 0.18s ease'
+                                                    }}>
+                                                        <p style={{ color: 'rgba(148,163,184,0.85)', fontSize: '0.875rem', margin: '0 0 1rem', lineHeight: 1.6 }}>
+                                                            {details.description}
+                                                        </p>
+                                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.65rem', marginBottom: '1rem' }}>
+                                                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.82rem' }}>
+                                                                <Clock size={14} style={{ color: '#00e5ff', marginTop: 2, flexShrink: 0 }} />
+                                                                <div>
+                                                                    <span style={{ display: 'block', color: 'rgba(148,163,184,0.55)', fontSize: '0.72rem', marginBottom: 1 }}>TIME</span>
+                                                                    <span style={{ color: 'rgba(226,232,240,0.9)' }}>{details.time}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.82rem' }}>
+                                                                <MapPin size={14} style={{ color: '#00e5ff', marginTop: 2, flexShrink: 0 }} />
+                                                                <div>
+                                                                    <span style={{ display: 'block', color: 'rgba(148,163,184,0.55)', fontSize: '0.72rem', marginBottom: 1 }}>VENUE</span>
+                                                                    <span style={{ color: 'rgba(226,232,240,0.9)' }}>{details.venue}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div style={{ marginBottom: '0.85rem' }}>
+                                                            <p style={{ fontSize: '0.72rem', color: 'rgba(148,163,184,0.55)', marginBottom: '0.4rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>What to expect</p>
+                                                            <ul style={{ margin: 0, paddingLeft: '1.1rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                                                                {details.highlights.map((h, i) => (
+                                                                    <li key={i} style={{ color: 'rgba(226,232,240,0.8)', fontSize: '0.82rem' }}>{h}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
+                                                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', background: 'rgba(251,191,36,0.07)', border: '1px solid rgba(251,191,36,0.2)', borderRadius: 8, padding: '0.6rem 0.8rem' }}>
+                                                            <Info size={13} style={{ color: '#fbbf24', marginTop: 2, flexShrink: 0 }} />
+                                                            <p style={{ margin: 0, fontSize: '0.8rem', color: 'rgba(251,191,36,0.9)' }}>
+                                                                <strong>What to bring: </strong>{details.whatToBring}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
-                                            <div className="event-item-info">
-                                                <h4>{event.name}</h4>
-                                                <p>{event.day ? `${event.day} · ` : ''}{event.note}</p>
-                                            </div>
-                                            <ChevronRight size={20} className="event-item-arrow" />
-                                        </div>
-                                    ))
+                                        )
+                                    })
                                 })()}
                             </div>
                         </section>
