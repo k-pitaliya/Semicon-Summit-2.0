@@ -375,9 +375,9 @@ const FacultyDashboard = () => {
     }
 
     return (
-        <div className="dashboard-page" style={{ position: 'relative', overflow: 'hidden' }}>
+        <div className="dashboard-page" style={{ position: 'relative' }}>
             {/* Background */}
-            <div className="hero-bg" style={{ zIndex: 0, opacity: 0.5 }}>
+            <div className="hero-bg" style={{ zIndex: 0, opacity: 0.5, overflow: 'hidden', pointerEvents: 'none' }}>
                 <div className="hero-grid" />
                 <div className="hero-glow hero-glow-1" style={{ top: '-20%', left: '20%', opacity: 0.3 }} />
             </div>

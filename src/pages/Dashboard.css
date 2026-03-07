@@ -130,6 +130,8 @@
     margin-left: 260px;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    overflow-x: hidden;
 }
 
 .dashboard-header {
@@ -198,6 +200,8 @@
 .dashboard-content {
     flex: 1;
     padding: 2rem;
+    min-width: 0;
+    overflow-x: auto;
 }
 
 .dashboard-section {
