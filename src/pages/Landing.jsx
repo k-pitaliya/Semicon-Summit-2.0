@@ -4,7 +4,7 @@ import {
     Cpu, Calendar, MapPin, Users, Zap, Award,
     ArrowRight, Sparkles, CircuitBoard, ChevronRight,
     CheckCircle2, Target, Building2, GraduationCap, Globe,
-    Linkedin, BookOpen, Mic2, Trophy, Handshake, Eye
+    Linkedin, BookOpen, Mic2, Trophy, Handshake, Eye, AlertCircle, ExternalLink
 } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -192,6 +192,105 @@ const Landing = () => {
                                 </Link>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ====== FEATURED EVENTS SPOTLIGHT ====== */}
+            <section className="featured-events-section reveal">
+                <div className="section-bg">
+                    <div className="section-grid" />
+                    <div className="section-glow section-glow-left" />
+                </div>
+                <div className="container">
+                    <div className="section-header section-header-center">
+                        <span className="section-tag">Open for Registration</span>
+                        <h2>Featured <span className="text-gradient">Events</span></h2>
+                        <p>Submit your ideas before the deadline — limited spots available.</p>
+                    </div>
+
+                    <div className="featured-events-grid">
+
+                        {/* ── Silicon Shark Tank ── */}
+                        <div className="featured-event-card featured-event-card--shark">
+                            <div className="fec-header">
+                                <div className="fec-badge">Flagship Event</div>
+                                <h3>Silicon Shark Tank</h3>
+                                <p className="fec-subtitle">Industry-Driven Idea Pitching</p>
+                            </div>
+
+                            <p className="fec-desc">
+                                Pitch your innovative electronics and semiconductor ideas to industry experts.
+                                Winners receive a <strong>FREE Internship Opportunity!</strong>
+                            </p>
+
+                            <div className="fec-rounds">
+                                <span className="fec-section-label"><BookOpen size={13} /> Rounds</span>
+                                <ul>
+                                    <li><ChevronRight size={12} />Idea Submission (Screening)</li>
+                                    <li><ChevronRight size={12} />Live Pitch to Industry Experts</li>
+                                </ul>
+                            </div>
+
+                            <div className="fec-deadline">
+                                <AlertCircle size={14} />
+                                <span><strong>Deadline:</strong> 12 March 2026, 7:00 PM</span>
+                            </div>
+
+                            <div className="fec-actions">
+                                <a
+                                    href="https://docs.google.com/document/d/1Qwy0ZiI6oU-lF8O0KOidfNbjzZkAr67SQLmASJxO2u8/edit?usp=sharing"
+                                    target="_blank" rel="noopener noreferrer"
+                                    className="fec-btn-outline"
+                                >
+                                    <ExternalLink size={15} /> Event Details
+                                </a>
+                                <Link to="/register?event=sharkTank" className="fec-btn-primary">
+                                    Register Now <ArrowRight size={15} />
+                                </Link>
+                            </div>
+                        </div>
+
+                        {/* ── Silicon Silent Gallery ── */}
+                        <div className="featured-event-card featured-event-card--gallery">
+                            <div className="fec-header">
+                                <div className="fec-badge fec-badge--gallery">Exhibition</div>
+                                <h3>Silicon Ideas Showcase</h3>
+                                <p className="fec-subtitle">Silent Feedback Edition</p>
+                            </div>
+
+                            <p className="fec-desc">
+                                Present interdisciplinary ideas connecting your domain with VLSI through an engaging
+                                poster presentation. Open to <strong>individuals or teams from any department.</strong>
+                            </p>
+
+                            <div className="fec-rounds">
+                                <span className="fec-section-label"><AlertCircle size={13} style={{ color: '#f97316' }} /> Deadlines</span>
+                                <ul>
+                                    <li><ChevronRight size={12} />Topic Selection: Within 1 day of registration</li>
+                                    <li><ChevronRight size={12} />Poster Submission for Review: 12 March 2026</li>
+                                    <li><ChevronRight size={12} />Final Poster: 15 March 2026</li>
+                                </ul>
+                            </div>
+
+                            <div className="fec-note">
+                                📌 Poster printing arranged by organizers — just submit your design file.
+                            </div>
+
+                            <div className="fec-actions">
+                                <a
+                                    href="https://docs.google.com/document/d/1l_NDMHc6AmoNzxHls3bzcdWJBXAoI_YXqwAtStZSITM/edit?usp=sharing"
+                                    target="_blank" rel="noopener noreferrer"
+                                    className="fec-btn-outline"
+                                >
+                                    <ExternalLink size={15} /> Event Details
+                                </a>
+                                <Link to="/register?event=silentGallery" className="fec-btn-primary">
+                                    Register Now <ArrowRight size={15} />
+                                </Link>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </section>

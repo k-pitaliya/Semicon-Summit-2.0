@@ -494,9 +494,99 @@
 .ev-modal-actions {
     margin-top: auto;
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
     padding-top: 1rem;
+    flex-wrap: wrap;
 }
+
+/* ── Rounds / Deadlines / Note extras ── */
+.ev-modal-extras {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+}
+
+.ev-modal-extras h4 {
+    display: flex;
+    align-items: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.65);
+    margin: 0 0 0.55rem 0;
+}
+
+.ev-modal-deadline {
+    border-color: rgba(249, 115, 22, 0.2);
+    background: rgba(249, 115, 22, 0.05);
+}
+
+.ev-rounds-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    counter-reset: round-counter;
+}
+
+.ev-rounds-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    line-height: 1.5;
+}
+
+.ev-rounds-list li svg { flex-shrink: 0; margin-top: 3px; color: #22c55e; opacity: 0.7; }
+
+.ev-deadline-single {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #f97316;
+    margin: 0;
+}
+
+.ev-deadlines-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.ev-deadlines-list li {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    padding-left: 1rem;
+    position: relative;
+    line-height: 1.5;
+}
+
+.ev-deadlines-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #f97316;
+    font-weight: 700;
+}
+
+.ev-modal-note {
+    background: rgba(249, 115, 22, 0.06);
+    border-left: 3px solid rgba(249, 115, 22, 0.4);
+    border-radius: 0 8px 8px 0;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.82rem;
+    color: rgba(148, 163, 184, 0.85);
+    line-height: 1.55;
+}
+
+
 
 .ev-btn-outline {
     flex: 1;

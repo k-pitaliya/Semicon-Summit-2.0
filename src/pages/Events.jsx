@@ -7,7 +7,7 @@ import {
     Cpu, Code, Trophy, Zap, Users, Lightbulb, Target, Award,
     ArrowRight, X, Calendar, Clock, MapPin, IndianRupee, ExternalLink, Eye,
     Sparkles, FileText, Mic2, Gamepad2, GraduationCap, Layers, Brain,
-    Filter, CircuitBoard
+    Filter, CircuitBoard, BookOpen, AlertCircle, ChevronRight
 } from 'lucide-react';
 import './Events.css';
 
@@ -213,7 +213,10 @@ The event consists of two rounds. In Round 1 (Idea Screening), teams must submit
         time: '12:30 PM – 04:30 PM',
         venue: 'Semiconductor Design Excellence Hub, EC Dept., A6 Building, CHARUSAT',
         fee: 'Prize Pool',
-        rulesUrl: '/images/SHARK TANK Rules.docx'
+        rulesUrl: '/images/SHARK TANK Rules.docx',
+        deadline: '12 March 2026, 7:00 PM',
+        rounds: ['Idea Submission — Screening Round', 'Live Pitch to Industry Experts'],
+        infoUrl: 'https://docs.google.com/document/d/1Qwy0ZiI6oU-lF8O0KOidfNbjzZkAr67SQLmASJxO2u8/edit?usp=sharing'
     },
     {
         id: 'silicon-jackpot',
@@ -291,7 +294,14 @@ Each poster includes a QR code enabling attendees to:
         time: '09:30 AM – 04:30 PM',
         venue: 'EC Square, EC Dept., A6 Building, CHARUSAT',
         fee: 'Included',
-        rulesUrl: null
+        rulesUrl: null,
+        deadlines: [
+            'Topic Selection: Within 1 day of registration',
+            'Poster Submission for Review: 12 March 2026',
+            'Final Poster Submission: 15 March 2026',
+        ],
+        infoUrl: 'https://docs.google.com/document/d/1l_NDMHc6AmoNzxHls3bzcdWJBXAoI_YXqwAtStZSITM/edit?usp=sharing',
+        note: 'Poster printing will be arranged by the organizing team. Participants only need to submit their final poster design file before the deadline.'
     },
 
     // ── Category 4: Industry Experience ──
@@ -383,6 +393,35 @@ const EventModal = ({ event, onClose }) => {
                         </div>
                     </div>
 
+                    {/* Rounds */}
+                    {event.rounds && (
+                        <div className="ev-modal-extras">
+                            <h4><BookOpen size={15} style={{ marginRight: 6, verticalAlign: 'middle' }} />Rounds</h4>
+                            <ol className="ev-rounds-list">
+                                {event.rounds.map((r, i) => (
+                                    <li key={i}><ChevronRight size={13} style={{ marginRight: 4, flexShrink: 0 }} />{r}</li>
+                                ))}
+                            </ol>
+                        </div>
+                    )}
+
+                    {/* Deadline(s) */}
+                    {(event.deadline || event.deadlines) && (
+                        <div className="ev-modal-extras ev-modal-deadline">
+                            <h4><AlertCircle size={15} style={{ marginRight: 6, verticalAlign: 'middle', color: '#f97316' }} />
+                                <span style={{ color: '#f97316' }}>Deadline{event.deadlines ? 's' : ''}</span>
+                            </h4>
+                            {event.deadline && <p className="ev-deadline-single">{event.deadline}</p>}
+                            {event.deadlines && (
+                                <ul className="ev-deadlines-list">
+                                    {event.deadlines.map((d, i) => (
+                                        <li key={i}>{d}</li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+                    )}
+
                     <div className="ev-modal-desc">
                         <h4>Description</h4>
                         <div className="ev-desc-text">
@@ -392,11 +431,23 @@ const EventModal = ({ event, onClose }) => {
                         </div>
                     </div>
 
+                    {/* Note */}
+                    {event.note && (
+                        <div className="ev-modal-note">
+                            <span style={{ fontWeight: 600 }}>📌 Note:</span> {event.note}
+                        </div>
+                    )}
+
                     <div className="ev-modal-actions">
                         {event.rulesUrl && (
                             <button className="ev-btn-outline" onClick={handleViewRules}>
                                 <FileText size={18} /> Event Rules
                             </button>
+                        )}
+                        {event.infoUrl && (
+                            <a href={event.infoUrl} target="_blank" rel="noopener noreferrer" className="ev-btn-outline">
+                                <BookOpen size={18} /> More Info
+                            </a>
                         )}
                         <Link to={event.formKey ? `/register?event=${event.formKey}` : '/register'} className="ev-btn-primary">
                             Register Now <ExternalLink size={18} />
