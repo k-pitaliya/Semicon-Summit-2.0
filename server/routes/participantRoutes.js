@@ -11,7 +11,7 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
     try {
         const { event, page, limit } = req.query;
         const pageNum = Math.max(1, parseInt(page) || 1);
-        const limitNum = Math.min(200, parseInt(limit) || 100);
+        const limitNum = Math.min(1000, parseInt(limit) || 1000);
         let participants;
         let total = 0; // declared here so it's in scope for res.json() below
 

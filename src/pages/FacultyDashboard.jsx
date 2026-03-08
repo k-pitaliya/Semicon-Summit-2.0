@@ -76,7 +76,7 @@ const FacultyDashboard = () => {
         setError(null)
         try {
             // Fetch all participants (role: participant)
-            const participantsRes = await api.get('/participants')
+            const participantsRes = await api.get('/participants?limit=1000')
             const participantsData = Array.isArray(participantsRes.data)
                 ? participantsRes.data
                 : (participantsRes.data?.participants ?? [])
