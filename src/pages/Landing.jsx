@@ -123,8 +123,8 @@ const Landing = () => {
 
                     {/* Hero CTA — visible above the fold */}
                     <div className="hero-cta-inline hero-animate hero-animate-delay-4">
-                        <Link to="/register" className="btn btn-primary btn-lg hero-register-btn">
-                            Register Now — ₹299 <ArrowRight size={20} />
+                        <Link to="/login" className="btn btn-primary btn-lg hero-register-btn">
+                            Login to Dashboard <ArrowRight size={20} />
                         </Link>
                         <Link to="/events" className="btn btn-secondary hero-events-btn">
                             <Eye size={18} /> View Events
@@ -184,11 +184,11 @@ const Landing = () => {
                             </div>
 
                             <div className="cta-buttons">
-                                <Link to="/register" className="btn btn-primary btn-lg cta-register-btn">
-                                    Register Now — ₹299 <ArrowRight size={20} />
-                                </Link>
-                                <Link to="/events" className="btn btn-secondary cta-events-btn">
-                                    <Eye size={18} /> View Events
+                                <div style={{ background: 'rgba(249,115,22,0.1)', border: '1px solid rgba(249,115,22,0.35)', borderRadius: '12px', padding: '1rem 1.5rem', color: '#f97316', fontWeight: 600, fontSize: '1rem', textAlign: 'center', width: '100%' }}>
+                                    🔒 Registration is now closed
+                                </div>
+                                <Link to="/login" className="btn btn-secondary cta-events-btn">
+                                    <Eye size={18} /> Login to Dashboard
                                 </Link>
                             </div>
                         </div>
@@ -238,20 +238,13 @@ const Landing = () => {
                             </div>
 
                             <div className="fec-actions">
-                                <a
-                                    href="https://docs.google.com/document/d/1Qwy0ZiI6oU-lF8O0KOidfNbjzZkAr67SQLmASJxO2u8/edit?usp=sharing"
-                                    target="_blank" rel="noopener noreferrer"
-                                    className="fec-btn-outline"
-                                >
+                                <a href="https://docs.google.com/document/d/1Qwy0ZiI6oU-lF8O0KOidfNbjzZkAr67SQLmASJxO2u8/edit?usp=sharing" target="_blank" rel="noopener noreferrer" className="fec-btn-outline">
                                     <ExternalLink size={15} /> Event Details
                                 </a>
-                                <Link to="/register?event=sharkTank" className="fec-btn-primary">
-                                    Register Now <ArrowRight size={15} />
-                                </Link>
                             </div>
                         </div>
 
-                        {/* ── Silicon Silent Gallery ── */}
+                        {/* ── Silicon Silent Gallery ── */}}
                         <div className="featured-event-card featured-event-card--gallery">
                             <div className="fec-header">
                                 <div className="fec-badge fec-badge--gallery">Exhibition</div>
@@ -278,16 +271,9 @@ const Landing = () => {
                             </div>
 
                             <div className="fec-actions">
-                                <a
-                                    href="https://docs.google.com/document/d/1l_NDMHc6AmoNzxHls3bzcdWJBXAoI_YXqwAtStZSITM/edit?usp=sharing"
-                                    target="_blank" rel="noopener noreferrer"
-                                    className="fec-btn-outline"
-                                >
+                                <a href="https://docs.google.com/document/d/1l_NDMHc6AmoNzxHls3bzcdWJBXAoI_YXqwAtStZSITM/edit?usp=sharing" target="_blank" rel="noopener noreferrer" className="fec-btn-outline">
                                     <ExternalLink size={15} /> Event Details
                                 </a>
-                                <Link to="/register?event=silentGallery" className="fec-btn-primary">
-                                    Register Now <ArrowRight size={15} />
-                                </Link>
                             </div>
                         </div>
 

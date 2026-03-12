@@ -449,9 +449,9 @@ const EventModal = ({ event, onClose }) => {
                                 <BookOpen size={18} /> More Info
                             </a>
                         )}
-                        <Link to={event.formKey ? `/register?event=${event.formKey}` : '/register'} className="ev-btn-primary">
-                            Register Now <ExternalLink size={18} />
-                        </Link>
+                        <span className="ev-btn-primary" style={{ opacity: 0.5, cursor: 'not-allowed', pointerEvents: 'none' }}>
+                            Registration Closed <ExternalLink size={18} />
+                        </span>
                     </div>
                 </div>
             </div>

@@ -34,6 +34,33 @@ const INITIAL_FORM = {
 };
 
 const Register = () => {
+    // ── REGISTRATION CLOSED ──────────────────────────────────
+    return (
+        <div className="register-page" style={{ position: 'relative', overflow: 'hidden' }}>
+            <div className="hero-bg"><div className="hero-grid" /><div className="hero-glow hero-glow-1" /><div className="hero-glow hero-glow-2" /><ParticleField count={40} /></div>
+            <div className="register-container success-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+                <div className="success-icon" style={{ color: '#f97316' }}>
+                    <AlertCircle size={80} />
+                </div>
+                <h1 style={{ color: '#f97316' }}>Registration Closed</h1>
+                <p className="success-message">
+                    Registration for <strong>Semiconductor Summit 2.0</strong> is now closed.<br />
+                    If you have already registered, please <Link to="/login" style={{ color: '#22c55e' }}>login to your dashboard</Link>.
+                </p>
+                <p style={{ fontSize: '0.9rem', color: 'rgba(148,163,184,0.7)', marginTop: '0.5rem' }}>
+                    For queries, contact us at the <Link to="/contact" style={{ color: '#22c55e' }}>Contact page</Link>.
+                </p>
+                <div style={{ marginTop: '2rem', display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                    <Link to="/login" className="btn btn-primary">Go to Login</Link>
+                    <Link to="/" className="btn btn-secondary"><ArrowLeft size={20} />Back to Home</Link>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// eslint-disable-next-line no-unused-vars
+const _RegisterFormUnused = () => {
     const [searchParams] = useSearchParams();
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState(() => {

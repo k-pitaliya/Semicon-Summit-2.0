@@ -181,6 +181,9 @@ const uploadReceipt = multer({
 });
 
 app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) => {
+    // ── REGISTRATION CLOSED ──────────────────────────────────
+    return res.status(403).json({ error: 'Registration is now closed. No new registrations are being accepted.' });
+
     try {
         const { name, email, phone, college, department, selectedEvents, paymentAmount, paymentId,
             studentId, universityEmail, yearOfStudy, eventChoices } = req.body;

@@ -70,9 +70,9 @@ const Navbar = () => {
                             {link.name}
                         </Link>
                     ))}
-                    <Link to="/register" className="btn btn-outline btn-sm nav-register-btn" onClick={() => setIsMobileMenuOpen(false)}>
-                        Register
-                    </Link>
+                    <span className="btn btn-outline btn-sm nav-register-btn" style={{ opacity: 0.45, cursor: 'not-allowed', pointerEvents: 'none' }}>
+                        Registration Closed
+                    </span>
                     <Link to="/login" className="btn btn-primary btn-sm nav-login-btn">
                         Login
                     </Link>
