@@ -119,6 +119,15 @@ const apiLimiter = rateLimit({
     legacyHeaders: false
 });
 
+// Rate limiting for the public registration endpoint
+const registrationLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 5, // 5 registration attempts per hour per IP
+    message: { error: 'Too many registration attempts from this IP, please try again in an hour.' },
+    standardHeaders: true,
+    legacyHeaders: false
+});
+
 // Webhook routes (must be before express.json() to handle raw body)
 app.use('/api/webhooks', webhookRoutes);
 
@@ -180,9 +189,11 @@ const uploadReceipt = multer({
     }
 });
 
-app.post('/api/register', uploadReceipt.single('pdfReceipt'), async (req, res) => {
-    // ── REGISTRATION CLOSED ──────────────────────────────────
-    return res.status(403).json({ error: 'Registration is now closed. No new registrations are being accepted.' });
+app.post('/api/register', registrationLimiter, uploadReceipt.single('pdfReceipt'), async (req, res) => {
+    // Check whether registration is open (controlled via REGISTRATION_OPEN env var)
+    if (process.env.REGISTRATION_OPEN !== 'true') {
+        return res.status(403).json({ error: 'Registration is now closed. No new registrations are being accepted.' });
+    }
 
     try {
         const { name, email, phone, college, department, selectedEvents, paymentAmount, paymentId,

@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const { generateToken, authenticate } = require('../middleware/auth');
 const { sendPasswordResetEmail, sendPasswordChangedEmail } = require('../services/emailService');
+const logger = require('../utils/logger');
 
 // Login
 router.post('/login', async (req, res) => {
@@ -31,7 +32,7 @@ router.post('/login', async (req, res) => {
         userData.token = token;
         res.json(userData);
     } catch (error) {
-        console.error('Login error:', error);
+        logger.error('Login error:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -41,7 +42,7 @@ router.get('/validate', authenticate, async (req, res) => {
     try {
         res.json(req.user);
     } catch (error) {
-        console.error('Auth validate error:', error);
+        logger.error('Auth validate error:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -77,7 +78,7 @@ router.post('/register', async (req, res) => {
         userData.token = token;
         res.status(201).json(userData);
     } catch (error) {
-        console.error('Registration error:', error);
+        logger.error('Registration error:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -105,10 +106,10 @@ router.post('/forgot-password', async (req, res) => {
         // Send a confirmation-only email (no password shown)
         await sendPasswordChangedEmail(user);
 
-        console.log(`🔐 Password reset (user-chosen) for: ${user.email}`);
+        logger.info(`Password reset (user-chosen) for: ${user.email}`);
         res.json({ message: SAFE_MESSAGE });
     } catch (error) {
-        console.error('Forgot password error:', error);
+        logger.error('Forgot password error:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -127,10 +128,10 @@ router.put('/change-password', authenticate, async (req, res) => {
         user.mustChangePassword = false;
         await user.save();
 
-        console.log(`🔑 User changed password: ${user.email}`);
+        logger.info(`User changed password: ${user.email}`);
         res.json({ message: 'Password changed successfully' });
     } catch (error) {
-        console.error('Change password error:', error);
+        logger.error('Change password error:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });

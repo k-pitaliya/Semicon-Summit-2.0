@@ -4,6 +4,7 @@ const User = require('../models/User');
 const Event = require('../models/Event');
 const Registration = require('../models/Registration');
 const { authenticate, authorize } = require('../middleware/auth');
+const logger = require('../utils/logger');
 
 // Get all users (Faculty only)
 router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, res) => {
@@ -18,7 +19,7 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
 
         res.json(users);
     } catch (error) {
-        console.error('Get users error:', error);
+        logger.error('Get users error:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -32,7 +33,7 @@ router.get('/:id', authenticate, async (req, res) => {
         }
         res.json(user);
     } catch (error) {
-        console.error('Get user error:', error);
+        logger.error('Get user error:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -49,7 +50,7 @@ router.put('/:id', authenticate, authorize('faculty', 'coordinator'), async (req
         }
         res.json(user);
     } catch (error) {
-        console.error('Update user error:', error);
+        logger.error('Update user error:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -69,10 +70,10 @@ router.delete('/:id', authenticate, authorize('faculty', 'coordinator'), async (
         await Registration.deleteMany({ user: req.params.id });
         await User.findByIdAndDelete(req.params.id);
 
-        console.log(`🗑️ User deleted: ${user.name} (${user.email})`);
+        logger.info(`User deleted: ${user.name} (${user.email})`);
         res.json({ success: true, message: 'User deleted successfully' });
     } catch (error) {
-        console.error('Delete user error:', error);
+        logger.error('Delete user error:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -106,18 +107,19 @@ router.post('/:id/reset-password', authenticate, authorize('faculty', 'coordinat
         try {
             emailSent = await sendPasswordResetEmail(user, newPassword);
         } catch (emailError) {
-            console.error('Password reset email failed:', emailError);
+            logger.error('Password reset email failed:', emailError);
         }
 
-        console.log(`🔐 Password reset for: ${user.name} (${user.email}) — email sent: ${emailSent}`);
+        logger.info(`Password reset for: ${user.name} (${user.email}) — email sent: ${emailSent}`);
         res.json({
             success: true,
             message: 'Password reset successfully',
+            // Return plaintext password so admin can share it manually if email delivery fails
             newPassword,
             emailSent
         });
     } catch (error) {
-        console.error('Password reset error:', error);
+        logger.error('Password reset error:', error);
         res.status(500).json({ error: 'Password reset failed' });
     }
 });
@@ -136,10 +138,10 @@ router.patch('/:id/role', authenticate, authorize('faculty', 'coordinator'), asy
             return res.status(404).json({ error: 'User not found' });
         }
 
-        console.log(`👤 Role changed for ${user.email}: ${role}`);
+        logger.info(`Role changed for ${user.email}: ${role}`);
         res.json(user);
     } catch (error) {
-        console.error('Change role error:', error);
+        logger.error('Change role error:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -181,7 +183,7 @@ router.patch('/:id/password-rotation', authenticate, authorize('faculty', 'coord
             user: user.toJSON()
         });
     } catch (error) {
-        console.error('Update password rotation error:', error);
+        logger.error('Update password rotation error:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });

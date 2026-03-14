@@ -5,6 +5,7 @@ const Event = require('../models/Event');
 const Registration = require('../models/Registration');
 const { authenticate, authorize } = require('../middleware/auth');
 const { generatePassword, sendCredentialsEmail, sendRejectionEmail } = require('../services/emailService');
+const logger = require('../utils/logger');
 
 // Get all participants (Faculty/Coordinator) — supports ?page=&limit=&event=
 router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, res) => {
@@ -133,7 +134,7 @@ router.get('/', authenticate, authorize('faculty', 'coordinator'), async (req, r
             }
         });
     } catch (error) {
-        console.error('Get participants error:', error);
+        logger.error('Get participants error:', error);
         res.status(500).json({ error: 'Server error fetching participants', details: error.message });
     }
 });
@@ -190,7 +191,7 @@ router.get('/export', authenticate, authorize('faculty'), async (req, res) => {
 
         res.json({ total: data.length, participants: data });
     } catch (error) {
-        console.error('Export error:', error);
+        logger.error('Export error:', error);
         res.status(500).json({ error: 'Export failed.' });
     }
 });
@@ -219,15 +220,14 @@ router.put('/:id/verify', authenticate, authorize('faculty'), async (req, res) =
 
         const emailSent = await sendCredentialsEmail(user, password);
 
-        console.log(`✅ User verified: ${user.name} (${user.email})`);
+        logger.info(`User verified: ${user.name} (${user.email})`);
         res.json({
             message: 'User verified successfully',
             user,
-            emailSent,
-            generatedPassword: password
+            emailSent
         });
     } catch (error) {
-        console.error('Verification error:', error);
+        logger.error('Verification error:', error);
         res.status(500).json({ error: 'Verification failed: ' + error.message });
     }
 });
@@ -255,10 +255,10 @@ router.put('/:id/reject', authenticate, authorize('faculty'), async (req, res) =
 
         await sendRejectionEmail(user, reason);
 
-        console.log(`❌ User rejected: ${user.name} (${user.email})`);
+        logger.info(`User rejected: ${user.name} (${user.email})`);
         res.json({ message: 'User rejected', user });
     } catch (error) {
-        console.error('Rejection error:', error);
+        logger.error('Rejection error:', error);
         res.status(500).json({ error: 'Rejection failed: ' + error.message });
     }
 });
@@ -292,16 +292,17 @@ router.post('/:id/resend-credentials', authenticate, authorize('faculty', 'coord
         }
         await user.save();
 
-        console.log(`📧 Credentials resent to ${user.email} (emailSent=${emailSent})`);
+        logger.info(`Credentials resent to ${user.email} (emailSent=${emailSent})`);
         res.json({
             message: emailSent
                 ? `Credentials emailed to ${user.email}`
                 : `Email delivery failed — new password generated but not delivered`,
             emailSent,
-            newPassword: password   // Return in response so admin can share manually if email fails
+            // Return in response so admin can share the new password manually if email fails
+            newPassword: password
         });
     } catch (error) {
-        console.error('Resend credentials error:', error);
+        logger.error('Resend credentials error:', error);
         res.status(500).json({ error: 'Resend failed: ' + error.message });
     }
 });
@@ -350,7 +351,7 @@ router.patch('/me/event-choices', authenticate, async (req, res) => {
         user.eventChoices = ec;
         await user.save();
 
-        console.log(`📅 Event choices updated for ${user.email}`, ec);
+        logger.info(`Event choices updated for ${user.email}: ${JSON.stringify(ec)}`);
         res.json({
             message: errors.length
                 ? 'Some updates applied. Note: ' + errors.join('; ')
@@ -359,7 +360,7 @@ router.patch('/me/event-choices', authenticate, async (req, res) => {
             warnings: errors
         });
     } catch (error) {
-        console.error('Update event choices error:', error);
+        logger.error('Update event choices error:', error);
         res.status(500).json({ error: 'Failed to update event choices' });
     }
 });
