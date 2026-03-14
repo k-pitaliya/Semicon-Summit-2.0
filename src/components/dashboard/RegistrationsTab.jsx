@@ -1,4 +1,4 @@
-import { Search, Download, Users, Filter, AlertTriangle, RefreshCw, Mail } from 'lucide-react'
+import { Search, Download, Users, Filter, AlertTriangle, RefreshCw, Mail, UserPlus } from 'lucide-react'
 import { useState } from 'react'
 
 const RegistrationsTab = ({
@@ -14,6 +14,7 @@ const RegistrationsTab = ({
     handleExport,
     handleBackfillIds,
     onResendEmail,
+    onAddParticipant,
 }) => {
     const [resendingId, setResendingId] = useState(null)
 
@@ -172,6 +173,31 @@ const RegistrationsTab = ({
                         }}
                     >
                         Assign Missing IDs
+                    </button>
+                )}
+
+                {onAddParticipant && (
+                    <button
+                        className="btn"
+                        onClick={onAddParticipant}
+                        title="Manually add a participant who paid but couldn't register"
+                        style={{
+                            background: 'rgba(34,197,94,0.12)',
+                            border: '1px solid rgba(34,197,94,0.4)',
+                            color: '#22c55e',
+                            borderRadius: '8px',
+                            padding: '8px 14px',
+                            cursor: 'pointer',
+                            fontSize: '0.85rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            whiteSpace: 'nowrap',
+                            fontWeight: 600
+                        }}
+                    >
+                        <UserPlus size={15} />
+                        Add Participant
                     </button>
                 )}
             </div>

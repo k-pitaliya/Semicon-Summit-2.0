@@ -523,6 +523,129 @@ app.post('/api/admin/backfill-registration-ids', authenticate, authorize('facult
     }
 });
 
+// ==========================================
+// MANUAL ADD PARTICIPANT (Faculty only)
+// For participants who paid but couldn't register due to registration being closed
+// ==========================================
+app.post('/api/admin/add-participant', authenticate, authorize('faculty'), async (req, res) => {
+    try {
+        const {
+            name, email, phone, college, department,
+            studentId, universityEmail, yearOfStudy,
+            razorpayPaymentId, paymentAmount,
+            eventChoices   // { day1Workshop, panelDiscussion, expertInsights, aiInVlsi, sharkTank, treasureHunt, silentGallery }
+        } = req.body;
+
+        // ── Basic validation ───────────────────────────────────────────────
+        if (!name || !email || !phone) {
+            return res.status(400).json({ error: 'Name, email, and phone are required.' });
+        }
+        const emailRegex = /^\S+@\S+\.\S+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ error: 'Please provide a valid email address.' });
+        }
+
+        // ── Duplicate guards ───────────────────────────────────────────────
+        const existingEmail = await User.findOne({ email: email.toLowerCase() });
+        if (existingEmail) {
+            return res.status(400).json({ error: `Email ${email} is already registered.` });
+        }
+        if (razorpayPaymentId) {
+            const normalizedPaymentId = razorpayPaymentId.trim();
+            if (!/^pay_[A-Za-z0-9]+$/.test(normalizedPaymentId)) {
+                return res.status(400).json({ error: 'Invalid Payment ID format. Must start with "pay_".' });
+            }
+            const existingPayment = await User.findOne({ razorpayPaymentId: normalizedPaymentId });
+            if (existingPayment) {
+                return res.status(400).json({ error: 'This Payment ID is already linked to another account.' });
+            }
+        }
+
+        // ── Create user — auto-approved ────────────────────────────────────
+        const password = generatePassword();
+        const user = new User({
+            name,
+            email: email.toLowerCase(),
+            phone,
+            college: college || '',
+            department: department || '',
+            studentId: studentId || '',
+            universityEmail: (universityEmail || '').toLowerCase(),
+            yearOfStudy: yearOfStudy || '',
+            eventChoices: eventChoices || {},
+            verificationStatus: 'approved',
+            paymentStatus: 'completed',
+            paymentAmount: parseInt(paymentAmount) || parseInt(process.env.REGISTRATION_FEE) || 299,
+            role: 'participant',
+            razorpayPaymentId: razorpayPaymentId ? razorpayPaymentId.trim() : undefined,
+            password: password,
+            verifiedAt: new Date(),
+            verifiedBy: req.user._id,
+        });
+        await user.save();
+
+        // ── Auto-assign SS26-XXX registration ID (with collision retry) ────
+        let idAssigned = false;
+        for (let attempt = 1; attempt <= 5 && !idAssigned; attempt++) {
+            try {
+                if (attempt > 1) await new Promise(r => setTimeout(r, 60 * attempt));
+                const lastUser = await User.findOne(
+                    { role: 'participant', registrationId: { $exists: true, $ne: null } },
+                    { registrationId: 1 },
+                    { sort: { registrationId: -1 } }
+                );
+                let nextNum = 1;
+                if (lastUser?.registrationId) {
+                    const match = lastUser.registrationId.match(/SS26-(\d+)/);
+                    if (match) nextNum = parseInt(match[1], 10) + 1;
+                }
+                user.registrationId = `SS26-${String(nextNum).padStart(3, '0')}`;
+                await user.save();
+                idAssigned = true;
+                logger.info('Manual add — Registration ID assigned', { registrationId: user.registrationId, userId: user._id, addedBy: req.user.email });
+            } catch (idError) {
+                if (idError.code === 11000) continue; // collision — retry
+                logger.error('Manual add — Failed to assign registrationId', { error: idError.message });
+                break;
+            }
+        }
+
+        // ── Send credentials email ─────────────────────────────────────────
+        let emailSent = false;
+        try {
+            emailSent = await sendCredentialsEmail(user, password);
+        } catch (emailError) {
+            logger.error('Manual add — Credentials email failed', { error: emailError.message, userId: user._id });
+        }
+        user.credentialsEmailSent = emailSent;
+        if (!emailSent) user.credentialsEmailFailedAt = new Date();
+        await user.save();
+
+        logger.info('Participant manually added by faculty', {
+            userId: user._id, email: user.email, registrationId: user.registrationId,
+            addedBy: req.user.email, credentialsEmailSent: emailSent
+        });
+
+        res.status(201).json({
+            message: `Participant added successfully${emailSent ? ' and credentials emailed.' : '. ⚠️ Email failed — share password manually.'}`,
+            password,          // Return plaintext so faculty can copy it if email fails
+            registrationId: user.registrationId,
+            emailSent,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                registrationId: user.registrationId,
+                verificationStatus: user.verificationStatus,
+            }
+        });
+    } catch (error) {
+        logger.error('Manual add-participant error:', error);
+        res.status(500).json({ error: 'Failed to add participant: ' + error.message });
+    }
+});
+
 // (seed-faculty and demo-seed endpoints removed — no longer needed in production)
 
 // ==========================================

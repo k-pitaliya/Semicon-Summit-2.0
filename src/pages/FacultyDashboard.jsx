@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
     Users, Download, Filter, Search, LogOut, Image,
-    AlertTriangle, X, Key, Trash2, UserCog, Upload, ImagePlus, Bell, Copy, Check, Menu
+    AlertTriangle, X, Key, Trash2, UserCog, Upload, ImagePlus, Bell, Copy, Check, Menu, UserPlus
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
@@ -38,6 +38,22 @@ const FacultyDashboard = () => {
     const [deleteConfirmModal, setDeleteConfirmModal] = useState({ open: false, user: null })
     const [passwordResetModal, setPasswordResetModal] = useState({ open: false, email: '', password: '', emailSent: false })
     const [copied, setCopied] = useState({})   // { fieldKey: true/false }
+
+    // Add Participant Modal State
+    const BLANK_ADD_FORM = {
+        name: '', email: '', phone: '', college: '', department: '',
+        studentId: '', universityEmail: '', yearOfStudy: '',
+        razorpayPaymentId: '', paymentAmount: '299',
+        eventChoices: {
+            day1Workshop: '', panelDiscussion: false, expertInsights: false,
+            aiInVlsi: false, sharkTank: false, treasureHunt: false, silentGallery: false
+        }
+    }
+    const [addParticipantModal, setAddParticipantModal] = useState({ open: false })
+    const [addForm, setAddForm] = useState(BLANK_ADD_FORM)
+    const [addResult, setAddResult] = useState(null)  // { name, email, registrationId, password, emailSent }
+    const [addLoading, setAddLoading] = useState(false)
+    const [addError, setAddError] = useState(null)
 
     const copyToClipboard = useCallback((text, key) => {
         navigator.clipboard.writeText(text).then(() => {
@@ -204,6 +220,39 @@ const FacultyDashboard = () => {
     }
 
 
+
+    const handleAddParticipant = async (e) => {
+        e.preventDefault()
+        setAddLoading(true)
+        setAddError(null)
+        try {
+            const payload = {
+                ...addForm,
+                eventChoices: addForm.eventChoices,
+                paymentAmount: parseInt(addForm.paymentAmount) || 299,
+            }
+            // Remove empty optional fields
+            if (!payload.razorpayPaymentId) delete payload.razorpayPaymentId
+            if (!payload.studentId) delete payload.studentId
+            if (!payload.universityEmail) delete payload.universityEmail
+            if (!payload.yearOfStudy) delete payload.yearOfStudy
+
+            const res = await api.post('/admin/add-participant', payload)
+            setAddResult(res.data)
+            await fetchData()  // Refresh participant list
+        } catch (err) {
+            setAddError(err.response?.data?.error || err.message || 'Failed to add participant')
+        } finally {
+            setAddLoading(false)
+        }
+    }
+
+    const closeAddModal = () => {
+        setAddParticipantModal({ open: false })
+        setAddForm(BLANK_ADD_FORM)
+        setAddResult(null)
+        setAddError(null)
+    }
 
     const handleBackfillIds = async () => {
         if (!confirm('Assign SS26-XXX registration IDs to all participants who are missing one?')) return;
@@ -509,6 +558,7 @@ const FacultyDashboard = () => {
                             handleExport={handleExport}
                             handleBackfillIds={handleBackfillIds}
                             onResendEmail={handleResendEmail}
+                            onAddParticipant={() => { setAddParticipantModal({ open: true }); setAddResult(null); setAddError(null) }}
                         />
                     )}
 
@@ -717,6 +767,188 @@ const FacultyDashboard = () => {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+            {/* ── Add Participant Modal ─────────────────────────────────────── */}
+            {addParticipantModal.open && (
+                <div className="modal-overlay" onClick={closeAddModal}>
+                    <div className="modal-content modal-large" onClick={e => e.stopPropagation()} style={{ maxWidth: '680px', maxHeight: '90vh', overflowY: 'auto' }}>
+                        <button className="modal-close" onClick={closeAddModal}><X size={24} /></button>
+
+                        {/* Header */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+                            <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <UserPlus size={18} color="#818cf8" />
+                            </div>
+                            <div>
+                                <h3 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--text-primary)' }}>Manually Add Participant</h3>
+                                <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>For participants who paid but couldn't register — registration is closed</p>
+                            </div>
+                        </div>
+
+                        {/* ── Success Card ── */}
+                        {addResult ? (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                <div style={{ padding: '14px 18px', background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.3)', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <span style={{ fontSize: '1.2rem' }}>✅</span>
+                                    <div>
+                                        <p style={{ margin: 0, fontWeight: 600, color: '#22c55e', fontSize: '0.95rem' }}>{addResult.message}</p>
+                                        <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--text-tertiary)' }}>
+                                            Registration ID: <code style={{ color: '#93c5fd', background: 'var(--bg-tertiary)', padding: '1px 5px', borderRadius: '3px' }}>{addResult.registrationId}</code>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Copyable credentials */}
+                                {[{ label: 'Email / Username', value: addResult.user?.email, key: 'add_email', mono: false },
+                                  { label: 'Temporary Password', value: addResult.password, key: 'add_pwd', mono: true }].map(({ label, value, key, mono }) => (
+                                    <div key={key}>
+                                        <p style={{ margin: '0 0 5px', fontSize: '0.72rem', fontWeight: 600, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{label}</p>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-default)', borderRadius: '8px' }}>
+                                            <span style={{ flex: 1, fontFamily: mono ? "'SF Mono', Monaco, monospace" : 'inherit', fontSize: mono ? '1rem' : '0.9rem', fontWeight: 600, color: 'var(--text-primary)', wordBreak: 'break-all' }}>{value}</span>
+                                            <button onClick={() => copyToClipboard(value, key)} title="Copy"
+                                                style={{ flexShrink: 0, background: copied[key] ? 'rgba(34,197,94,0.15)' : 'rgba(99,102,241,0.12)', border: `1px solid ${copied[key] ? 'rgba(34,197,94,0.4)' : 'rgba(99,102,241,0.3)'}`, borderRadius: '6px', padding: '5px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', color: copied[key] ? '#22c55e' : '#818cf8', fontSize: '0.75rem', fontWeight: 600, transition: 'all 0.2s' }}>
+                                                {copied[key] ? <><Check size={13} /> Copied!</> : <><Copy size={13} /> Copy</>}
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+
+                                {!addResult.emailSent && (
+                                    <div style={{ padding: '10px 14px', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.3)', borderRadius: '8px', fontSize: '0.83rem', color: '#fbbf24' }}>
+                                        ⚠️ Email delivery failed. Please share the password above manually with the participant.
+                                    </div>
+                                )}
+
+                                <div className="modal-actions" style={{ marginTop: '8px' }}>
+                                    <button className="btn btn-secondary" onClick={closeAddModal}>Close</button>
+                                    <button className="btn btn-primary" onClick={() => { setAddResult(null); setAddForm(BLANK_ADD_FORM); setAddError(null) }}>
+                                        <UserPlus size={16} /> Add Another
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                        /* ── Form ── */
+                        <form onSubmit={handleAddParticipant} style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+                            {/* Error */}
+                            {addError && (
+                                <div style={{ marginBottom: '16px', padding: '10px 14px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.35)', borderRadius: '8px', color: '#fca5a5', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <AlertTriangle size={15} color="#ef4444" /> {addError}
+                                </div>
+                            )}
+
+                            {/* Personal Info */}
+                            <p style={{ margin: '0 0 10px', fontSize: '0.72rem', fontWeight: 700, color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Personal Info</p>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                                <div className="input-group" style={{ margin: 0 }}>
+                                    <label>Full Name <span style={{ color: '#ef4444' }}>*</span></label>
+                                    <input className="input" type="text" placeholder="Ravi Sharma" required
+                                        value={addForm.name} onChange={e => setAddForm(p => ({ ...p, name: e.target.value }))} />
+                                </div>
+                                <div className="input-group" style={{ margin: 0 }}>
+                                    <label>Personal Email <span style={{ color: '#ef4444' }}>*</span></label>
+                                    <input className="input" type="email" placeholder="ravi@gmail.com" required
+                                        value={addForm.email} onChange={e => setAddForm(p => ({ ...p, email: e.target.value }))} />
+                                </div>
+                                <div className="input-group" style={{ margin: 0 }}>
+                                    <label>Phone <span style={{ color: '#ef4444' }}>*</span></label>
+                                    <input className="input" type="tel" placeholder="9876543210" required
+                                        value={addForm.phone} onChange={e => setAddForm(p => ({ ...p, phone: e.target.value }))} />
+                                </div>
+                                <div className="input-group" style={{ margin: 0 }}>
+                                    <label>University Email</label>
+                                    <input className="input" type="email" placeholder="21ec001@charusat.ac.in"
+                                        value={addForm.universityEmail} onChange={e => setAddForm(p => ({ ...p, universityEmail: e.target.value }))} />
+                                </div>
+                                <div className="input-group" style={{ margin: 0 }}>
+                                    <label>College / Institution</label>
+                                    <input className="input" type="text" placeholder="CHARUSAT University"
+                                        value={addForm.college} onChange={e => setAddForm(p => ({ ...p, college: e.target.value }))} />
+                                </div>
+                                <div className="input-group" style={{ margin: 0 }}>
+                                    <label>Department</label>
+                                    <input className="input" type="text" placeholder="Electronics & Communication"
+                                        value={addForm.department} onChange={e => setAddForm(p => ({ ...p, department: e.target.value }))} />
+                                </div>
+                                <div className="input-group" style={{ margin: 0 }}>
+                                    <label>Student ID</label>
+                                    <input className="input" type="text" placeholder="21ECXXX"
+                                        value={addForm.studentId} onChange={e => setAddForm(p => ({ ...p, studentId: e.target.value }))} />
+                                </div>
+                                <div className="input-group" style={{ margin: 0 }}>
+                                    <label>Year of Study</label>
+                                    <select className="input" value={addForm.yearOfStudy} onChange={e => setAddForm(p => ({ ...p, yearOfStudy: e.target.value }))}>
+                                        <option value="">Select year</option>
+                                        <option>1st Year</option><option>2nd Year</option>
+                                        <option>3rd Year</option><option>4th Year</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            {/* Payment */}
+                            <p style={{ margin: '8px 0 10px', fontSize: '0.72rem', fontWeight: 700, color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Payment</p>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                                <div className="input-group" style={{ margin: 0 }}>
+                                    <label>Razorpay Payment ID</label>
+                                    <input className="input" type="text" placeholder="pay_XXXXXXXXXXXXXXXX"
+                                        value={addForm.razorpayPaymentId} onChange={e => setAddForm(p => ({ ...p, razorpayPaymentId: e.target.value }))} />
+                                    <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '3px', display: 'block' }}>Leave blank if payment was offline</span>
+                                </div>
+                                <div className="input-group" style={{ margin: 0 }}>
+                                    <label>Amount Paid (₹)</label>
+                                    <input className="input" type="number" min="0" placeholder="299"
+                                        value={addForm.paymentAmount} onChange={e => setAddForm(p => ({ ...p, paymentAmount: e.target.value }))} />
+                                </div>
+                            </div>
+
+                            {/* Event Choices */}
+                            <p style={{ margin: '8px 0 10px', fontSize: '0.72rem', fontWeight: 700, color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Event Choices</p>
+                            <div style={{ padding: '14px 16px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-default)', borderRadius: '10px', marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                {/* Workshop */}
+                                <div>
+                                    <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Day 1 Workshop</label>
+                                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                        {[{ v: '', l: 'None' }, { v: 'rtl-gds', l: 'RTL & Testbench' }, { v: 'fpga', l: 'FPGA Interfacing' }].map(({ v, l }) => (
+                                            <button type="button" key={v}
+                                                onClick={() => setAddForm(p => ({ ...p, eventChoices: { ...p.eventChoices, day1Workshop: v } }))}
+                                                style={{ padding: '5px 12px', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s', border: addForm.eventChoices.day1Workshop === v ? '1px solid #818cf8' : '1px solid var(--border-default)', background: addForm.eventChoices.day1Workshop === v ? 'rgba(99,102,241,0.18)' : 'transparent', color: addForm.eventChoices.day1Workshop === v ? '#818cf8' : 'var(--text-tertiary)' }}>
+                                                {l}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                {/* Checkboxes */}
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                                    {[
+                                        { key: 'panelDiscussion', label: 'Panel Discussion (D1)' },
+                                        { key: 'expertInsights', label: 'Expert Insights: VLSI vs Embedded (D2)' },
+                                        { key: 'sharkTank', label: 'Silicon Shark Tank (D2)' },
+                                        { key: 'aiInVlsi', label: 'AI-Powered VLSI Talk (D3)' },
+                                        { key: 'treasureHunt', label: 'Silicon Jackpot / Treasure Hunt (D3)' },
+                                        { key: 'silentGallery', label: 'Silicon Silent Gallery (D3)' },
+                                    ].map(({ key, label }) => (
+                                        <label key={key} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.82rem', color: 'var(--text-secondary)', userSelect: 'none' }}>
+                                            <input type="checkbox" checked={!!addForm.eventChoices[key]}
+                                                onChange={e => setAddForm(p => ({ ...p, eventChoices: { ...p.eventChoices, [key]: e.target.checked } }))}
+                                                style={{ width: '15px', height: '15px', accentColor: '#818cf8', cursor: 'pointer' }} />
+                                            {label}
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="modal-actions">
+                                <button type="button" className="btn btn-secondary" onClick={closeAddModal}>Cancel</button>
+                                <button type="submit" className="btn btn-primary" disabled={addLoading}
+                                    style={{ background: addLoading ? undefined : 'linear-gradient(135deg, #6366f1, #8b5cf6)', opacity: addLoading ? 0.7 : 1 }}>
+                                    {addLoading
+                                        ? <><div style={{ width: '14px', height: '14px', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} /> Adding…</>
+                                        : <><UserPlus size={16} /> Add Participant</>}
+                                </button>
+                            </div>
+                        </form>
+                        )}
                     </div>
                 </div>
             )}
