@@ -55,31 +55,27 @@ const Speakers = () => {
                                 <Clock size={16} />
                                 <span>Speaker Reveal Series</span>
                             </div>
-                            <h3>Profiles will be unveiled in phases</h3>
-                            <p>Our industry sharks are top leaders from the semiconductor ecosystem. Their profiles will be revealed in a series of announcements leading up to the summit.</p>
-                            <div className="reveal-phases">
-                                <div className="reveal-phase">
-                                    <div className="phase-dot active" style={{ background: '#22c55e', borderColor: '#22c55e' }} />
-                                    <span style={{ color: '#4ade80', fontWeight: 600 }}>Phase 1 — ✓ Revealed</span>
-                                </div>
-                                <div className="reveal-phase">
-                                    <div className="phase-dot active" />
-                                    <span style={{ color: '#4ade80', fontWeight: 600 }}>Phase 2 — Active (March 2026)</span>
-                                </div>
-                                <div className="reveal-phase">
-                                    <div className="phase-dot" />
-                                    <span>Phase 3 — Pre-Event</span>
-                                </div>
-                            </div>
-
-                            <div className="reveal-silhouettes">
-                                {[1, 2, 3].map(i => (
-                                    <div key={i} className="silhouette-card" style={{ animationDelay: `${i * 0.15}s` }}>
-                                        <div className="silhouette-avatar">
-                                            <span>?</span>
+                            <h3>Expert Evaluators for Silicon Shark Tank</h3>
+                            <p>Meet our esteemed "Sharks" — top leaders and entrepreneurs from the semiconductor ecosystem. They bring decades of experience to evaluate, critique, and guide the innovative pitches from our participants.</p>
+                            <div className="speaker-profile-grid" style={{ justifyContent: 'center' }}>
+                                {[
+                                    { name: 'Mr. Marmik Bhatt', role: 'Founder & CEO, Monk9 Tech Private Limited', photo: '/images/panelists/panelist/marmik_bhatt.jpg' },
+                                    { name: 'Mr. Nikul Shah', role: 'CEO, IndiSemic', photo: '/images/panelists/panelist/nikul_shah.jpg' }
+                                ].map((shark, i) => (
+                                    <div key={i} className="speaker-profile-card theme-amber" style={{ animationDelay: `${i * 0.2}s` }}>
+                                        <div className="speaker-profile-photo-wrap">
+                                            <img
+                                                src={shark.photo}
+                                                alt={shark.name}
+                                                className="speaker-profile-photo"
+                                                onError={e => { e.currentTarget.src = ''; e.currentTarget.parentElement.style.background = 'rgba(245, 158, 11, 0.1)'; }}
+                                            />
+                                            <div className="speaker-profile-glow" />
                                         </div>
-                                        <div className="silhouette-name">Coming Soon</div>
-                                        <div className="silhouette-role">Industry Expert</div>
+                                        <div className="speaker-profile-info">
+                                            <div className="speaker-profile-name">{shark.name}</div>
+                                            <div className="speaker-profile-role">{shark.role}</div>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
@@ -106,19 +102,29 @@ const Speakers = () => {
                             </div>
                             <h3>Panelists from leading fabless startups and MSMEs</h3>
                             <p>Our panelists represent the forefront of India's semiconductor growth — from chip design startups to established MSME players.</p>
-
-                            <div className="reveal-silhouettes">
+                            <div className="speaker-profile-grid" style={{ justifyContent: 'center' }}>
                                 {[
-                                    { name: 'Marmik Bhatt', role: 'Panelist' },
-                                    { name: 'Sudhir Nayak', role: 'Panelist' },
-                                    { name: 'Nikul Shah', role: 'Panelist' }
+                                    { name: 'Mr. Sudhir Naik', role: 'Founder & CEO, N Cube Semicon Private Limited; Mid West Head, IESA', photo: '/images/panelists/panelist/sudhir_naik.jpg' },
+                                    { name: 'Mr. Sunil Parmar', role: 'Director, Powency', photo: '/images/panelists/panelist/sunil_parmar.jpg' },
+                                    { name: 'Mr. Snehal Patel', role: 'Senior Director, Engineering – ASIC, eInfochips', photo: '/images/panelists/panelist/snehal_patel.jpg' },
+                                    { name: 'Mr. Nishith Shukla', role: 'Head of Engineering, VeriFast Technologies', photo: '/images/panelists/panelist/nishith_shukla.jpg' },
+                                    { name: 'Mr. Mufaddal Saifee', role: 'Technical Director, SiFive', photo: '/images/panelists/panelist/mufaddal_saifee.jpg' },
+                                    { name: 'Mr. Marmik Bhatt', role: 'Founder & CEO, Monk9 Tech Private Limited', photo: '/images/panelists/panelist/marmik_bhatt.jpg' }
                                 ].map((panelist, i) => (
-                                    <div key={i} className="silhouette-card panelist" style={{ animationDelay: `${i * 0.15}s` }}>
-                                        <div className="silhouette-avatar">
-                                            <Mic size={20} />
+                                    <div key={i} className="speaker-profile-card theme-green" style={{ animationDelay: `${i * 0.15}s` }}>
+                                        <div className="speaker-profile-photo-wrap">
+                                            <img
+                                                src={panelist.photo}
+                                                alt={panelist.name}
+                                                className="speaker-profile-photo"
+                                                onError={e => { e.currentTarget.src = ''; e.currentTarget.parentElement.style.background = 'rgba(34, 197, 94, 0.1)'; }}
+                                            />
+                                            <div className="speaker-profile-glow" />
                                         </div>
-                                        <div className="silhouette-name">{panelist.name}</div>
-                                        <div className="silhouette-role">{panelist.role}</div>
+                                        <div className="speaker-profile-info">
+                                            <div className="speaker-profile-name">{panelist.name}</div>
+                                            <div className="speaker-profile-role">{panelist.role}</div>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
@@ -146,7 +152,7 @@ const Speakers = () => {
                             <h3>Expert instructors for RTL &amp; Self-Checking Testbench and Verilog &amp; FPGA workshops</h3>
                             <p>Workshop leaders with extensive industry experience will guide participants through hands-on sessions covering industry-ready RTL design, self-checking verification, and FPGA implementation.</p>
 
-                            <div className="speaker-profile-grid">
+                            <div className="speaker-profile-grid" style={{ justifyContent: 'center' }}>
                                 {[
                                     { name: 'Kaushal Modi', role: 'Associate Director (Design Verification) · eInfochips (An Arrow Company)', photo: '/images/panelists/Kausal_Modi.jpeg' },
                                     { name: 'Ashish Christain', role: 'Senior Design Verification Engineer · eInfochips (An Arrow Company)', photo: '/images/panelists/Ashish_Christain.jpeg' }
