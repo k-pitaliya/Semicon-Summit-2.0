@@ -418,3 +418,368 @@
         gap: 1rem;
     }
 }
+
+/* ═══════════════════════════════════════════════════════
+   EXPERT INSIGHTS / ALUMNI KEYNOTE SECTION
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Hero Card ── */
+.expert-hero-card {
+    position: relative;
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.8), rgba(22, 10, 45, 0.9));
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 24px;
+    padding: 2.5rem;
+    overflow: hidden;
+}
+
+.expert-hero-glow {
+    position: absolute;
+    top: -120px;
+    right: -120px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.12), transparent 70%);
+    pointer-events: none;
+}
+
+/* ── Badges ── */
+.expert-badges-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.expert-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 100px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.expert-badge-alumni {
+    background: rgba(139, 92, 246, 0.12);
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    color: #c4b5fd;
+}
+
+.expert-badge-location {
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    color: #a5b4fc;
+}
+
+.expert-badge-session {
+    background: rgba(20, 184, 166, 0.1);
+    border: 1px solid rgba(20, 184, 166, 0.3);
+    color: #5eead4;
+}
+
+/* ── Profile Two-Column Layout ── */
+.expert-profile-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+
+/* ── Photo Column ── */
+.expert-photo-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.expert-photo-wrap {
+    position: relative;
+    width: 220px;
+    height: 260px;
+    border-radius: 18px;
+    overflow: hidden;
+    background: rgba(139, 92, 246, 0.1);
+    flex-shrink: 0;
+}
+
+.expert-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.expert-photo-wrap:hover .expert-photo {
+    transform: scale(1.04);
+}
+
+.expert-photo-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    border: 2px solid rgba(139, 92, 246, 0.35);
+    pointer-events: none;
+}
+
+.expert-photo-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: rgba(139, 92, 246, 0.5);
+}
+
+.expert-memberships {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.expert-membership-badge {
+    padding: 0.3rem 0.75rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-align: center;
+}
+
+/* ── Bio Column ── */
+.expert-bio-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.expert-name {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+    font-family: var(--font-display);
+    line-height: 1.2;
+}
+
+.expert-title {
+    font-size: 1rem;
+    color: #a78bfa;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: 0.02em;
+}
+
+.expert-edu {
+    font-size: 0.82rem;
+    color: var(--text-tertiary);
+    margin: 0 0 0.75rem;
+}
+
+.expert-bio-text {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0;
+}
+
+.expert-bio-text em {
+    color: #c4b5fd;
+    font-style: normal;
+}
+
+.expert-bio-text strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* ── CTA Buttons ── */
+.expert-cta-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1.25rem;
+}
+
+.expert-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1.2rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.expert-btn-linkedin {
+    background: rgba(10, 102, 194, 0.15);
+    border-color: rgba(10, 102, 194, 0.4);
+    color: #60a5fa;
+}
+
+.expert-btn-linkedin:hover {
+    background: rgba(10, 102, 194, 0.25);
+    transform: translateY(-2px);
+}
+
+.expert-btn-email {
+    background: rgba(139, 92, 246, 0.12);
+    border-color: rgba(139, 92, 246, 0.35);
+    color: #c4b5fd;
+}
+
+.expert-btn-email:hover {
+    background: rgba(139, 92, 246, 0.22);
+    transform: translateY(-2px);
+}
+
+/* ── Keynote Outline ── */
+.keynote-outline {
+    border-top: 1px solid rgba(139, 92, 246, 0.15);
+    padding-top: 2rem;
+    margin-top: 0.5rem;
+}
+
+.keynote-outline-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #a78bfa;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.85rem;
+}
+
+.keynote-duration {
+    margin-left: auto;
+    background: rgba(139, 92, 246, 0.12);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    color: #c4b5fd;
+    padding: 0.2rem 0.75rem;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: normal;
+    text-transform: none;
+}
+
+.keynote-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin: 0 0 1.5rem;
+    font-family: var(--font-display);
+}
+
+.keynote-slides-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.85rem;
+}
+
+.keynote-slide-card {
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(139, 92, 246, 0.1);
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    transition: all 0.25s ease;
+}
+
+.keynote-slide-card:hover {
+    background: rgba(139, 92, 246, 0.07);
+    border-color: rgba(139, 92, 246, 0.25);
+    transform: translateY(-2px);
+}
+
+.keynote-slide-num {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #a78bfa;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.3rem;
+}
+
+.keynote-slide-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.35;
+    margin-bottom: 0.4rem;
+}
+
+.keynote-slide-desc {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* ── Footer CTA strip ── */
+.expert-footer-cta {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.expert-footer-cta p {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    margin: 0;
+    flex: 1;
+    min-width: 180px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+    .expert-profile-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .expert-photo-col {
+        align-items: flex-start;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .keynote-slides-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .expert-hero-card {
+        padding: 1.5rem;
+    }
+
+    .expert-photo-col {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .keynote-slides-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .expert-footer-cta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

@@ -3,8 +3,9 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ParticleField from '../components/ParticleField';
 import {
-    Users, Mic, Sparkles, Building2, Eye, Clock,
-    ChevronRight, Zap, Target
+    Users, Mic, Sparkles, Building2, Clock,
+    Zap, Target, GraduationCap, Mail, ExternalLink,
+    PlayCircle, BookOpen, Award, MapPin, Linkedin
 } from 'lucide-react';
 import './Speakers.css';
 
@@ -127,6 +128,121 @@ const Speakers = () => {
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* ─── Expert Insights: Alumni Keynote ──────────────────────────── */}
+                    <section className="speaker-reveal-section expert-keynote-section">
+                        <div className="reveal-header">
+                            <div className="reveal-icon-wrap" style={{ background: 'rgba(139, 92, 246, 0.1)', borderColor: 'rgba(139, 92, 246, 0.25)', color: '#a78bfa' }}>
+                                <GraduationCap size={28} />
+                            </div>
+                            <div>
+                                <h2>Expert <span style={{ background: 'linear-gradient(135deg, #a78bfa, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Insights</span></h2>
+                                <p className="reveal-subtitle">Semiconductors in the AI Era — Alumni Keynote from Silicon Valley</p>
+                            </div>
+                        </div>
+
+                        <div className="expert-hero-card">
+                            <div className="expert-hero-glow" />
+
+                            {/* Badges Row */}
+                            <div className="expert-badges-row">
+                                <span className="expert-badge expert-badge-alumni"><GraduationCap size={12} /> CHARUSAT Alumni</span>
+                                <span className="expert-badge expert-badge-location"><MapPin size={12} /> Silicon Valley, CA</span>
+                                <span className="expert-badge expert-badge-session"><BookOpen size={12} /> Day 2 · Expert Insights Session</span>
+                            </div>
+
+                            {/* Speaker Profile Layout */}
+                            <div className="expert-profile-layout">
+                                {/* Photo Column */}
+                                <div className="expert-photo-col">
+                                    <div className="expert-photo-wrap">
+                                        <img
+                                            src="/images/panelists/panelist/krunal_patel.jpg"
+                                            alt="Krunal Patel"
+                                            className="expert-photo"
+                                            onError={e => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement.classList.add('expert-photo-fallback'); }}
+                                        />
+                                        <div className="expert-photo-ring" />
+                                    </div>
+                                    <div className="expert-memberships">
+                                        {['Forbes Tech Council', 'IEEE Senior Member', 'Sigma Xi', 'SCRS Distinguished'].map(m => (
+                                            <span key={m} className="expert-membership-badge">{m}</span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Bio Column */}
+                                <div className="expert-bio-col">
+                                    <h3 className="expert-name">Mr. Krunal Patel</h3>
+                                    <p className="expert-title">Technical Program Manager · Applied Materials</p>
+                                    <p className="expert-edu">B.E. — CHARUSAT University &nbsp;·&nbsp; MS — New York University (NYU)</p>
+
+                                    <p className="expert-bio-text">
+                                        Krunal is a Technical Program Manager and engineer based in Silicon Valley, currently working at Applied Materials. He has led complex hardware and systems programs across consumer electronics, semiconductor, and electric vehicle industries — giving him an end-to-end view of how advanced technologies move from concept to large-scale deployment.
+                                    </p>
+                                    <p className="expert-bio-text">
+                                        His work has been featured in <em>ISE Magazine</em> and <em>IntechOpen (UK)</em>, and he has authored papers published with <strong>IEEE</strong> and <strong>Springer</strong>. He is a Distinguished SCRS Member, Full Member of Sigma Xi, Forbes Technology Council Member, and Senior Member of both IISE and IEEE.
+                                    </p>
+
+                                    <div className="expert-cta-row">
+                                        <a href="https://www.linkedin.com/in/krunalpatel1860" target="_blank" rel="noopener noreferrer" className="expert-btn expert-btn-linkedin">
+                                            <Linkedin size={15} /> LinkedIn
+                                        </a>
+                                        <a href="mailto:krunalpatel1860@gmail.com" className="expert-btn expert-btn-email">
+                                            <Mail size={15} /> Get in Touch
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Keynote Outline */}
+                            <div className="keynote-outline">
+                                <div className="keynote-outline-header">
+                                    <Award size={17} color="#a78bfa" />
+                                    <span>Keynote Outline</span>
+                                    <span className="keynote-duration">15–20 min</span>
+                                </div>
+                                <h4 className="keynote-title">
+                                    Semiconductors in the AI Era: From Moore's Law Limits to the Full Industry Value Chain and Emerging Career Opportunities
+                                </h4>
+                                <div className="keynote-slides-grid">
+                                    {[
+                                        { num: 1, title: 'Why Semiconductors, Why Now?', desc: 'Chips and datacenter power as the real AI bottleneck. Market approaching $1T driven by AI, 5G/6G, EVs, and IoT.' },
+                                        { num: 2, title: "Moore's Law Hit the Wall", desc: 'Three new walls: physics, economics, complexity. Architecture-led scaling: GAA, HBM, chiplets, angstrom-era nodes.' },
+                                        { num: 3, title: 'Global Semiconductor Landscape', desc: 'Who leads in foundry, memory, analog, fabless, and EDA/IP. Key geographic hubs and major policy pushes.' },
+                                        { num: 4, title: 'Entire Semiconductor Value Chain', desc: 'Six-stage value chain from design to product management. Thousands of steps and multi-country flows.' },
+                                        { num: 5, title: 'Design, Fab, Test & Equipment', desc: 'RTL, verification, physical design, wafer fabrication, ATMP, equipment, materials, and supply chain.' },
+                                        { num: 6, title: 'Product Development: A Team Sport', desc: 'Real product lifecycle from concept specs to high-volume production across multi-year, multi-country programmes.' },
+                                        { num: 7, title: 'AI × Semiconductors: The Compounding Loop', desc: 'AI accelerating chip design and manufacturing yield. Better AI → better chips → better AI tools.' },
+                                        { num: 8, title: 'Opportunities: Designer, Builder, Founder', desc: 'Roles across design, manufacturing, EDA tools, test/reliability, research, and startups.' },
+                                        { num: 9, title: 'How You Can Accelerate Innovation', desc: 'Systems-thinking mindset. High-impact bottlenecks: test, yield, supply chain, programme management.' },
+                                        { num: 10, title: 'Where EC Fundamentals Actually Live', desc: 'How core EC subjects map to real semiconductor jobs and families. Signals, analog, digital design as industry tools.' },
+                                        { num: 11, title: "India's Semiconductor Push", desc: 'New fabs, ATMP projects, skilling programs. Opportunities in design centers, manufacturing, suppliers, and startups.' },
+                                        { num: 12, title: 'Key Takeaways & Next Steps', desc: 'Semiconductors as the physical foundation of the AI economy. Breadth of roles and the unique moment for engineers.' },
+                                    ].map(slide => (
+                                        <div key={slide.num} className="keynote-slide-card">
+                                            <div className="keynote-slide-num">Slide {String(slide.num).padStart(2, '0')}</div>
+                                            <div className="keynote-slide-title">{slide.title}</div>
+                                            <div className="keynote-slide-desc">{slide.desc}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Footer CTA */}
+                            <div className="expert-footer-cta">
+                                <p>Want to connect or ask questions after the session?</p>
+                                <div className="expert-cta-row">
+                                    <a href="mailto:krunalpatel1860@gmail.com" className="expert-btn expert-btn-email">
+                                        <Mail size={15} /> krunalpatel1860@gmail.com
+                                    </a>
+                                    <a href="https://www.linkedin.com/in/krunalpatel1860" target="_blank" rel="noopener noreferrer" className="expert-btn expert-btn-linkedin">
+                                        <ExternalLink size={15} /> LinkedIn Profile
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </section>
