@@ -198,38 +198,26 @@ const Speakers = () => {
                                 </div>
                             </div>
 
-                            {/* Keynote Outline */}
-                            <div className="keynote-outline">
-                                <div className="keynote-outline-header">
-                                    <Award size={17} color="#a78bfa" />
-                                    <span>Keynote Outline</span>
-                                    <span className="keynote-duration">15–20 min</span>
+                            {/* Keynote Resources CTA */}
+                            <div className="keynote-outline" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '2.5rem 2rem', background: 'rgba(139, 92, 246, 0.04)', borderRadius: '16px', marginTop: '1.5rem', border: '1px solid rgba(139, 92, 246, 0.15)' }}>
+                                <div style={{ background: 'rgba(139, 92, 246, 0.1)', padding: '1rem', borderRadius: '50%', marginBottom: '1rem', border: '1px solid rgba(139, 92, 246, 0.2)' }}>
+                                    <PlayCircle size={32} color="#a78bfa" />
                                 </div>
-                                <h4 className="keynote-title">
-                                    Semiconductors in the AI Era: From Moore's Law Limits to the Full Industry Value Chain and Emerging Career Opportunities
+                                <h4 className="keynote-title" style={{ marginBottom: '0.5rem', fontSize: '1.15rem' }}>
+                                    Semiconductors in the AI Era: From Moore's Law Limits to the Full Industry Value Chain
                                 </h4>
-                                <div className="keynote-slides-grid">
-                                    {[
-                                        { num: 1, title: 'Why Semiconductors, Why Now?', desc: 'Chips and datacenter power as the real AI bottleneck. Market approaching $1T driven by AI, 5G/6G, EVs, and IoT.' },
-                                        { num: 2, title: "Moore's Law Hit the Wall", desc: 'Three new walls: physics, economics, complexity. Architecture-led scaling: GAA, HBM, chiplets, angstrom-era nodes.' },
-                                        { num: 3, title: 'Global Semiconductor Landscape', desc: 'Who leads in foundry, memory, analog, fabless, and EDA/IP. Key geographic hubs and major policy pushes.' },
-                                        { num: 4, title: 'Entire Semiconductor Value Chain', desc: 'Six-stage value chain from design to product management. Thousands of steps and multi-country flows.' },
-                                        { num: 5, title: 'Design, Fab, Test & Equipment', desc: 'RTL, verification, physical design, wafer fabrication, ATMP, equipment, materials, and supply chain.' },
-                                        { num: 6, title: 'Product Development: A Team Sport', desc: 'Real product lifecycle from concept specs to high-volume production across multi-year, multi-country programmes.' },
-                                        { num: 7, title: 'AI × Semiconductors: The Compounding Loop', desc: 'AI accelerating chip design and manufacturing yield. Better AI → better chips → better AI tools.' },
-                                        { num: 8, title: 'Opportunities: Designer, Builder, Founder', desc: 'Roles across design, manufacturing, EDA tools, test/reliability, research, and startups.' },
-                                        { num: 9, title: 'How You Can Accelerate Innovation', desc: 'Systems-thinking mindset. High-impact bottlenecks: test, yield, supply chain, programme management.' },
-                                        { num: 10, title: 'Where EC Fundamentals Actually Live', desc: 'How core EC subjects map to real semiconductor jobs and families. Signals, analog, digital design as industry tools.' },
-                                        { num: 11, title: "India's Semiconductor Push", desc: 'New fabs, ATMP projects, skilling programs. Opportunities in design centers, manufacturing, suppliers, and startups.' },
-                                        { num: 12, title: 'Key Takeaways & Next Steps', desc: 'Semiconductors as the physical foundation of the AI economy. Breadth of roles and the unique moment for engineers.' },
-                                    ].map(slide => (
-                                        <div key={slide.num} className="keynote-slide-card">
-                                            <div className="keynote-slide-num">Slide {String(slide.num).padStart(2, '0')}</div>
-                                            <div className="keynote-slide-title">{slide.title}</div>
-                                            <div className="keynote-slide-desc">{slide.desc}</div>
-                                        </div>
-                                    ))}
-                                </div>
+                                <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', maxWidth: '650px', lineHeight: '1.6', fontSize: '0.9rem' }}>
+                                    Access the complete outline document and the explainer video detailing the industry value chain, emerging career opportunities, and how core EC subjects map to real semiconductor jobs.
+                                </p>
+                                <a 
+                                    href="https://drive.google.com/drive/folders/1w8C9ibbm74XdiFM9RsyKug3tr4652aMT" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    className="expert-btn"
+                                    style={{ background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)', color: '#fff', fontSize: '0.95rem', padding: '0.7rem 1.6rem', borderRadius: '10px', boxShadow: '0 4px 15px rgba(124, 58, 237, 0.3)' }}
+                                >
+                                    <ExternalLink size={18} /> Access Keynote Materials (G-Drive)
+                                </a>
                             </div>
 
                             {/* Footer CTA */}
