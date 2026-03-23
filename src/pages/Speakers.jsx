@@ -160,7 +160,7 @@ const Speakers = () => {
                                 <div className="expert-photo-col">
                                     <div className="expert-photo-wrap">
                                         <img
-                                            src="/images/panelists/panelist/krunal_patel.jpg"
+                                            src="/images/panelists/panelist/krunal_patel.jpeg"
                                             alt="Krunal Patel"
                                             className="expert-photo"
                                             onError={e => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement.classList.add('expert-photo-fallback'); }}
