@@ -25,3 +25,8 @@ server/.env
 *.njsproj
 *.sln
 *.sw?
+
+# Uploaded files (PII - never commit)
+server/uploads/payments/
+server/uploads/receipts/
+server/uploads/*.zip
