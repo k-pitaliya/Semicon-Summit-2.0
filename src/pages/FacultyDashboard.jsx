@@ -6,7 +6,8 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
-import * as XLSX from 'xlsx'
+import ExcelJS from 'exceljs'
+import { saveAs } from 'file-saver'
 import './Dashboard.css'
 import RegistrationsTab from '../components/dashboard/RegistrationsTab'
 import UsersTab from '../components/dashboard/UsersTab'
@@ -283,8 +284,7 @@ const FacultyDashboard = () => {
 
     const handleExport = () => {
         setActionLoading('export');
-        // Use setTimeout to let the UI re-render the spinner before blocking JS
-        setTimeout(() => {
+        setTimeout(async () => {
             try {
                 const yesNo = (val) => val ? 'Yes' : 'No';
                 const excelData = filteredParticipants.map((p, index) => {
@@ -314,19 +314,21 @@ const FacultyDashboard = () => {
                     };
                 });
 
-                const worksheet = XLSX.utils.json_to_sheet(excelData);
-                worksheet['!cols'] = [
-                    { wch: 6 }, { wch: 12 }, { wch: 26 }, { wch: 32 }, { wch: 32 },
-                    { wch: 15 }, { wch: 32 }, { wch: 22 }, { wch: 16 }, { wch: 14 },
-                    { wch: 10 }, { wch: 18 }, { wch: 12 }, { wch: 12 }, { wch: 12 },
-                    { wch: 14 }, { wch: 14 }, { wch: 24 }, { wch: 14 }, { wch: 12 }, { wch: 16 },
-                ];
+                const columnWidths = [6, 12, 26, 32, 32, 15, 32, 22, 16, 14, 10, 18, 12, 12, 12, 14, 14, 24, 14, 12, 16];
+                const headers = Object.keys(excelData[0]);
+                const workbook = new ExcelJS.Workbook();
+                const worksheet = workbook.addWorksheet('Registrations');
+                worksheet.columns = headers.map((h, i) => ({
+                    header: h,
+                    key: h,
+                    width: columnWidths[i] || 12,
+                }));
+                excelData.forEach(row => worksheet.addRow(row));
 
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, 'Registrations');
                 const suffix = selectedEvent !== 'all' ? `_${selectedEvent}` : '_All';
                 const filename = `SS26_Registrations${suffix}_${new Date().toISOString().split('T')[0]}.xlsx`;
-                XLSX.writeFile(workbook, filename);
+                const buffer = await workbook.xlsx.writeBuffer();
+                saveAs(new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), filename);
             } finally {
                 setActionLoading(null);
             }
